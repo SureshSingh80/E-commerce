@@ -1,0 +1,583 @@
+/* general styling */
+body 
+{
+    padding: 0;
+    margin: 0;
+    /* background-color:pink; */
+}
+.flex-div
+{
+    display:flex;
+}
+
+/* Homepage/Navbar */
+.nav-container
+{
+    width:100%;
+    height:auto;
+    background-color: rgb(172, 36, 221);
+    /* background-color: pink; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:10px;
+    color:white;
+}
+.left-side-div
+{
+    width:30px;
+}
+.middle-side-div
+{
+    margin-right:20rem;
+}
+.nav-container div input 
+{
+    width:300px;
+    position:relative;
+    margin-right:0.1rem;
+}
+.second-div
+{
+    margin-right:25rem;
+}
+.login-btn
+{
+    margin-left:-5rem;
+}
+.signUp-btn 
+{
+    margin-left:-1rem;
+    margin-right:3rem;
+}
+.cart 
+{
+    font-size:25px;
+}
+
+/* login */
+.login-container 
+{
+   height: 100%;
+   width: 100%;
+   position:absolute;
+   display:flex;
+   align-items: center;
+   justify-content: center;
+   
+
+}
+.login-container .form-div
+{
+    border:1px solid rgb(180, 172, 172);
+    padding: 1rem;
+}
+.login-container input 
+{
+    margin:2rem 0;
+}
+.login-container .submit-btn 
+{
+    width:100%;
+}
+
+
+
+
+
+/* footer */
+.footer-info
+{
+    background-color: #ebebeb;
+    width:100%;
+    display:flex;
+    padding:2rem;
+    align-items:center;
+    justify-content: center;
+     
+}
+.fa-brands
+{
+    margin-right:1rem;
+}
+p 
+{
+    line-height: 2rem;
+    margin-right:3rem;
+}
+/* show details */
+.show-img
+{
+  height:50vh;
+  object-fit:contain;
+}
+/* cart button */
+.cart-btn
+{
+    background-color:transparent ;
+    border:none;
+}
+.show-cart-num
+{
+    width:23px;
+    height: 23px;
+    position:absolute;
+    top:4px;
+    right:15px;
+    background-color: red;
+    color:white;
+    border-radius:50%;
+    text-align: center;
+    
+}
+.show-cart-num span 
+{
+    /* font-size:10px !important; */
+}
+/* admin */
+.admin-dashboard button
+{
+    padding:1rem 4rem;
+    border:none;
+    border-radius:10px;
+    color:white;
+    
+}
+/* slider */
+.slide-container
+{
+    width:100%;
+    height: 200px;
+    /* border:3px solid black; */
+    position: relative;
+    margin:auto;
+    margin-top:1%;
+    overflow: hidden;
+    display: flex;
+}
+
+@media (max-width:500px){
+    .slide-container
+    {
+        height:100px;
+    }
+}
+
+.slide
+{
+   width: 100%;
+   height: 100%;
+   object-fit: cover;
+   flex:0 0 100%;
+   transition: 1s;
+}
+/* styling next/prev icons */
+.next
+{
+    position:absolute;
+    top:50%;
+    left:98.3%;
+    color:white;
+    margin-right:20px;
+}
+.prev
+{
+    position:absolute;
+    top:50%;
+    left:0;
+    color:white;
+}
+.prev:hover 
+{
+    cursor:pointer;
+}
+.next:hover 
+{
+    cursor: pointer;
+}
+
+/* initially dropdown is hidden mode */
+.dropdown-homepage
+{
+    display: none;
+}
+.dropdown-loginHomepage
+{
+    display: none;
+}
+.success-order-card{
+    padding:2rem;
+}
+.admin-icon 
+{
+    background-color: transparent;
+    border:none;
+}
+/* hover effect */
+.admin-icon:hover 
+{
+    color:blue;
+}
+.signUp:hover 
+{
+    color:blue;
+}
+.login:hover 
+{
+    color:blue;
+}
+.log-out:hover{
+    color:blue;
+}
+.orders:hover 
+{
+    color:blue;
+}
+.carts:hover {
+    color:blue;
+}
+
+/*  responsiveness (slider) */
+@media (max-width:1120px){
+    .next 
+    {
+        left:97%;
+    }
+}
+@media (max-width:720px){
+    .next
+    {
+        left:96%;
+    }
+}
+
+/* responsive loginHomepage(navbar) */
+@media (max-width:1205px){
+      .left-side-div 
+      {
+        display: none;
+      }
+      .middle-side-div
+      {
+        margin-left:0%;
+      }
+}
+@media (max-width:1080px){
+    .middle-side-div
+    {
+        margin-right:10%;
+    }
+}
+@media (max-width:900px){
+    .middle-side-div
+    {
+        margin:0;
+    }
+}
+@media (max-width:710px){
+     .right-side-div 
+     {
+        display:none;
+
+     }
+     .dropdown-loginHomepage{
+        display:inline;
+     }
+     .dropdown-loginHomepage ul li form button 
+     {
+         border:none;
+         background-color:transparent;
+     }
+}
+/* responsive homepage(navbar) */
+@media (max-width:1000px){
+    .first-div 
+    {
+        display: none;
+
+    }
+    .second-div 
+    {
+        width:200px;
+    }
+}
+@media (max-width:700px){
+    .second-div
+    {
+        width:100px;
+    }
+}
+@media (max-width:600px){
+    .second-div
+    {
+        width:50px;
+    }
+}
+@media (max-width:770px){
+    .third-div
+    {
+        display:none;
+    }
+    .right-side-div{
+        display: none;
+    }
+    /* .dropdown-homepage
+    {
+        display:inline;
+        margin-left:-10rem;
+    }
+    .dropdown-homepage ul li form button 
+    {
+        border:none;
+        background-color:transparent;
+    } */
+     .hamberger-container
+     {
+        visibility: visible !important;
+      
+     }
+     .hamberger-content
+     {
+        transition:1s;
+        background-color: #ded5d5;
+     }
+     .hamberger-content button:hover
+     {
+        transform:scale(1.1);
+        color:#1c1b1b;
+       
+     }
+     
+     .small-screen-cart
+     {
+        display: inline !important;
+     }
+}
+
+@media (max-width:570px){
+    .input-box{
+        width:30% !important;
+        position: relative;
+        left:-30px;
+    }
+}
+/* all orders */
+@media (max-width:550px) {
+        .order-col
+        {
+            width:100%;
+            margin-left:0;
+        }
+}
+/* cart */
+@media (max-width:1600px){
+    .buyNow-btn
+    {
+        margin-right:35rem;
+    }
+}
+@media (max-width:1280px){
+    .buyNow-btn
+    {
+        margin-right:30rem;
+    }
+}
+@media (max-width:1180px){
+    .buyNow-btn
+    {
+        margin-right:25rem;
+    }
+}
+@media (max-width:1000px){
+    .buyNow-btn
+    {
+        margin-right:20rem;
+    }
+}
+@media (max-width:800px){
+    .buyNow-btn
+    {
+        margin-right:10rem;
+    }
+}
+@media (max-width:673px){
+    .buyNow-btn
+    {
+        margin-right:5rem;
+    }
+}
+@media (max-width:520px){
+    .buyNow-btn
+    {
+        margin-right:2rem;
+    }
+}
+@media (max-width:440px){
+    .buyNow-btn{
+        margin-right:1rem;  
+    }
+}
+@media (max-width:410px){
+    .cartDiv{
+        display: block;
+    }
+}
+/* cancel order page */
+@media (max-width:870px){
+    .cancel-order-div
+    {
+        display:block;
+        margin-left:3rem;
+    }
+   
+}
+@media (max-width:550px){
+    .cancel-order-div
+    {
+        
+        margin-left:0;
+    }
+   
+}
+/* success order page */
+@media (max-width:870px){
+    .success-order-div
+    {
+        display:block;
+        margin-left:3rem;
+    }
+   
+}
+@media (max-width:550px){
+    .success-order-div
+    {
+        margin-left:0;
+    }
+   
+}
+@media (max-width:500px){
+    .success-order-card
+    {
+        padding:0;
+    }
+}
+/* admin (dashboard) */
+@media (max-width:600px){
+    .admin-dashboard{
+        margin-left:6rem;
+       
+    }
+    
+}
+@media (max-width:430px){
+    .admin-dashboard{
+        display: none;
+       
+    }
+    
+}
+
+/* styling cards  */
+.card-container 
+{
+  
+    display: grid;
+    grid-template-columns: repeat(7,1fr);
+    gap:5px;
+}
+
+.card-container .card {
+    box-shadow: 2px 2px #ebe9e9;
+    transition: 0.1s;
+}
+
+.card-container .card:hover 
+{
+    transform: scale(1.05);
+}
+
+@media (max-width:1410px){
+    .card-container{
+        grid-template-columns: repeat(6,1fr);
+    }
+   
+}
+
+@media (max-width:1210px){
+    .card-container{
+        grid-template-columns: repeat(5,1fr);
+    }
+    
+}
+
+@media (max-width:1010px){
+    .card-container{
+        grid-template-columns: repeat(4,1fr);
+    }
+    
+}
+
+@media (max-width:810px){
+    .card-container{
+        grid-template-columns: repeat(3,1fr);
+    }
+   
+}
+
+@media (max-width:610px){
+    .card-container{
+        grid-template-columns: repeat(2,1fr);
+    }
+   
+}
+
+.card-img-top
+{
+   border-radius:1rem;  
+    width:100% !important;
+   object-fit: contain;
+}
+
+.add-to-cart-btn 
+{
+    padding:4px 8px;
+    text-decoration: none;
+    font-size:15px;
+    border-radius:12px;
+    border:none;
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif
+}
+/* Ratings */
+
+.stars {
+    font-size: 30px;
+    color: #f0f0f0;
+    cursor: pointer;
+  }
+  
+  .star1,.star2,.star3,.star4{
+   
+    color: #FFD700; 
+    transition: color 0.3s;
+  }
+  
+  .star:hover,
+  .star.active {
+    color: #FFD700;
+  }
+  
+  .star:hover ~ .star {
+    color: #f0f0f0;
+  }  
+  
+
+
+
+
+
+
+
+
+
+
+

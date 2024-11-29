@@ -1,0 +1,74 @@
+<% layout("/layouts/biolerplate") %>
+<body>
+    
+        <!-- navbar -->
+        <!-- <div class="nav-container sticky-top">
+          <div class="flex-div first-div">
+            <span class="material-symbols-outlined" style="">shopping_bag</span>
+          </div>
+
+         <div class=" flex-div second-div">
+          
+              <form action="/homepage/searchResult" method="post">
+                 <div class="flex-div">
+                 <input type="text" class="form-control" name="searchType" placeholder="Seach products" style="display: inline;">
+                 <button class="btn btn-danger search-btn">Search</button>
+                </div>
+              </form>
+        </div>
+          
+          <div class="flex-div third-div">
+                <form action="/homepage/login">
+                     <button class="btn btn-success login-btn">login</button>
+                </form>
+                <form action="/homepage/signup">
+                    <button class="btn btn-dark signUp-btn">SignUp</button>
+                </form>
+                <form action="/admin">
+                    <button class="admin-icon"><span class="material-symbols-outlined " style="color:white; font-size:30px;margin-top:5px;">account_circle</span></button>
+                </form>
+          </div>
+
+          <div class="dropdown dropdown-homepage" style="padding:0">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
+            <ul class="dropdown-menu">
+              <li class="">
+                <form action="/homepage/login">
+                  <button class="" style="width:100%;">login</button>
+                </form>
+              </li>
+              <li>
+                <form action="/homepage/signup">
+                    <button class="" style="width:100%;">SignUp</button>
+                </form>
+              </li>
+
+              <form action="/admin">
+                <button class="admin-icon" style="width:100%;">Admin</button>
+            </form>
+             
+            </ul>
+          </div>
+
+        </div> -->
+
+      
+
+        <!-- all products -->
+        <h4 style="margin-left:2rem; margin-top:2rem;">Result Found</h4>
+        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2">
+           <% for(item of searchItem){%>
+         
+          <div class="card mb-3">
+                <a href="/homepage/<%=item.productId%>/showInfo"><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:15rem;"></a>
+                <div class="card-body">
+                  <h5 class="card-title"><%=item.title%></h5>
+                  <h6 class="cad-title">&#8377;<%=item.price.toLocaleString("en-IN")%></h6>
+                  <a href="/homepage/signup" class="btn" style="background-color: rgb(172, 36, 221);color:white;">Add to Cart</a>
+                </div>
+          </div>
+        
+        <%}%>
+      </div>
+      <a href="/homepage" class="btn btn-success col-6 offset-3 mb-3">Continue Shopping</a>
+</body>
