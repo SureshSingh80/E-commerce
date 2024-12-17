@@ -1,7 +1,8 @@
 <% layout("/layouts/biolerplate") %>
 <body style="background-color: rgb(172, 36, 221);">
 
-    <div class="login-container" style="background-color: rgb(240, 212, 217);">
+    <div class="login-container">
+      <div class="form-div">
         <h3 style=" margin-left:35%;   color:rgb(172, 36, 221);">Login</h3> 
         <form action="/homepage/login" method="post" novalidate class="needs-validation">
             
@@ -10,12 +11,47 @@
                 <div class="invalid-feedback">Please Enter Username</div>
             </div>
             <div>
-                <input type="text" name="login[password]" class="form-control password mb-0" placeholder="Password" required>
+                <input type="password" name="login[password]" class="form-control password mb-0" placeholder="Password" required>
                 <div class="invalid-feedback">Please Enter password</div>
+                <div class="password-error" style="display:none; color:red; font-weight:300;">Must be at least 8 words one Capital and small one special character and number</div>
+            </div>
+            <br>
+            <div>
+               <label for="show-pass">Show password</label><br>
+               <input type="checkbox" id="show-pass" class="m-0" onchange="handleChange()">
             </div>
             
-            <button class="btn btn-success submit-btn mt-4">Submit</button>
+            <button class="btn submit-btn mt-4" disabled style="background-color: rgb(172, 36, 221); color:white;">Proceed</button>
         </form>
+      </div>
     </div>
+     <script>
+         const passwordInput=document.querySelector(".password");
+         const passError=document.querySelector(".password-error");
+         const submitBtn=document.querySelector(".submit-btn");
+         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
+         
+         passwordInput.addEventListener("input",()=>{
+              if(passwordInput.value.length<8 ||  !passwordRegex.test(passwordInput.value)){
+                 passError.style.display="inline";
+                 submitBtn.disabled=true;
+              }
+              else {
+               passError.style.display='none';
+               submitBtn.disabled=false;
+              }
+                
+         });
+        
+        
+        const handleChange=()=>{
+              if(passwordInput.type=='password'){
+                 passwordInput.type="text";
+              }
+              else 
+                 passwordInput.type="password";
+        }
+     </script>
+
     
 </body>

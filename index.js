@@ -1,6 +1,7 @@
 // requires basic packages and files
 const express = require("express");
 const methodOverride = require("method-override");
+const bodyParser=require("body-parser");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const mongoose = require("mongoose");
@@ -16,6 +17,8 @@ const flash = require("connect-flash");
 const jwt = require("jsonwebtoken");
 require("dotenv").config(); // to access data of  .env
 const cookie = require("cookie");
+const axios = require("axios");
+const bcrypt = require("bcrypt");
 
 const app = express();
 //basic setup
@@ -64,6 +67,11 @@ app.set("views", path.join(__dirname, "views"));
 
 // serving static files(css,js)
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+// used to parse incoming JOSN request bodies and makes the data available in req.body
+app.use(express.json());
 
 // for use ejs-mate
 app.engine("ejs", ejsMate);
@@ -80,7 +88,6 @@ app.get("/", (req, res) => {
 
 // homepage
 app.get("/homepage", async (req, res, next) => {
- 
   // logout admin
   res.cookie("adminToken", "", {
     httpOnly: true,
@@ -88,9 +95,9 @@ app.get("/homepage", async (req, res, next) => {
   });
 
   // logout user
-  res.cookie("userToken","",{
-    httpOnly:true,
-    expires:new Date(0)
+  res.cookie("userToken", "", {
+    httpOnly: true,
+    expires: new Date(0),
   });
 
   try {
@@ -132,26 +139,44 @@ app.get("/admin", (req, res) => {
 app.post("/admin/homepage", async (req, res, next) => {
   try {
     let name = "admin";
-    let pass = "123..";
+    let pass = "Admin@123";
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
+
     let { username, password } = req.body;
-    const trimedUsername = username.trim();
-    const trimedPassword = password.trim();
+    console.log(passwordRegex.test(password));
 
-    const tokenData = {
-      id: 80,
-      admin: trimedUsername,
-      password: trimedPassword,
-    };
-    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
-      expiresIn: "1d",
-    });
-
-    if (trimedUsername === name && trimedPassword === pass) {
-      res.cookie("adminToken", token, { httpOnly: true });
-      let allItem = await Item.find({});
-      res.render("alter.ejs", { allItem });
+    if (password.length < 8) {
+      req.flash("error", "password must be atleast 8 character");
+      res.redirect("/admin");
+    } else if (!passwordRegex.test(password)) {
+      req.flash(
+        "error",
+        "password must be contain one Capital and Small letter one Special Character and Number"
+      );
+      res.redirect("/admin");
     } else {
-      res.render("adminError.ejs");
+      const trimedUsername = username.trim();
+      const trimedPassword = password.trim();
+
+      const tokenData = {
+        id: 80,
+        admin: trimedUsername,
+        password: trimedPassword,
+      };
+      const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
+        expiresIn: "1d",
+      });
+
+      if (trimedUsername === name && trimedPassword === pass) {
+        console.log("All correct");
+        res.cookie("adminToken", token, { httpOnly: true });
+        let allItem = await Item.find({});
+
+        res.render("alter.ejs", { allItem });
+      } else {
+        res.render("adminError.ejs");
+      }
     }
   } catch (err) {
     next(err);
@@ -169,10 +194,7 @@ app.get("/admin/homepage", async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-  }
-  else 
-    res.redirect("/homepage");
-
+  } else res.redirect("/homepage");
 });
 
 // delete particualar item(delete route)
@@ -237,45 +259,77 @@ app.post("/admin/new", async (req, res, next) => {
 // signUp (User panel)
 // signUp stores(customers data)
 app.post("/homepage/signUp", async (req, res, next) => {
-
-  
   try {
-
     await CurrentUser.deleteMany({}); // for track current login or signup user
-    let { username, email, password, mobNo, address } = req.body;
-    let data = { username, email, password, mobNo, address };
-    let user = new CurrentUser({
-      username: data.username,
-    });
+    let { username, email, password, confirmPassword, mobNo, address } =
+      req.body;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
 
-    
-    let customer = new Customer(data);
-    // save token in browser cookie
-    const tokenData={
-      id:80,
-      username:username,
-      password:password
+    if (password.length < 8 && password != confirmPassword) {
+      req.flash(
+        "error",
+        "password and confirm password should be same and password At least 8 character"
+      );
+      res.redirect("/homepage/signup");
+    } else if (password.length < 8) {
+      req.flash("error", "password  must be  Atleast 8 character");
+      res.redirect("/homepage/signup");
+    } else if (password != confirmPassword) {
+      req.flash("error", "password and confirm password should be same");
+      res.redirect("/homepage/signup");
+    } else if (!passwordRegex.test(password)) {
+      req.flash(
+        "error",
+        "password must be contain one Capital and Small letter one Special Character and Number"
+      );
+      res.redirect("/homepage/signup");
+    } else {
+      const saltRound = 10;
+      const bcryptPass = await bcrypt.hash(password, saltRound);
+
+      const trimedUsername=username.trim();
+
+      let data = {
+        username: trimedUsername,
+        email: email,
+        password: bcryptPass,
+        mobNo: mobNo,
+        address: address,
+      };
+
+      let user = new CurrentUser({
+        username: data.username,
+      });
+
+      let customer = new Customer(data);
+      // save token in browser cookie
+      const tokenData = {
+        id: 80,
+        username: username,
+        password: password,
+      };
+      const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
+        expiresIn: "1d",
+      });
+      res.cookie("userToken", token, { httpOnly: true });
+
+      await customer.save();
+      await user.save();
+
+      // // find Who login
+      //  let currentUser=await CurrentUser.find({});
+      //  let customers=await Customer.find({});
+      //  let cust;
+      //  for(customer of customers){
+      //      if(customer.username==currentUser[0].username){
+      //           cust=customer;
+      //      }
+      //   }
+      let allItem = await Item.find({});
+      // res.render("loginHomepage.ejs",{allItem,cart:cust.carts.length});
+      res.redirect("/loginHomepage");
     }
-    const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
-      expiresIn: "1d",
-    });
-    res.cookie("userToken",token,{httpOnly:true});
-
-    await customer.save();
-    await user.save();
-
-    // // find Who login
-    //  let currentUser=await CurrentUser.find({});
-    //  let customers=await Customer.find({});
-    //  let cust;
-    //  for(customer of customers){
-    //      if(customer.username==currentUser[0].username){
-    //           cust=customer;
-    //      }
-    //   }
-    let allItem = await Item.find({});
-    // res.render("loginHomepage.ejs",{allItem,cart:cust.carts.length});
-    res.redirect("/loginHomepage");
   } catch (err) {
     req.flash("error", "Username or email already exist");
     res.redirect("/homepage/signup");
@@ -287,31 +341,54 @@ app.post("/homepage/login", async (req, res, next) => {
   try {
     await CurrentUser.deleteMany({});
     let login = req.body.login;
-    let user = new CurrentUser({
-      username: login.username,
-    });
-    await user.save();
-    let customers = await Customer.find({});
-    for (customer of customers) {
-      if (
-        login.username === customer.username &&
-        login.password === customer.password
-      ) {
-         // save token in browser cookie
-        const tokenData={
-          id:80,
-          username:customer.username,
-          password:customer.password
-        }
-        const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
-          expiresIn: "1d",
-        });
-        res.cookie("userToken",token,{httpOnly:true});
+    login.username=login.username.trim();
+    
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
 
-        res.redirect("/loginHomepage");
+    if (login.password.length < 8) {
+      req.flash("error", "password must be atleast 8 character");
+      res.redirect("/homepage/login");
+    } else if (!passwordRegex.test(login.password)) {
+      req.flash(
+        "error",
+        "password must be contain one Capital and Small letter one Special Character and Number"
+      );
+      res.redirect("/homepage/login");
+    } else {
+      let user = new CurrentUser({
+        username: login.username,
+      });
+      await user.save();
+      let customers = await Customer.find({});
+      
+
+      for (customer of customers) {
+        const passCompareResult=await bcrypt.compare(login.password,customer.password);
+        
+
+        if ( 
+          login.username === customer.username &&
+          passCompareResult
+        ) {
+          // save token in browser cookie
+          const tokenData = {
+            id: 80,
+            username: customer.username,
+            password: customer.password,
+          };
+          const token = jwt.sign(tokenData, process.env.TOKEN_SECRET, {
+            expiresIn: "1d",
+          });
+          res.cookie("userToken", token, { httpOnly: true });
+
+          res.redirect("/loginHomepage");
+        }
+         
+        
       }
+      res.render("error.ejs");
     }
-    res.render("error.ejs");
   } catch (err) {
     next(err);
   }
@@ -332,6 +409,7 @@ app.get("/homepage/:id/loginShowInfo", async (req, res, next) => {
 app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
   try {
     let { id } = req.params;
+  
     let currentUser = await CurrentUser.find({});
 
     // find Who login
@@ -354,20 +432,17 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
     });
 
     cust.carts.push(newItem);
-
     await newItem.save();
     let result = await cust.save();
-    console.log(result);
-
-    let allItem = await Item.find({});
-    console.log(allItem);
-    //   let cart={no:6};
-    //   res.render("loginHomepage.ejs",{allItem,cart:cust.carts.length});
-    res.redirect("/loginHomepage");
+    console.log(result);   
+    // res.redirect("/loginHomepage");
+    res.send(`success`);
   } catch (err) {
     next(err);
   }
 });
+
+
 
 // show cart
 app.get("/homepage/signUp/cart", async (req, res, next) => {
@@ -525,64 +600,85 @@ app.get("/homepage/signUp/:id/cancelOrder/:orderId", async (req, res, next) => {
 // return to login(User) from Logout
 app.get("/loginHomepage", async (req, res, next) => {
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-  console.log("loginCookies= ",cookies.userToken);
-  if(cookies.userToken){
+  console.log("loginCookies= ", cookies.userToken);
+  if (cookies.userToken) {
     try {
       // find Who login
       let currentUser = await CurrentUser.find({});
-      let customers = await Customer.find({});  
+      let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
         if (customer.username == currentUser[0].username) {
           cust = customer;
         }
       }
-  
+
       let allItem = await Item.find({});
-        res.render("loginHomepage.ejs", { allItem, cart: cust.carts.length });
+      res.render("loginHomepage.ejs", { allItem, cart: cust.carts.length });  
     } catch (err) {
       next(err);
     }
-  }
-  else 
-    res.redirect("/homepage");
-  
+  } else res.redirect("/homepage");
 });
 
 // searching items (homepage)
 app.post("/homepage/searchResult", async (req, res, next) => {
   try {
-    let { selectedCategory,customCategory } = req.body;
-    let category;
-    if(selectedCategory==="Other" && customCategory)
-       category=customCategory;
-    else 
-       category=selectedCategory;
+    let { selectedCategory, customCategory } = req.body;
+    let searchItem;
+    
+
 
     let allItem = await Item.find({});
-    await Search.deleteMany({});
-    for (items of allItem) {
-      if (items.type === category || items.title === category) {
-        let search = new Search({
-          productId: items._id,
-          title: items.title,
-          description: items.description,
-          specification: items.specification,
-          image: items.image,
-          price: items.price,
-        });
-        await search.save();
-      }
+    if(selectedCategory==='Other'){
+        searchItem=allItem.filter(item=>item.title==customCategory)
     }
-    let countSearch = await Search.countDocuments({});
-    if (countSearch == 0) res.render("noSearchFound.ejs");
+    else{
+       searchItem=allItem.filter(item=>item.type==selectedCategory);
+    }
+   
+
+    if (searchItem.length==0) res.render("noSearchFound.ejs");
     else {
-      let searchItem = await Search.find({});
       res.render("searches.ejs", { searchItem });
     }
   } catch (err) {
     next(err);
   }
+});
+
+// top deals route (homepage)
+app.post("/homepage/topDeals/Explore",async(req,res,next)=>{
+    try {
+      let {type}=req.body;
+      const allItems= await Item.find({});
+      const allItem=allItems.filter(item=>item.type===type);
+      res.render("topDealHomepage.ejs",{allItem});
+    } catch (error) {
+      next(error);
+    }
+});  
+
+app.post("/loginHomepage/topDeals/Explore",async(req,res,next)=>{
+    try {
+      let {type}=req.body;
+       // find Who login
+       let currentUser = await CurrentUser.find({});
+       let customers = await Customer.find({});
+       let cust;
+       for (customer of customers) {
+         if (customer.username == currentUser[0].username) {
+           cust = customer;
+         }
+       }
+
+      const allItems= await Item.find({});
+      const allItem=allItems.filter(item=>item.type===type);
+      res.render("topDealLoginHomepage.ejs",{allItem, cart:cust.carts.length});
+
+    } catch (error) {
+       next(error);
+    }
 });
 
 // searching items (login Homepage)
@@ -597,32 +693,20 @@ app.post("/homepage/signUp/searchResult", async (req, res, next) => {
         cust = customer;
       }
     }
-    let { selectedCategory,customCategory } = req.body;
-    let category;
-    if(selectedCategory==="Other" && customCategory)
-       category=customCategory;
-    else 
-       category=selectedCategory;
+    let { selectedCategory, customCategory } = req.body;
+    let searchItem;
 
     let allItem = await Item.find({});
-    await Search.deleteMany({});
-    for (items of allItem) {
-      if (items.type === category || items.title === category) {
-        let search = new Search({
-          productId: items._id,
-          title: items.title,
-          description: items.description,
-          specification: items.specification,
-          image: items.image,
-          price: items.price,
-        });
-        await search.save();
-      }
-    }
-    let countSearch = await Search.countDocuments({});
-    if (countSearch == 0) res.render("noSearchFoundLogin.ejs");
+    if(selectedCategory==='Other'){
+      searchItem=allItem.filter(item=>item.title==customCategory)
+  }
+  else{
+     searchItem=allItem.filter(item=>item.type==selectedCategory);
+  }
+  
+ 
+    if (searchItem.length==0) res.render("noSearchFoundLogin.ejs");
     else {
-      let searchItem = await Search.find({});
       res.render("loginSearches.ejs", { searchItem, cart: cust.carts.length });
     }
   } catch (err) {

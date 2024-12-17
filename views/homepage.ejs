@@ -1,158 +1,206 @@
 <% layout("/layouts/biolerplate") %>
 <body>
-    
-    
-        <!-- navbar -->
-        <div class="nav-container sticky-top">
-          <div class="flex-div first-div">
-            <a href="/" style="color:white;"><span class="material-symbols-outlined">Home</span></a>
+  <!-- navbar -->
+  <div class="nav-container sticky-top">
+    <div class="flex-div first-div">
+      <a href="/" style="color: white"
+        ><span class="material-symbols-outlined">Home</span></a
+      >
+    </div>
+
+    <div class="flex-div second-div">
+      <!-- show only when screen size is <=770px -->
+      <div class="hamberger-container" style="visibility: hidden">
+        <button
+          class="hamberger-btn"
+          style="background: none; border: none; color: white"
+          ;
+        >
+          <span
+            class="material-symbols-outlined hamberger-icon"
+            style="padding: 4px; font-size: 2rem; margin-right: 2rem"
+          >
+            menu
+          </span>
+          <span
+            class="material-symbols-outlined position-absolute cross-icon"
+            style="top: 20%; left: 3%; font-size: 30px; visibility: hidden"
+          >
+            close
+          </span>
+        </button>
+
+        <div
+          class="position-absolute hamberger-content"
+          style="
+            visibility: hidden;
+            min-width: 20%;
+            position: relative;
+            left: -200px;
+          "
+        >
+          <div class="p-3">
+            <form action="/homepage/login">
+              <button
+                class="login m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                login
+              </button>
+            </form>
+
+            <form action="/homepage/signup">
+              <button
+                class="signUp m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                SignUp
+              </button>
+            </form>
+
+            <form action="/admin">
+              <button
+                class="admin m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Admin
+              </button>
+            </form>
           </div>
+        </div>
+      </div>
 
-         <div class=" flex-div second-div">
-            <!-- show only when screen size is <=770px -->
-          <div class="hamberger-container" style="visibility: hidden;" >
-            <button class="hamberger-btn" style="background: none; border:none; color:white;";>
-              <span class="material-symbols-outlined hamberger-icon" style="padding:4px; font-size:2rem; margin-right: 2rem;">
-                menu
-              </span>
-              <span class="material-symbols-outlined position-absolute cross-icon" style="top:20%; left:3% ;font-size:30px; visibility:hidden;">
-                close
-              </span>
-            </button>
+      <form action="/homepage/searchResult" method="post">
+        <div class="flex-div input-box">
+          <select
+            name="selectedCategory"
+            id="combo-select"
+            onchange="toggleInputField()"
+          >
+            <option value="">---Search---</option>
+            <option value="Mobiles">Mobiles</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Earbuds">Earbuds</option>
+            <option value="Cables">Cables</option>
+            <option value="Neckbands">Neckbands</option>
+            <option value="Watches">Watches</option>
+            <option value="Mouses">Mouses</option>
+            <option value="Keyboards">Keyboards</option>
+            <option value="Monitors">Monitors</option>
+            <option value="Other">Other</option>
+          </select>
+          <input
+            type="text"
+            name="customCategory"
+            placeholder="Type Model..."
+            id="combo-input"
+            style="display: none"
+          />
 
-            <div class="position-absolute hamberger-content" style="visibility:hidden; min-width:20%; position:relative; left:-200px; ">             
-              <div class=" p-3">
-                  <form action="/homepage/login">
-                    <button class="login m-1" style="width:100%; border:none; background-color: transparent;">login</button>
-                  </form>              
-                
-                  <form action="/homepage/signup">
-                      <button class="signUp m-1" style="width:100%; border:none; background-color: transparent;">SignUp</button>
-                  </form>              
-  
-                  <form action="/admin">
-                    <button class="admin m-1" style="width:100%; border:none; background-color: transparent;">Admin</button>
-                  </form>
-              </div>                
-            </div>
-            
-         </div>
-          
-              <form action="/homepage/searchResult" method="post">            
-                
-               
-                 <div class="flex-div input-box">
-                   
-                     <select name="selectedCategory" id="combo-select" onchange="toggleInputField()">
-                        <option value="">---Search---</option>
-                        <option value="Mobiles">Mobiles</option>
-                        <option value="Laptops">Laptops</option>
-                        <option value="Earbuds">Earbuds</option>
-                        <option value="Cables">Cables</option>
-                        <option value="Neckbands">Neckbands</option>
-                        <option value="Watches">Watches</option>
-                        <option value="Mouses">Mouses</option>
-                        <option value="Keyboards">Keyboards</option>
-                        <option value="Monitors">Monitors</option>
-                        <option value="Other">Other</option>
-                        
-                     </select>
-                     <input type="text" name="customCategory" placeholder="Type Model..." id="combo-input" style="display:none;">
-                     
-                    <button class="btn btn-danger search-btn" >Search</button>
-                </div>
-                <!-- <div class="flex-div" style="width:100%; position:absolute;">
+          <button class="btn btn-danger search-btn">Search</button>
+        </div>
+        <!-- <div class="flex-div" style="width:100%; position:absolute;">
                   <input type="text" class="form-control" name="searchType" placeholder="Seach products" style="display: inline;" style="width:100%; position:relative">
                   <button class="btn btn-danger search-btn">Search</button>
               </div> -->
-              
-              </form>
-                  
-              
-        </div>
+      </form>
+    </div>
 
-         <!-- show cart only when screen size is <=770px -->
-              <button style="position:absolute; left:90%; display: none;" class="cart-btn small-screen-cart" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white;">shopping_cart</span></button>
-        
-          <!-- show search icon  when screen size is  <=450px  -->
+    <!-- show cart only when screen size is <=770px -->
+    <button
+      style="position: absolute; left: 90%; display: none"
+      class="cart-btn small-screen-cart"
+      style="margin-right: 1rem"
+    >
+      <span
+        class="material-symbols-outlined cart"
+        style="margin-left: 0rem; color: white"
+        >shopping_cart</span
+      >
+    </button>
 
+    <!-- show search icon  when screen size is  <=450px  -->
 
-          <!-- <div style="position:absolute; left:90%; display: none;" class="small-screen-cart">
-          <form action="/admin">
-            <button class="admin-icon"><span class="material-symbols-outlined " style="color:white; font-size:30px;margin-top:5px;">account_circle</span></button>
-          </form>
-        </div>      -->
-          
-          <div class="flex-div third-div">
+    <div class="flex-div third-div">
+      <form action="/homepage/login">
+        <button class="btn btn-success login-btn">login</button>
+      </form>
+      <form action="/homepage/signup">
+        <button class="btn btn-dark signUp-btn">SignUp</button>
+      </form>
+      <form action="/homepage/login" method="get">
+        <button
+          style="position: absolute; left: 98%; top: 30%"
+          class="cart-btn small-screen-cart"
+          style="margin-right: 1rem"
+        >
+          <span
+            class="material-symbols-outlined cart"
+            style="margin-left: 0rem; color: white"
+            >shopping_cart</span
+          >
+        </button>
+      </form>
 
-            
+      <!-- for small screen sizes -->
+    </div>
+  </div>
 
-                <form action="/homepage/login">
-                     <button class="btn btn-success login-btn">login</button>
-                </form>
-                <form action="/homepage/signup">
-                    <button class="btn btn-dark signUp-btn">SignUp</button>
-                </form>
-               <form action="/homepage/login" method="get">
-                  <button style="position:absolute; left:98%; top:30%;" class="cart-btn small-screen-cart" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white;">shopping_cart</span></button>
+  <!-- slider -->
+  <div class="slide-container">
+    <img
+      src="https://plus.unsplash.com/premium_photo-1680985551009-05107cd2752c?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+      alt=""
+      class="slide"
+    />
+    <img
+      src="https://media.istockphoto.com/id/141944385/photo/laptops.jpg?s=612x612&w=0&k=20&c=qqWhcSA5ZJofpOvyLuyMcZTQU5Ew9Ebadk3u8iPVQVU="
+      alt=""
+      class="slide"
+    />
+    <img
+      src="https://helpdeskgeek.com/wp-content/pictures/2021/10/multi-monitor.jpeg"
+      alt=""
+      class="slide"
+    />
+    <img
+      src="https://www.pcworld.com/wp-content/uploads/2023/10/cpu-hub-100758206-orig.jpg?quality=50&strip=all"
+      alt=""
+      class="slide"
+    />
+    <img
+      src="https://i.pcmag.com/imagery/reviews/07lrPVKK2Bexf9Xi0sKRlSa-1..v1678155979.jpg"
+      alt=""
+      class="slide"
+    />
+    <img
+      src="https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2018/08/best-mouse-keyboard-combos.jpg"
+      alt=""
+      class="slide"
+    />
+    <img
+      src="https://hips.hearstapps.com/hmg-prod/images/best-over-ear-headphones-1527009080.jpg"
+      alt=""
+      class="slide"
+    />
 
-               </form>
+    <span class="material-symbols-outlined prev">arrow_back_ios</span>
+    <span class="material-symbols-outlined next">arrow_forward_ios</span>
+  </div>
 
-                <!-- for small screen sizes -->
-               
-                
-          </div>
-          <!-- for small screen size -->
-          <!-- <div class="dropdown dropdown-homepage" style="padding:0">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-            <ul class="dropdown-menu">
-              <li class="">
-                <form action="/homepage/login">
-                  <button class="login" style="width:100%;">login</button>
-                </form>
-              </li>
-              <li>
-                <form action="/homepage/signup">
-                    <button class="signUp" style="width:100%;">SignUp</button>
-                </form>
-              </li>
+  <!-- all products -->
 
-              <form action="/admin">
-                <button class="admin-icon" style="width:100%;">Admin</button>
-            </form>
-             
-            </ul>
-          </div> -->
-         
-        </div>
-
-        <!-- slider -->
-        <div class="slide-container" >
-          <img src="https://plus.unsplash.com/premium_photo-1680985551009-05107cd2752c?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="" class="slide" >
-          <img src="https://media.istockphoto.com/id/141944385/photo/laptops.jpg?s=612x612&w=0&k=20&c=qqWhcSA5ZJofpOvyLuyMcZTQU5Ew9Ebadk3u8iPVQVU=" alt="" class="slide">
-          <img src="https://helpdeskgeek.com/wp-content/pictures/2021/10/multi-monitor.jpeg" alt="" class="slide">
-          <img src="https://www.pcworld.com/wp-content/uploads/2023/10/cpu-hub-100758206-orig.jpg?quality=50&strip=all" alt="" class="slide">
-          <img src="https://i.pcmag.com/imagery/reviews/07lrPVKK2Bexf9Xi0sKRlSa-1..v1678155979.jpg" alt="" class="slide">
-          <img src="https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2018/08/best-mouse-keyboard-combos.jpg" alt="" class="slide">
-          <img src="https://hips.hearstapps.com/hmg-prod/images/best-over-ear-headphones-1527009080.jpg" alt="" class="slide">
-    
-          <span class="material-symbols-outlined prev">arrow_back_ios</span>
-          <span class="material-symbols-outlined next">arrow_forward_ios</span>
-      </div>
-
-        <!-- all products -->
-     
-        <h2 style="margin-left:2rem;">All Items</h2>
+  <!-- <h2 style="margin-left:2rem;">All Items</h2>
        
           <div class="card-container" >
             <% for(item of allItem){%>
           
            <div class="card" >
-                 <a href="/homepage/<%=item.id%>/showInfo"><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:6rem;width:50%;"></a>
+                 <a href="/homepage/<%=item.id%>/showInfo"><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:6rem;width:50%;">  </a>
                  <div class="card-body text-center">
                    <h5 class="card-title"><%=item.title%></h5>
                    <h6 class="cad-title">&#8377;<%=item.price.toLocaleString("en-IN")%></h6>
-
+                
                  <div class="rating-card">
                     
                     <div class="stars">
@@ -169,24 +217,405 @@
          
          <%}%>
        </div>
-    
+     -->
+ 
+  <p style="margin-left:1rem; font-size: 20px; font-weight: bold;">Top Deals</p>
 
-      <!-- footer -->
-      <footer>
-        <div class="footer-info">
-            <div class="personal-detail">
-              <div class="icons" style="margin-left:3.5rem;">
-               <i class="fa-brands fa-square-facebook"></i>
-               <i class="fa-brands fa-instagram"></i>
-               <i class="fa-brands fa-linkedin"></i>
-            </div>
-               <p class="info">
-                Deleveloper Name: Suresh Singh<br>
-                Email: kumarsuresh8403@gmail.com<br>
-              </p>
-               
-          </div>
+  
+  <div class="top-deals-container card-container" style="margin-bottom:2rem;">
+
+    <!-- Mobile -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">
+        
+          <input
+            type="image"
+            class="card-img-top"            
+            style="height: 10rem;"
+            src="https://media.licdn.com/dms/image/v2/D4D12AQG0NMBwOtr-IA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1712297539871?e=2147483647&v=beta&t=E-ccKcy0Sr4Nz5NqcEM0sW70Pc6w-tB1_PucQjjN3OM"
+            alt="img can't loaded"
+            />
+          <input type="hidden" name="type" value="Mobiles">
+          
+       
+      </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
         </div>
-    </footer>
-      <!-- <script src="/public/js/app.js"></script> -->
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Mobiles</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 6000 &#8377;</p>
+    </div>
+
+     <!-- Laptops -->
+     <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">
+        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr9wqEqAspFJtGy1WeGgoDr7xeOtbutlctqg&s"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Laptops">
+        
+     
+    </form>
+      </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Laptops</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 22000 &#8377;</p>
+    </div>
+
+    <!-- Earbuds  -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://i5.walmartimages.com/seo/iHip-Mini-SoundPods-True-Wireless-Earbuds_471c6118-fdc2-451e-8ffa-0d26da6bfd89.76d14900092e14dd9ba94c8ce17bccc3.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
+          alt="img can't loaded"
+          />
+        <input type="hidden" name="type" value="Earbuds">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Earbuds & Earphones</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 600 &#8377;</p>
+    </div>
+
+    <!-- Cables -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://www.shutterstock.com/image-vector/socket-usb-plug-in-typec-600nw-1589223730.jpg"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Cables">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Cables</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 250 &#8377;</p>
+    </div>
+
+    <!--Neckbands  -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://p.globalsources.com/IMAGES/PDT/B1199981724/Bluetooth-Earphone.png"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Neckbands">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Neckbands</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 700 &#8377;</p>
+    </div>
+
+    <!-- Watches -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://m.media-amazon.com/images/I/51Pwv-iqM7L._AC_UF1000,1000_QL80_.jpg"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Watches">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Watches</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 600 &#8377;</p>
+    </div>
+
+    <!--Mouse  -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUk3AtPpfqTgERcYjRui9zw98BdqnEEuD8Q&s"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Mouses">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Mouses</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 250 &#8377;</p>
+    </div>
+
+    <!-- Keyboards -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://plus.unsplash.com/premium_photo-1664194583917-b0ba07c4ce2a?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8a2V5Ym9hcmR8ZW58MHx8MHx8fDA%3D"
+          alt="img can't loaded"
+          />
+        <input type="hidden" name="type" value="Keyboards">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">keyboards</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 350 &#8377;</p>
+    </div>
+     
+    <!-- Monitors -->
+  <div class="card">
+    <form action="/homepage/topDeals/Explore" method="post">        
+      <input
+        type="image"
+        class="card-img-top"            
+        style="height: 10rem;"
+        src="https://cdn.mos.cms.futurecdn.net/cgUGYddWT5Birdwnj26DNF.jpg"
+        alt="img can't loaded"
+      />
+      <input type="hidden" name="type" value="Monitors">  
+   </form>
+    <div class="rating-card">
+      <div class="stars">
+        <span class="star star1" data-value="1">&#9733;</span>
+        <span class="star star2" data-value="2">&#9733;</span>
+        <span class="star star3" data-value="3">&#9733;</span>
+        <span class="star star4" data-value="4">&#9733;</span>
+        <span class="star star5" data-value="5">&#9733;</span>
+      </div>
+      
+    </div>
+    <p class="card-title" style="margin-left:1rem;">Monitors*</p>
+    <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 7500 &#8377;</p>
+  </div>
+
+    <!-- Printers -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://www.shutterstock.com/image-photo/multi-function-printer-isolated-against-600nw-72097618.jpg"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Printers">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Printers</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 4500 &#8377;</p>
+    </div>
+
+    <!-- Telivisions -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://m.media-amazon.com/images/I/71mjmBA235L._AC_UF1000,1000_QL80_.jpg"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Telivisions">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Telivisions</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 8000 &#8377;</p>
+    </div>
+
+     <!-- Tablets -->
+     <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://d.ibtimes.co.uk/en/full/1420622/google-nexus-9.jpg?w=731&f=5ed6856d651116d3475a6d9cb8815346"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Tablets">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Tablets</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 8000 &#8377;</p>
+    </div>
+
+    <!-- Cameras -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://southernhospitalityblog.com/camera-decision/camera-front-angled/"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Cameras">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Cameras</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 44000 &#8377;</p>
+    </div>
+
+    <!-- Projectors -->
+    <div class="card">
+      <form action="/homepage/topDeals/Explore" method="post">        
+        <input
+          type="image"
+          class="card-img-top"            
+          style="height: 10rem;"
+          src="https://techterms.com/img/lg/projector_1345.jpg"
+          alt="img can't loaded"
+        />
+        <input type="hidden" name="type" value="Projectors">  
+     </form>
+      <div class="rating-card">
+        <div class="stars">
+          <span class="star star1" data-value="1">&#9733;</span>
+          <span class="star star2" data-value="2">&#9733;</span>
+          <span class="star star3" data-value="3">&#9733;</span>
+          <span class="star star4" data-value="4">&#9733;</span>
+          <span class="star star5" data-value="5">&#9733;</span>
+        </div>
+        
+      </div>
+      <p class="card-title" style="margin-left:1rem;">Projectors</p>
+      <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 44000 &#8377;</p>
+    </div>
+
+  </div>
+
+  
+
+   
+
+  <!-- footer -->
+  <footer>
+    <div class="footer-info">
+      <div class="personal-detail">
+        <div class="icons" style="margin-left: 3.5rem">
+          <i class="fa-brands fa-square-facebook"></i>
+          <i class="fa-brands fa-instagram"></i>
+          <i class="fa-brands fa-linkedin"></i>
+        </div>
+        <p class="info">
+          Deleveloper Name: Suresh Singh<br />
+          Email: kumarsuresh8403@gmail.com<br />
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- <script src="/public/js/app.js"></script> -->
 </body>

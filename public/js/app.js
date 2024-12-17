@@ -1,5 +1,6 @@
-// clien-side validation (bootstrap)
 
+
+// clien-side validation (bootstrap)
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (() => {
     'use strict'
@@ -87,6 +88,15 @@ function toggleInputField(){
   else{
     comboInput.style.display="none";
   }
+}
+console.log("other than homepage");
+function refreshPage()
+{
+   location.reload();
+}
+if(window.location.pathname!='/'){
+  //  refreshPage();
+  
 }
 
  

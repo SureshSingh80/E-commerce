@@ -1,0 +1,180 @@
+<% layout("/layouts/biolerplate") %>
+
+<body>
+     <!-- navbar -->
+  <div class="nav-container sticky-top">
+    <div class="flex-div first-div">
+      <a href="/" style="color: white"
+        ><span class="material-symbols-outlined">Home</span></a
+      >
+    </div>
+
+    <div class="flex-div second-div">
+      <!-- show only when screen size is <=770px -->
+      <div class="hamberger-container" style="visibility: hidden">
+        <button
+          class="hamberger-btn"
+          style="background: none; border: none; color: white"
+          ;
+        >
+          <span
+            class="material-symbols-outlined hamberger-icon"
+            style="padding: 4px; font-size: 2rem; margin-right: 2rem"
+          >
+            menu
+          </span>
+          <span
+            class="material-symbols-outlined position-absolute cross-icon"
+            style="top: 20%; left: 3%; font-size: 30px; visibility: hidden"
+          >
+            close
+          </span>
+        </button>
+
+        <div
+          class="position-absolute hamberger-content"
+          style="
+            visibility: hidden;
+            min-width: 20%;
+            position: relative;
+            left: -200px;
+          "
+        >
+          <div class="p-3">
+            <form action="/homepage/login">
+              <button
+                class="login m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                login
+              </button>
+            </form>
+
+            <form action="/homepage/signup">
+              <button
+                class="signUp m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                SignUp
+              </button>
+            </form>
+
+            <form action="/admin">
+              <button
+                class="admin m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Admin
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <form action="/homepage/searchResult" method="post">
+        <div class="flex-div input-box">
+          <select
+            name="selectedCategory"
+            id="combo-select"
+            onchange="toggleInputField()"
+          >
+            <option value="">---Search---</option>
+            <option value="Mobiles">Mobiles</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Earbuds">Earbuds</option>
+            <option value="Cables">Cables</option>
+            <option value="Neckbands">Neckbands</option>
+            <option value="Watches">Watches</option>
+            <option value="Mouses">Mouses</option>
+            <option value="Keyboards">Keyboards</option>
+            <option value="Monitors">Monitors</option>
+            <option value="Other">Other</option>
+          </select>
+          <input
+            type="text"
+            name="customCategory"
+            placeholder="Type Model..."
+            id="combo-input"
+            style="display: none"
+          />
+
+          <button class="btn btn-danger search-btn">Search</button>
+        </div>
+        <!-- <div class="flex-div" style="width:100%; position:absolute;">
+                  <input type="text" class="form-control" name="searchType" placeholder="Seach products" style="display: inline;" style="width:100%; position:relative">
+                  <button class="btn btn-danger search-btn">Search</button>
+              </div> -->
+      </form>
+    </div>
+
+    <!-- show cart only when screen size is <=770px -->
+    <button
+      style="position: absolute; left: 90%; display: none"
+      class="cart-btn small-screen-cart"
+      style="margin-right: 1rem"
+    >
+      <span
+        class="material-symbols-outlined cart"
+        style="margin-left: 0rem; color: white"
+        >shopping_cart</span
+      >
+    </button>
+
+    <!-- show search icon  when screen size is  <=450px  -->
+
+    <div class="flex-div third-div">
+      <form action="/homepage/login">
+        <button class="btn btn-success login-btn">login</button>
+      </form>
+      <form action="/homepage/signup">
+        <button class="btn btn-dark signUp-btn">SignUp</button>
+      </form>
+      <form action="/homepage/login" method="get">
+        <button
+          style="position: absolute; left: 98%; top: 30%"
+          class="cart-btn small-screen-cart"
+          style="margin-right: 1rem"
+        >
+          <span
+            class="material-symbols-outlined cart"
+            style="margin-left: 0rem; color: white"
+            >shopping_cart</span
+          >
+        </button>
+      </form>
+
+      <!-- for small screen sizes -->
+    </div>
+  </div>
+
+  <!-- all products -->
+
+   <h2 style="margin-left:2rem;">All Items</h2>
+       
+          <div class="card-container" >
+            <% for(item of allItem){%>
+          
+                <div class="card" >
+                      <a href="/homepage/<%=item._id%>/showInfo"><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:6rem;width:50%;">  </a>
+                      <div class="card-body text-center">
+                        <h5 class="card-title"><%=item.title%></h5>
+                        <h6 class="cad-title">&#8377;<%=item.price.toLocaleString("en-IN")%></h6>
+                     
+                      <div class="rating-card">
+                         
+                         <div class="stars">
+                           <span class="star star1" data-value="1">&#9733;</span>
+                           <span class="star star2" data-value="2">&#9733;</span>
+                           <span class="star star3" data-value="3">&#9733;</span>
+                           <span class="star star4" data-value="4">&#9733;</span>
+                           <span class="star star5" data-value="5">&#9733;</span>
+                         </div>
+                     </div>
+                        <a href="/homepage/signup" class="add-to-cart-btn" style="background-color: rgb(172, 36, 221);color:white;">Add to Cart</a>
+                      </div>
+                </div>
+              
+              <%}%>
+            </div>
+          
+</body>

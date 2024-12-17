@@ -1,61 +1,71 @@
 <% layout("/layouts/biolerplate") %>
+<head>
+    <!-- for use axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
 <body >
-    <div class="login-container" style="">
+    <div class="login-container" >
         <div class="form-div">
             <h5>Admin Login</h5>
-            <form action="/admin/homepage" method="post" novalidate class="needs-validation">
+            <form action="/admin/homepage" method="post" class="needs-validation" novalidate >
             <div>
                
-                <input type="text" name="username" class="form-control mb-0" placeholder="username" required>
+                <input type="text" id="username" name="username" class="form-control mb-0 w-100 p-1" placeholder="Username" required>
                 <div class="invalid-feedback">Please enter username</div>
             </div>
             
-             <div >
-               <input type="password" name="password" class="form-control password mb-0" placeholder="Password" required>
-               
+             <div class="mb-0">
+
+               <input type="password" id="password" name="password" class="form-control w-100 password mb-0" placeholder="Password" required>               
                <div class="invalid-feedback" >Please enter password</div>
-               <span class="eye-on" style="position:relative; top:-30px; left:80%; display: none;"><i class="fas fa-eye icon"></i></span>
+               <div class="password-error" style="display:none; color:red; font-weight:300;"> Must be at least 8 words one Capital and small one special character and number </div>
             </div>
+              <br>
+             <div>
+                <label for="show-pass">Show password</label><br>
+                <input type="checkbox" id="show-pass" class="m-0" onchange="handleChange()">
+             </div>
+            
 
-            <!-- <div>
-                <label for="show-pass">Show password</label>
-                <input type="checkbox" id="show-pass">
-            </div> -->
-
-            <button class="btn  submit-btn mt-4" style="background-color: rgb(172, 36, 221); color:white;">Login</button>
+            <button type="submit" class="btn  submit-btn mt-4" disabled  style="background-color: rgb(172, 36, 221); color:white;" >Proceed </button>
         </form>
         </div>        
     </div>
     
     <script>
 
-        const eyeBtn=document.querySelector(".eye-on");
-        const eyeIcon=document.querySelector(".icon");
+        
+        
         const passwordInput=document.querySelector(".password");
+        const passError=document.querySelector(".password-error");
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
+        const submitBtn=document.querySelector(".submit-btn");
         
-        
+        const handleChange=()=>{
+              if(passwordInput.type=='password'){
+                 passwordInput.type="text";
+              }
+              else 
+                 passwordInput.type="password";
+        }
+ 
         passwordInput.addEventListener("input",()=>{
-             if(passwordInput.value===''){
-                eyeBtn.style.display="none";
-             }
-             else 
-              eyeBtn.style.display="inline";
-        });
-
-        // to show hide
-        eyeBtn.addEventListener("click",()=>{
-            if(passwordInput.type=="password"){
-                passwordInput.type="text";
-                eyeIcon.classList.remove("fa-eye");
-                eyeIcon.classList.add("fa-eye-slash");
-            }
-            else{
-                passwordInput.type="password";
-                eyeIcon.classList.remove("fa-eye-slash");
-                eyeIcon.classList.add("fa-eye");
-            }
             
+            if(passwordInput.value.length<8 || !passwordRegex.test(passwordInput.value)){
+                passError.style.display="inline";
+                submitBtn.disabled=true;
+            }
+            else {
+                passError.style.display="none";
+                submitBtn.disabled=false;
+            }
+               
         });
+        
+       
+
+
+      
     </script>
        
    

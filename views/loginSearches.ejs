@@ -1,91 +1,234 @@
 <% layout("/layouts/biolerplate") %>
 <body>
-    
-        <!-- navbar
-        <div class="nav-container sticky-top">
-          <div class="flex-div left-side-div">
-            <span class="material-symbols-outlined" style="">shopping_bag</span>
+  <!-- navbar -->
+  <div class="nav-container sticky-top">
+    <div class="flex-div left-side-div">
+      <a href="/" style="color: white"
+        ><span class="material-symbols-outlined" style="">Home</span></a
+      >
+    </div>
+
+    <div class="flex-div middle-side-div">
+      <!-- show only when screen size is <=770px -->
+      <div class="hamberger-container" style="visibility: hidden">
+        <button
+          class="hamberger-btn"
+          style="background: none; border: none; color: white"
+          ;
+        >
+          <span
+            class="material-symbols-outlined hamberger-icon"
+            style="padding: 4px; font-size: 2rem; margin-right: 2rem"
+          >
+            menu
+          </span>
+          <span
+            class="material-symbols-outlined position-absolute cross-icon"
+            style="top: 20%; left: 3%; font-size: 30px; visibility: hidden"
+          >
+            close
+          </span>
+        </button>
+
+        <div
+          class="position-absolute hamberger-content"
+          style="
+            visibility: hidden;
+            min-width: 20%;
+            position: relative;
+            left: -200px;
+          "
+        >
+          <div class="p-3">
+            <form action="/homepage">
+              <button
+                class="log-out m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Logout
+              </button>
+            </form>
+
+            <form action="/homepage/signUp/orders">
+              <button
+                class="orders m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Your Orders
+              </button>
+            </form>
+
+            <form action="/homepage/signUp/cart" method="get">
+              <button
+                class="carts m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Cart
+              </button>
+            </form>
+          </div>
         </div>
-
-         <div class="flex-div middle-side-div">
-              
-              <form action="/homepage/signUp/searchResult" method="post">
-                <div class="flex-div">
-                   <input type="text" class="form-control" name="searchType" placeholder="Seach products">
-                   <button class="btn btn-danger search-btn">Search</button>
-                </div>
-              </form>
-          </div>
-          
-          <div class="flex-div right-side-div">
-                <form action="/homepage">
-                     <button class="btn btn-success login-btn">Logout</button>
-                </form>
-                <form action="/homepage/signUp/orders">
-                      <button class="btn btn-success your-orders-btn">Your Orders<span class="material-symbols-outlined orders-icon" style="margin-top:-1rem;position:relative;top:6px;left:3px;">orders</span></button>
-                </form>
-                <form action="/homepage/signUp/cart" method="get" >
-                    <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white;">shopping_cart</span></button>
-                    <div class="show-cart-num"><%=cart%></div>
-                </form>
-          </div>
-
-          <div class="dropdown dropdown-loginHomepage" >
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-            <ul class="dropdown-menu">
-              <li>
-                <form action="/homepage">
-                  <button class="">Logout</button>
-               </form>
-              </li>
-              <li>
-                <form action="/homepage/signUp/orders">
-                  <button class="">Your Orders</button>
-               </form>
-              </li>
-              <li>
-                <form action="/homepage/signUp/cart" method="get" >
-                    <button class="" style="margin-right:1rem;">Cart</button>
-                    
-                </form> 
-              </li>
-            </ul>
-          </div>
-
-        </div> -->
-
-          <!-- slider -->
-          <!-- <div class="slide-container">
-            <img src="https://cdn.thewirecutter.com/wp-content/media/2024/03/androidphones-2048px-0793-2x1-1.jpg?auto=webp&quality=75&crop=2:1&width=1024" alt="" class="slide">
-            <img src="https://media.istockphoto.com/id/141944385/photo/laptops.jpg?s=612x612&w=0&k=20&c=qqWhcSA5ZJofpOvyLuyMcZTQU5Ew9Ebadk3u8iPVQVU=" alt="" class="slide">
-            <img src="https://helpdeskgeek.com/wp-content/pictures/2021/10/multi-monitor.jpeg" alt="" class="slide">
-            <img src="https://www.pcworld.com/wp-content/uploads/2023/10/cpu-hub-100758206-orig.jpg?quality=50&strip=all" alt="" class="slide">
-            <img src="https://i.pcmag.com/imagery/reviews/07lrPVKK2Bexf9Xi0sKRlSa-1..v1678155979.jpg" alt="" class="slide">
-            <img src="https://static1.makeuseofimages.com/wordpress/wp-content/uploads/2018/08/best-mouse-keyboard-combos.jpg" alt="" class="slide">
-            <img src="https://hips.hearstapps.com/hmg-prod/images/best-over-ear-headphones-1527009080.jpg" alt="" class="slide">
-      
-            <span class="material-symbols-outlined prev">arrow_back_ios</span>
-            <span class="material-symbols-outlined next">arrow_forward_ios</span>
-        </div> -->
-
-        <!-- all products -->
-        <h2 style="margin-left:2rem; margin-top:2rem;">Search Results...</h2>
-        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2">
-           <% for(item of searchItem){%>
-         
-          <div class="card mb-3">
-                <a href="/homepage/<%=item.productId%>/loginShowInfo"><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:15rem;"></a>
-                <div class="card-body">
-                  <h5 class="card-title"><%=item.title%></h5>
-                  <h6 class="cad-title">&#8377;<%=item.price.toLocaleString("en-IN")%></h6>
-                  <form action="/homepage/signUp/<%=item.productId%>/cart" method="post">
-                    <button class="btn  add-cart-btn" style="background-color: rgb(172, 36, 221); color:white;">Add to Cart</button>
-                    
-                 </form>
-                </div>
-          </div>
-        
-        <%}%>
       </div>
-      <a href="/loginHomepage" class="btn btn-success col-6 offset-3 mb-3">Continue Shopping</a>
+
+      <form action="/homepage/signUp/searchResult" method="post">
+        <div class="flex-div input-box">
+          <select
+            name="selectedCategory"
+            id="combo-select"
+            onchange="toggleInputField()"
+          >
+            <option value="">---Search---</option>
+            <option value="Mobiles">Mobiles</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Earbuds">Earbuds</option>
+            <option value="Cables">Cables</option>
+            <option value="Neckbands">Neckbands</option>
+            <option value="Watches">Watches</option>
+            <option value="Mouses">Mouses</option>
+            <option value="Keyboards">Keyboards</option>
+            <option value="Monitors">Monitors</option>
+            <option value="Other">Other</option>
+          </select>
+          <input
+            type="text"
+            name="customCategory"
+            placeholder="Type Model..."
+            id="combo-input"
+            style="display: none"
+          />
+
+          <button class="btn btn-danger search-btn">Search</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- show only when screen size is <=770px -->
+    <div
+      style="position: absolute; left: 90%; display: none"
+      class="small-screen-cart"
+    >
+      <form action="/homepage/signUp/cart" method="get">
+        <button class="cart-btn" style="margin-right: 1rem">
+          <span
+            class="material-symbols-outlined cart"
+            style="margin-left: 0rem; color: white"
+            >shopping_cart</span
+          >
+        </button>
+        <% if(cart){%>
+        <div class="show-cart-num" style="position: absolute; top: -11px">
+          <span><%=cart%></span>
+        </div>
+        <%}%>
+      </form>
+    </div>
+
+    <div class="flex-div right-side-div">
+      <form action="/homepage">
+        <button class="btn btn-success login-btn">Logout</button>
+      </form>
+      <form action="/homepage/signUp/orders">
+        <button class="btn btn-success your-orders-btn">
+          Your Orders<span
+            class="material-symbols-outlined orders-icon"
+            style="margin-top: -1rem; position: relative; top: 6px; left: 3px"
+            >orders</span
+          >
+        </button>
+      </form>
+      <form action="/homepage/signUp/cart" method="get">
+        <button class="cart-btn" style="margin-right: 1rem">
+          <span
+            class="material-symbols-outlined cart"
+            style="margin-left: 0rem; color: white"
+            >shopping_cart</span
+          >
+        </button>
+        <% if(cart){%>
+        <div class="show-cart-num"><%=cart%></div>
+        <%}%>
+      </form>
+    </div>
+  </div>
+  
+  <!-- all products -->
+  <h4 style="margin-left: 2rem; margin-top: 2rem">Result Found</h4>
+ 
+  <% for(item of searchItem){%>
+
+  <div class=" search-container mb-5" style=" display: flex; flex-direction:row;  position:relative; align-content:space-between; height:150px" >
+    <div class="m-2 search-container-first" >
+      <a href="/homepage/<%=item._id%>/loginShowInfo"
+        ><img
+          src="<%=item.image%>"
+          class="card-img-top"
+          alt="..."
+          style="margin-top:50%;"
+          width="60px"
+          height="60px"
+      /></a>
+    </div>
+    
+    <div class="search-container-second" style="position:absolute; left:50%; margin-top:30px;">
+      <ul>
+        <li><h5 class="card-title"><%=item.title%></h5></li>
+        <li>&#8377;<%=item.price.toLocaleString("en-IN")%></li>
+        <li><%=item.description%></li>
+      
+      </ul>
+      
+      <form action="/homepage/signUp/<%=item._id%>/cart" method="post" >
+        <button
+          class=""
+          style="background-color: rgb(172, 36, 221); color: white; padding:5px 10px; text-decoration: none; border-radius: 10px; margin-left:30px; border:none;"
+        >
+          Add to Cart
+        </button>
+      </form>
+      
+      
+    </div>
+  </div>
+  
+  <%}%>
+
+  <a href="/loginHomepage" class="btn btn-success col-6 offset-3 mb-3"
+    >Continue Shopping</a
+  >
+
+  <script>
+    // hamberger-btn
+    const hBtn = document.querySelector(".hamberger-btn");
+    const hContent = document.querySelector(".hamberger-content");
+    const crossIcon = document.querySelector(".cross-icon");
+    const hambergerIcon = document.querySelector(".hamberger-icon");
+
+    hBtn.addEventListener("click", () => {
+      if (hContent.style.visibility === "hidden") {
+        crossIcon.style.visibility = "visible";
+        hambergerIcon.style.visibility = "hidden";
+        hContent.style.visibility = "visible";
+        hContent.style.left = "0px";
+        // hContent.style.opacity=1;
+      } else {
+        crossIcon.style.visibility = "hidden";
+        hambergerIcon.style.visibility = "visible";
+        hContent.style.left = "-200px";
+        hContent.style.visibility = "hidden";
+      }
+    });
+
+    // combo search functionality
+    function toggleInputField() {
+      const comboSelect = document.querySelector("#combo-select");
+      const comboInput = document.querySelector("#combo-input");
+
+      if (comboSelect.value === "Other") {
+        comboSelect.style.display = "none";
+        comboInput.style.display = "block";
+      } else {
+        comboInput.style.display = "none";
+      }
+    }
+  </script>
 </body>

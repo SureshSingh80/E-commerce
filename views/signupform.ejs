@@ -1,36 +1,97 @@
 <% layout("/layouts/biolerplate") %>
 <body style="background-color: rgb(172, 36, 221);">
 
-    <div class="login-container" style="background-color: rgb(240, 212, 217);">
+    <div class="login-container">
+       <div class="form-div">
         <h3 style=" margin-left:30%;   color:rgb(172, 36, 221);">SignUp</h3> 
-               <form action="/homepage/signUp" method="post" novalidate class="needs-validation=' ">
+          <form action="/homepage/signUp" method="post" novalidate class="needs-validation">
 
-            <div>
-               <input type="text"  name="username" class="form-control username mb-0" placeholder="Username" required>
-               <div class="invalid-feedback">Please Enter username</div>
-            </div>
-            <div>
-                <input type="text" name="email" class="form-control email mb-0" placeholder="Email" required >
-                <div class="invalid-feedback">Please Enter email</div>
-            </div>
-           
-            <div>
-               <input type="password" name="password" class="form-control password mb-0" placeholder="Password" required>
-               <div class="invalid-feedback">Please Enter password</div>
-            </div>
+     <div>
+        <input type="text"  name="username" class="form-control username mb-0" placeholder="Username" required>
+        <div class="invalid-feedback">Please Enter username</div>
+     </div>
+     <div>
+         <input type="email" name="email" class="form-control email mb-0" placeholder="Email" required >
+         <div class="invalid-feedback">Please Enter email</div>
+     </div>
+    
+     <div>
+        <input type="password" name="password" class="form-control password1 mb-0" placeholder="Password" required>
+        <div class="invalid-feedback">Please Enter password</div>
+        <div class="password-error1" style="display:none; color:red; font-weight:300;">Must be at least 8 words one Capital and small one special character and number</div>
+     </div>
 
-            <div class="mb-4">
-                <input type="text" name="mobNo" class="form-control mobNo mb-0" placeholder="Mob No." required>
-                <div class="invalid-feedback">Please Enter Mob</div>
-            </div>
-            
-            <div>
-                <textarea name="address" id="" placeholder="Delivery Address" rows="2" cols="33" class="form-control mb-0" required></textarea>
-                <div class="invalid-feedback">Please enter Delivery Address</div>
-            </div>   
+     <div>
+        <input type="password" name="confirmPassword" class="form-control password2 mb-0" placeholder="Confirm Password" required>
+        <div class="invalid-feedback">Please Enter Confirm password</div>
+        <div class="password-error2" style="display:none; color:red; font-weight:300;">Password and confirm password should be same</div>
+     </div>
 
-            <button class="btn btn-success submit-btn mt-4">Submit</button>
-        </form>
+     <div class="mb-4">
+         <input type="number" name="mobNo" class="form-control mobNo mb-0" placeholder="Mob No." required>
+         <div class="invalid-feedback">Please Enter Mob</div>
+     </div>
+     
+     <div>
+         <textarea name="address" id="" placeholder="Delivery Address" rows="2" cols="33" class="form-control mb-0" required></textarea>
+         <div class="invalid-feedback">Please enter Delivery Address</div>
+     </div>
+     
+     <div>
+         <label for="show-pass">Show password</label><br>
+         <input type="checkbox" class="m-0" onchange="handleChange()">
+     </div>
+
+     <button class="btn  submit-btn mt-4" disabled style="background-color: rgb(172, 36, 221); color:white;">Proceed</button>
+    </form>
+       </div>
     </div>
+
+    <script>
+         const pass1=document.querySelector(".password1");
+         const pass2=document.querySelector(".password2");
+         const passError1=document.querySelector(".password-error1");
+         const passError2=document.querySelector(".password-error2");
+         const submitBtn=document.querySelector(".submit-btn");
+         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
+
+         const handleChange=()=>{
+            
+              if(pass1.type==='password' && pass2.type==='password'){
+                 pass1.type='text';
+                 pass2.type='text';
+              }
+              else{
+                pass1.type='password';
+                pass2.type='password';
+              }
+         }
+
+         pass1.addEventListener("input",()=>{
+             if(pass1.value.length<8 || !passwordRegex.test(pass1.value)){
+                passError1.style.display="inline";
+                submitBtn.disabled=true;
+             }
+             else {
+               passError1.style.display="none";
+               submitBtn.disabled=false;
+             }
+                
+                
+         });
+         pass2.addEventListener("input",()=>{
+            if(pass1.value!=pass2.value){
+                passError2.style.display="inline";
+                submitBtn.disabled=true;
+            }
+            else{
+                passError2.style.display="none";
+                submitBtn.disabled=false;
+            } 
+
+         
+               
+         });
+    </script>
     
 </body>

@@ -1,17 +1,33 @@
 <% layout("/layouts/biolerplate") %>
 <body>
    
-        <a href="/homepage" class="btn btn-success dashboard-btn mt-3  offset-6  ">Logout Admin</a>
+      <div class="  m-4">
+        <a href="/homepage" class="text-decoration-none mx-1  " style="padding:5px 10px; background-color: rgb(75, 72, 72); color:white;float:right; ">Logout</a>
+        <a href="/admin/new"class="text-decoration-none " style="padding:5px 10px; background-color: rgb(19, 184, 69); color:white;float:right;">Add  Item</a>
+      </div>
+        
        
     <h2 style="margin-left:2rem;">All Items</h2>
-        <div class="row row-cols-lg-4 row-cols-md-3 row-cols-sm-2">
+        <div class="card-container">
            <% for(item of allItem){%>
          
           <div class="card">
-                <a href=""><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:15rem;"></a>
-                <div class="card-body">
+                <a href=""><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:6rem;width:50%;"></a>
+                <div class="card-body text-center">
                   <h5 class="card-title"><%=item.title%></h5>
                   <h6 class="cad-title">&#8377;<%=item.price.toLocaleString("en-IN")%></h6>
+
+                  <div class="rating-card">
+                    
+                    <div class="stars">
+                      <span class="star star1" data-value="1">&#9733;</span>
+                      <span class="star star2" data-value="2">&#9733;</span>
+                      <span class="star star3" data-value="3">&#9733;</span>
+                      <span class="star star4" data-value="4">&#9733;</span>
+                      <span class="star star5" data-value="5">&#9733;</span>
+                    </div>
+                </div>
+                
                   <div class="flex-div" style="justify-content: space-between;">
 
                   <form action="/admin/<%=item._id%>/edit" method="get">
@@ -27,7 +43,5 @@
           </div>
           <%}%>
         </div>
-        <form action="/admin/new" method="get">
-            <button class="btn btn-success mb-3 col-6 offset-3">Add new Item</button>
-        </form>
+        <!-- -->
 </body>
