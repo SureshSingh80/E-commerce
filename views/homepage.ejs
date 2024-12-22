@@ -3,7 +3,7 @@
   <!-- navbar -->
   <div class="nav-container sticky-top">
     <div class="flex-div first-div">
-      <a href="/" style="color: white"
+      <a href="/homepage" style="color: white"
         ><span class="material-symbols-outlined">Home</span></a
       >
     </div>
@@ -66,6 +66,16 @@
                 Admin
               </button>
             </form>
+
+            <form action="/homepage">
+              <button
+                class="admin m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Home
+              </button>
+            </form>
+
           </div>
         </div>
       </div>
@@ -617,5 +627,12 @@
       </div>
     </div>
   </footer>
-  <!-- <script src="/public/js/app.js"></script> -->
+   <script>
+    //  console.log("logout homepage");
+    //  history.pushState(null,null,location.href);
+    //  window.onpopstate = function(event) {
+    //     history.pushState(null, '', location.href);
+    // };
+
+   </script>
 </body>

@@ -19,6 +19,8 @@ require("dotenv").config(); // to access data of  .env
 const cookie = require("cookie");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
+const browserSync=require("browser-sync");
+const nocache=require('nocache');
 
 const app = express();
 //basic setup
@@ -73,21 +75,33 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // used to parse incoming JOSN request bodies and makes the data available in req.body
 app.use(express.json());
 
+// Middlware (after logout user can't go back and enter in login)
+
+
+
+//app.use(nocache());
+
 // for use ejs-mate
 app.engine("ejs", ejsMate);
 
-const port = 8080;
+const port =8080;  
 app.listen(port, () => {
   console.log(`Server started at port ${port}`);
 });
+
 
 // routes (Homepage)
 app.get("/", (req, res) => {
   res.send("Hii, I am root directory");
 });
 
-// homepage
+// homepage also logout (user and admin)
 app.get("/homepage", async (req, res, next) => {
+
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
   // logout admin
   res.cookie("adminToken", "", {
     httpOnly: true,
@@ -100,8 +114,10 @@ app.get("/homepage", async (req, res, next) => {
     expires: new Date(0),
   });
 
+ 
   try {
     let allItem = await Item.find({});
+    
     res.render("homepage.ejs", { allItem });
   } catch (err) {
     next(new customError(500, "Failed to load Homepage"));
@@ -116,7 +132,7 @@ app.get("/homepage/login", (req, res) => {
 // signUp
 app.get("/homepage/signup", (req, res) => {
   res.render("signupform.ejs");
-});
+});  
 
 // show route(display specification of particular product)
 app.get("/homepage/:id/showInfo", async (req, res, next) => {
@@ -141,10 +157,10 @@ app.post("/admin/homepage", async (req, res, next) => {
     let name = "admin";
     let pass = "Admin@123";
     const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;  
 
     let { username, password } = req.body;
-    console.log(passwordRegex.test(password));
+    // console.log(passwordRegex.test(password));
 
     if (password.length < 8) {
       req.flash("error", "password must be atleast 8 character");
@@ -194,49 +210,65 @@ app.get("/admin/homepage", async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-  } else res.redirect("/homepage");
+  } else res.redirect("/admin");
 });
 
 // delete particualar item(delete route)
 app.delete("/admin/:id/delete", async (req, res, next) => {
-  try {
-    let { id } = req.params;
-    let deletedItem = await Item.findByIdAndDelete(id);
-    req.flash("success", "Deleted item successfully");
-    let allItem = await Item.find({});
-    res.redirect("/admin/homepage");
-  } catch (err) {
-    next(err);
-  }
-});
 
-// app.get("/admin/homepage",async(req,res)=>{
-//     let allItem=await Item.find({});
-//     res.render("alter.ejs",{allItem});
-// });
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.adminToken){
+    try {
+      let { id } = req.params;
+      let deletedItem = await Item.findByIdAndDelete(id);
+      req.flash("success", "Deleted item successfully");
+      let allItem = await Item.find({});
+      res.redirect("/admin/homepage");
+    } catch (err) {
+      next(err);
+    }
+  }
+  else 
+     res.redirect("/admin");
+  
+});
 
 //edit item(update route)
 app.get("/admin/:id/edit", async (req, res, next) => {
-  try {
-    let { id } = req.params;
-    let item = await Item.findById(id);
-    if (!item) throw new customError(500, "Item Not Found");
-    res.render("edit.ejs", { item });
-  } catch (err) {
-    next(err);
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.adminToken){
+    try {
+      let { id } = req.params;
+      let item = await Item.findById(id);
+      if (!item) throw new customError(500, "Item Not Found");
+      res.render("edit.ejs", { item });
+    } catch (err) {
+      next(err);
+    }
   }
+  else 
+     res.redirect("/admin");
+ 
 });
 app.put("/admin/:id", async (req, res, next) => {
-  try {
-    let { id } = req.params;
-    let item = req.body.item;
-    await Item.findByIdAndUpdate(id, item);
-    req.flash("success", "Edit Successfully");
-    let allItem = await Item.find({});
-    res.redirect("/admin/homepage");
-  } catch (err) {
-    next(new customError(500, "Please follow all mongoose schema constraints"));
-  }
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+   if(cookies.adminToken){
+    try {
+      let { id } = req.params;
+      let item = req.body.item;
+      await Item.findByIdAndUpdate(id, item);
+      req.flash("success", "Edit Successfully");
+      let allItem = await Item.find({});
+      res.redirect("/admin/homepage");
+    } catch (err) {
+      next(new customError(500, "Please follow all mongoose schema constraints"));
+    }
+   }
+   else 
+     res.redirect("/admin");
+  
 });
 
 // add item
@@ -244,16 +276,23 @@ app.get("/admin/new", (req, res) => {
   res.render("new.ejs");
 });
 app.post("/admin/new", async (req, res, next) => {
-  try {
-    let newItem = req.body.item;
-    let i = new Item(newItem);
-    await i.save();
-    req.flash("success", "Item added successfully");
-    let allItem = await Item.find({});
-    res.redirect("/admin/homepage");
-  } catch (err) {
-    next(new customError(500, "Please follow all mongoose schema constraints"));
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.adminToken){
+    try {
+      let newItem = req.body.item;
+      let i = new Item(newItem);
+      await i.save();
+      req.flash("success", "Item added successfully");
+      let allItem = await Item.find({});
+      res.redirect("/admin/homepage");
+    } catch (err) {
+      next(new customError(500, "Please follow all mongoose schema constraints"));
+    }
   }
+  else 
+     res.redirect("/admin");
+  
 });
 
 // signUp (User panel)
@@ -394,213 +433,279 @@ app.post("/homepage/login", async (req, res, next) => {
   }
 });
 
+// login show product
 app.get("/homepage/:id/loginShowInfo", async (req, res, next) => {
-  try {
-    let { id } = req.params;
-    let item = await Item.findById(id);
-    if (!item) throw new customError(500, "Item Not Found");
-    res.render("loginShow.ejs", { item });
-  } catch (err) {
-    next(err);
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      let { id } = req.params;
+      let item = await Item.findById(id);
+      if (!item) throw new customError(500, "Item Not Found");
+      res.render("loginShow.ejs", { item });
+    } catch (err) {
+      next(err);
+    }
   }
+  else 
+     res.redirect("/homepage");
+  
 });
 
 // add to cart
 app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
-  try {
-    let { id } = req.params;
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+  if(cookies.userToken){
+    try {
+      let { id } = req.params;
+    
+      let currentUser = await CurrentUser.find({});
   
-    let currentUser = await CurrentUser.find({});
-
-    // find Who login
-    let customers = await Customer.find({});
-    let cust;
-    for (customer of customers) {
-      if (customer.username == currentUser[0].username) {
-        cust = customer;
+      // find Who login
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == currentUser[0].username) {
+          cust = customer;
+        }
       }
+  
+      let item = await Item.findById(id);
+      let newItem = new Cart({
+        type: item.type,
+        title: item.title,
+        description: item.description,
+        specification: item.specification,
+        image: item.image,
+        price: item.price,
+      });
+  
+      cust.carts.push(newItem);
+      await newItem.save();
+      let result = await cust.save();
+      console.log(result);   
+      // res.redirect("/loginHomepage");
+      res.send(`success`);
+    } catch (err) {
+      next(err);
     }
-
-    let item = await Item.findById(id);
-    let newItem = new Cart({
-      type: item.type,
-      title: item.title,
-      description: item.description,
-      specification: item.specification,
-      image: item.image,
-      price: item.price,
-    });
-
-    cust.carts.push(newItem);
-    await newItem.save();
-    let result = await cust.save();
-    console.log(result);   
-    // res.redirect("/loginHomepage");
-    res.send(`success`);
-  } catch (err) {
-    next(err);
   }
+  else 
+     res.redirect("/homepage");
+  
 });
 
 
 
 // show cart
 app.get("/homepage/signUp/cart", async (req, res, next) => {
-  try {
-    // find Who login
-    let currentUser = await CurrentUser.find({});
-    let customers = await Customer.find({});
-    let cust;
-    for (customer of customers) {
-      if (customer.username == currentUser[0].username) {
-        cust = customer;
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+  if(cookies.userToken){
+    try {
+      // find Who login
+      let currentUser = await CurrentUser.find({});
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == currentUser[0].username) {
+          cust = customer;
+        }
       }
+      let items = await Customer.find({ username: cust.username }).populate(
+        "carts"
+      );
+      let Items = items[0];
+      // calculate price
+      let price = 0;
+      for (item of Items.carts) {
+        price = price + item.price;
+      }
+      if (cust.carts.length) res.render("cart.ejs", { Items, totalPrice: price });
+      else res.render("emptyCart.ejs");
+    } catch (err) {
+      next(err);
     }
-    let items = await Customer.find({ username: cust.username }).populate(
-      "carts"
-    );
-    let Items = items[0];
-    // calculate price
-    let price = 0;
-    for (item of Items.carts) {
-      price = price + item.price;
-    }
-    if (cust.carts.length) res.render("cart.ejs", { Items, totalPrice: price });
-    else res.render("emptyCart.ejs");
-  } catch (err) {
-    next(err);
   }
+  else 
+    res.redirect("/homepage");
+  
 });
 
 // delete from cart
 app.delete("/homepage/:id/carts/:cartId", async (req, res, next) => {
-  try {
-    let { id, cartId } = req.params;
-    let res1 = await Customer.findByIdAndUpdate(id, {
-      $pull: { carts: cartId },
-    });
-    let res2 = await Cart.findByIdAndDelete(cartId);
-    res.redirect("/homepage/signUp/cart");
-  } catch (err) {
-    next(err);
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      let { id, cartId } = req.params;
+      let res1 = await Customer.findByIdAndUpdate(id, {
+        $pull: { carts: cartId },
+      });
+      let res2 = await Cart.findByIdAndDelete(cartId);
+      res.redirect("/homepage/signUp/cart");
+    } catch (err) {
+      next(err);
+    }
   }
+  else 
+     res.redirect("/homepage");
+  
 });
 
 // buy route (by without going to  cart)
 app.get("/homepage/signUp/:itemId/buy", async (req, res, next) => {
-  try {
-    let { itemId } = req.params;
 
-    // find Who login
-    let currentUser = await CurrentUser.find({});
-    let customers = await Customer.find({});
-    let cust;
-    for (customer of customers) {
-      if (customer.username == currentUser[0].username) {
-        cust = customer;
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      let { itemId } = req.params;
+  
+      // find Who login
+      let currentUser = await CurrentUser.find({});
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == currentUser[0].username) {
+          cust = customer;
+        }
       }
+      let date = Math.floor(Math.random() * 30) + 1;
+      let month = new Date().getMonth();
+      let year = new Date().getFullYear();
+      let status = "Expected at: " + date + "/" + month + "/" + year;
+      let item = await Item.findById(itemId);
+      let newOrder = new Order({
+        orderName: item.title,
+        orderImage: item.image,
+        orderPrice: item.price,
+        orderStatus: status,
+        orderAddress: cust.address,
+        customerName: cust.username,
+        mobNo: cust.mobNo,
+        status: "Pending",
+      });
+      await cust.orders.push(newOrder);
+      await newOrder.save();
+      await cust.save();
+      res.render("orderSuccess.ejs", { item });
+    } catch (err) {
+      next(err);
     }
-    let date = Math.floor(Math.random() * 30) + 1;
-    let month = new Date().getMonth();
-    let year = new Date().getFullYear();
-    let status = "Expected at: " + date + "/" + month + "/" + year;
-    let item = await Item.findById(itemId);
-    let newOrder = new Order({
-      orderName: item.title,
-      orderImage: item.image,
-      orderPrice: item.price,
-      orderStatus: status,
-      orderAddress: cust.address,
-      customerName: cust.username,
-      mobNo: cust.mobNo,
-      status: "Pending",
-    });
-    await cust.orders.push(newOrder);
-    await newOrder.save();
-    await cust.save();
-    res.render("orderSuccess.ejs", { item });
-  } catch (err) {
-    next(err);
   }
+  else 
+    res.redirect("/homepage");
+  
 });
 // buy route (through cart)
 app.get("/homepage/signUp/:cartId/buyNow", async (req, res, next) => {
-  try {
-    let { cartId } = req.params;
-    // find Who login
-    let currentUser = await CurrentUser.find({});
-    let customers = await Customer.find({});
-    let cust;
-    for (customer of customers) {
-      if (customer.username == currentUser[0].username) {
-        cust = customer;
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      let { cartId } = req.params;
+      // find Who login
+      let currentUser = await CurrentUser.find({});
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == currentUser[0].username) {
+          cust = customer;
+        }
       }
+      let date = Math.floor(Math.random() * 30) + 1;
+      let month = new Date().getMonth();
+      let year = new Date().getFullYear();
+      let status = "Expected at: " + date + "/" + month + "/" + year;
+  
+      let item = await Cart.findById(cartId);
+  
+      let newOrder = new Order({
+        orderName: item.title,
+        orderImage: item.image,
+        orderPrice: item.price,
+        orderStatus: status,
+        orderAddress: cust.address,
+        customerName: cust.username,
+        mobNo: cust.mobNo,
+        status: "Pending",
+      });
+      await cust.orders.push(newOrder);
+      await newOrder.save();
+      await cust.save();
+      res.render("orderSuccess.ejs", { item });
+    } catch (err) {
+      next(err);
     }
-    let date = Math.floor(Math.random() * 30) + 1;
-    let month = new Date().getMonth();
-    let year = new Date().getFullYear();
-    let status = "Expected at: " + date + "/" + month + "/" + year;
-
-    let item = await Cart.findById(cartId);
-
-    let newOrder = new Order({
-      orderName: item.title,
-      orderImage: item.image,
-      orderPrice: item.price,
-      orderStatus: status,
-      orderAddress: cust.address,
-      customerName: cust.username,
-      mobNo: cust.mobNo,
-      status: "Pending",
-    });
-    await cust.orders.push(newOrder);
-    await newOrder.save();
-    await cust.save();
-    res.render("orderSuccess.ejs", { item });
-  } catch (err) {
-    next(err);
   }
+  else 
+     res.redirect("/homepage");
+  
 });
 
 // All orders
 app.get("/homepage/signUp/orders", async (req, res, next) => {
-  try {
-    // find Who login
-    let currentUser = await CurrentUser.find({});
-    let customers = await Customer.find({});
-    let cust;
-    for (customer of customers) {
-      if (customer.username == currentUser[0].username) {
-        cust = customer;
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      // find Who login
+      let currentUser = await CurrentUser.find({});
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == currentUser[0].username) {
+          cust = customer;
+        }
       }
+      let order = await Customer.find({ username: cust.username }).populate(
+        "orders"
+      );
+      let Orders = order[0];
+      if (cust.orders.length) res.render("orders.ejs", { Orders });
+      else res.render("emptyOrder.ejs");
+    } catch (err) {
+      next(err);
     }
-    let order = await Customer.find({ username: cust.username }).populate(
-      "orders"
-    );
-    let Orders = order[0];
-    if (cust.orders.length) res.render("orders.ejs", { Orders });
-    else res.render("emptyOrder.ejs");
-  } catch (err) {
-    next(err);
   }
+  else 
+    res.redirect("/homepage");
+  
 });
 
 // cancel orders
 app.get("/homepage/signUp/:id/cancelOrder/:orderId", async (req, res, next) => {
-  try {
-    let { id, orderId } = req.params;
-    await Customer.findByIdAndUpdate(id, { $pull: { orders: orderId } });
-    await Order.findByIdAndDelete(orderId);
-    res.render("orderCancel.ejs");
-  } catch (err) {
-    next(err);
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      let { id, orderId } = req.params;
+      await Customer.findByIdAndUpdate(id, { $pull: { orders: orderId } });
+      await Order.findByIdAndDelete(orderId);
+      res.render("orderCancel.ejs");
+    } catch (err) {
+      next(err);
+    }
   }
+  else 
+     res.redirect("/homepage");
+  
 });
 
 // return to login(User) from Logout
 app.get("/loginHomepage", async (req, res, next) => {
+
+  
+    
+    res.setHeader('Cache-Control', 'no-store');                                     
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-  console.log("loginCookies= ", cookies.userToken);
+  // console.log("loginCookies= ", cookies.userToken);
   if (cookies.userToken) {
     try {
       // find Who login
@@ -660,6 +765,14 @@ app.post("/homepage/topDeals/Explore",async(req,res,next)=>{
 });  
 
 app.post("/loginHomepage/topDeals/Explore",async(req,res,next)=>{
+
+    // res.setHeader('Cache-Control', 'no-store');
+    // res.setHeader('Pragma', 'no-cache');
+    // res.setHeader('Expires', '0');
+    
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+  if (cookies.userToken){
     try {
       let {type}=req.body;
        // find Who login
@@ -679,39 +792,51 @@ app.post("/loginHomepage/topDeals/Explore",async(req,res,next)=>{
     } catch (error) {
        next(error);
     }
+  }
+  else 
+     res.redirect("/homepage");
+    
 });
 
 // searching items (login Homepage)
 app.post("/homepage/signUp/searchResult", async (req, res, next) => {
-  try {
-    // find Who login
-    let currentUser = await CurrentUser.find({});
-    let customers = await Customer.find({});
-    let cust;
-    for (customer of customers) {
-      if (customer.username == currentUser[0].username) {
-        cust = customer;
-      }
-    }
-    let { selectedCategory, customCategory } = req.body;
-    let searchItem;
 
-    let allItem = await Item.find({});
-    if(selectedCategory==='Other'){
-      searchItem=allItem.filter(item=>item.title==customCategory)
-  }
-  else{
-     searchItem=allItem.filter(item=>item.type==selectedCategory);
-  }
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+  if(cookies.userToken){
+    try {
+      // find Who login
+      let currentUser = await CurrentUser.find({});
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == currentUser[0].username) {
+          cust = customer;
+        }
+      }
+      let { selectedCategory, customCategory } = req.body;
+      let searchItem;
   
- 
-    if (searchItem.length==0) res.render("noSearchFoundLogin.ejs");
-    else {
-      res.render("loginSearches.ejs", { searchItem, cart: cust.carts.length });
+      let allItem = await Item.find({});
+      if(selectedCategory==='Other'){
+        searchItem=allItem.filter(item=>item.title==customCategory)
     }
-  } catch (err) {
-    next(err);
+    else{
+       searchItem=allItem.filter(item=>item.type==selectedCategory);
+    }
+    
+   
+      if (searchItem.length==0) res.render("noSearchFoundLogin.ejs");
+      else {
+        res.render("loginSearches.ejs", { searchItem, cart: cust.carts.length });
+      }
+    } catch (err) {
+      next(err);
+    }
   }
+  else 
+     res.redirect("/homepage/login");
+  
 });
 
 // error handling middleWare

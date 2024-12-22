@@ -1,10 +1,10 @@
 <% layout("/layouts/biolerplate") %>
 
 <body>
-     <!-- navbar -->
+  <!-- navbar -->
   <div class="nav-container sticky-top">
     <div class="flex-div first-div">
-      <a href="/" style="color: white"
+      <a href="/homepage" style="color: white"
         ><span class="material-symbols-outlined">Home</span></a
       >
     </div>
@@ -67,6 +67,16 @@
                 Admin
               </button>
             </form>
+
+            <form action="/homepage">
+              <button
+                class="admin m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Home
+              </button>
+            </form>
+
           </div>
         </div>
       </div>
@@ -149,32 +159,69 @@
 
   <!-- all products -->
 
-   <h2 style="margin-left:2rem;">All Items</h2>
-       
-          <div class="card-container" >
-            <% for(item of allItem){%>
-          
-                <div class="card" >
-                      <a href="/homepage/<%=item._id%>/showInfo"><img src="<%=item.image%>" class="card-img-top" alt="..." style="height:6rem;width:50%;">  </a>
-                      <div class="card-body text-center">
-                        <h5 class="card-title"><%=item.title%></h5>
-                        <h6 class="cad-title">&#8377;<%=item.price.toLocaleString("en-IN")%></h6>
-                     
-                      <div class="rating-card">
-                         
-                         <div class="stars">
-                           <span class="star star1" data-value="1">&#9733;</span>
-                           <span class="star star2" data-value="2">&#9733;</span>
-                           <span class="star star3" data-value="3">&#9733;</span>
-                           <span class="star star4" data-value="4">&#9733;</span>
-                           <span class="star star5" data-value="5">&#9733;</span>
-                         </div>
-                     </div>
-                        <a href="/homepage/signup" class="add-to-cart-btn" style="background-color: rgb(172, 36, 221);color:white;">Add to Cart</a>
-                      </div>
-                </div>
-              
-              <%}%>
-            </div>
-          
+  <h2 style="margin-left: 2rem">All Items</h2>
+
+  <div class="card-container">
+    <% for(item of allItem){%>
+
+    <div class="card">
+      <a href="/homepage/<%=item._id%>/showInfo"
+        ><img
+          src="<%=item.image%>"
+          class="card-img-top"
+          alt="..."
+          style="height: 6rem; width: 50%"
+        />
+      </a>
+      <div class="card-body text-center">
+        <h5 class="card-title"><%=item.title%></h5>
+        <h6 class="cad-title">
+          &#8377;<%=item.price.toLocaleString("en-IN")%>
+        </h6>
+
+        <div class="rating-card">
+          <div class="stars">
+            <span class="star star1" data-value="1">&#9733;</span>
+            <span class="star star2" data-value="2">&#9733;</span>
+            <span class="star star3" data-value="3">&#9733;</span>
+            <span class="star star4" data-value="4">&#9733;</span>
+            <span class="star star5" data-value="5">&#9733;</span>
+          </div>
+        </div>
+        <a
+          href="/homepage/signup"
+          class="add-to-cart-btn"
+          style="background-color: rgb(172, 36, 221); color: white"
+          >Add to Cart</a
+        >
+      </div>
+    </div>
+
+    <%}%>
+  </div>
+
+  <script>
+    // hamberger-btn
+    const hBtn = document.querySelector(".hamberger-btn");
+    const hContent = document.querySelector(".hamberger-content");
+    const crossIcon = document.querySelector(".cross-icon");
+    const hambergerIcon = document.querySelector(".hamberger-icon");
+
+    hBtn.addEventListener("click", () => {
+      if (hContent.style.visibility === "hidden") {
+        crossIcon.style.visibility = "visible";
+        hambergerIcon.style.visibility = "hidden";
+        hContent.style.visibility = "visible";
+        hContent.style.left = "0px";
+        // hContent.style.opacity=1;
+      } else {
+        crossIcon.style.visibility = "hidden";
+        hambergerIcon.style.visibility = "visible";
+        hContent.style.left = "-200px";
+        hContent.style.visibility = "hidden";
+      }
+    });
+
+    
+  </script>
 </body>

@@ -7,8 +7,7 @@ body
 {
     padding: 0;
     margin: 0;
-    overflow-x:hidden;
-    
+    overflow-x:hidden;    
     /* background-color:pink; */
 }
 @media (max-width:400px){
@@ -265,7 +264,7 @@ p
 }
 
 /* responsive loginHomepage(navbar) */
-@media (max-width:1205px){
+@media (max-width:770px){
       .left-side-div 
       {
         display: none;
@@ -303,7 +302,7 @@ p
      }
 }
 /* responsive homepage(navbar) */
-@media (max-width:1000px){
+@media (max-width:770px){
     .first-div 
     {
         display: none;

@@ -45,7 +45,7 @@ prev.addEventListener("click",function(event){
 let autoClick=()=>{
     next.click();
 }
-setInterval(autoClick,3000);
+// setInterval(autoClick,3000);
 
 // hamberger-btn
 const hBtn=document.querySelector(".hamberger-btn");
@@ -90,14 +90,9 @@ function toggleInputField(){
   }
 }
 console.log("other than homepage");
-function refreshPage()
-{
-   location.reload();
-}
-if(window.location.pathname!='/'){
-  //  refreshPage();
-  
-}
+
+
+   
 
  
 

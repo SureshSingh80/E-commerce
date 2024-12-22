@@ -4,7 +4,7 @@
         <!-- navbar -->
         <div class="nav-container sticky-top">
           <div class="flex-div left-side-div">
-            <a href="/" style="color:white;"><span class="material-symbols-outlined" style="">Home</span></a>
+            <a href="/loginHomepage" style="color:white;"><span class="material-symbols-outlined" style="">Home</span></a>
          </div>
 
          <div class="flex-div middle-side-div">
@@ -23,9 +23,11 @@
             <div class="position-absolute hamberger-content" style="visibility:hidden; min-width:20%; position:relative; left:-200px; ">             
               <div class=" p-3">
 
-                <form action="/homepage">
-                  <button class="log-out m-1" style="width:100%; border:none; background-color: transparent; ">Logout</button>
-               </form>             
+                <form action="/loginHomepage" method="get" >
+                  <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Home</button>             
+              </form> 
+
+                          
                 
                <form action="/homepage/signUp/orders">
                 <button class="orders m-1" style="width:100%; border:none; background-color: transparent;">Your Orders</button>
@@ -34,6 +36,10 @@
               <form action="/homepage/signUp/cart" method="get" >
                 <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Cart</button>             
             </form> 
+
+            <form  onsubmit="handleLogout(event)">
+              <button class="log-out m-1" style="width:100%; border:none; background-color: transparent; ">Logout</button>
+           </form>  
 
               </div>                
             </div>
@@ -74,8 +80,8 @@
           </div> 
           
           <div class="flex-div right-side-div">
-                <form action="/homepage">
-                     <button class="btn btn-success login-btn">Logout</button>
+                <form  onsubmit="handleLogout(event)">
+                     <button  class="btn btn-success login-btn">Logout</button>
                 </form>
                 <form action="/homepage/signUp/orders">
                       <button class="btn btn-success your-orders-btn">Your Orders<span class="material-symbols-outlined orders-icon" style="margin-top:-1rem;position:relative;top:6px;left:3px;">orders</span></button>
@@ -518,5 +524,14 @@
           </div>
         </div>
     </footer>
-      
+      <script>
+          const handleLogout=(event)=>{
+             event.preventDefault();
+             
+             history.pushState(null,null,"/homepage");
+             history.back();
+             history.forward();
+             window.location.href="/homepage";
+          }
+      </script>
 </body>

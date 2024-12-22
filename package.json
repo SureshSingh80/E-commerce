@@ -1,10 +1,10 @@
 {
   "name": "e_commercecopy",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "browser-sync": "node browsersync.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -20,11 +20,20 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "ejs-mate": "^4.0.0",
-    "express": "^4.19.2",
+    "express": "^4.21.2",
     "express-session": "^1.18.0",
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mongoose": "^8.4.0",
-    "nodemon": "^3.1.7"
-  }
+    "nocache": "^4.0.0",
+    "nodemon": "^3.1.7",
+    "tar": "^7.4.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.3",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.2.0"
+  },
+  "description": ""
 }
