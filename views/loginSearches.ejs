@@ -50,9 +50,12 @@
               </button>
             </form>
 
-           
+            <form action="/loginHomepage/account">
+              <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Account</button>
+           </form>   
 
-            <form action="/homepage/signUp/orders">
+
+            <!-- <form action="/homepage/signUp/orders">
               <button
                 class="orders m-1"
                 style="width: 100%; border: none; background-color: transparent"
@@ -77,7 +80,7 @@
               >
                 Logout
               </button>
-            </form>
+            </form> -->
             
           </div>
         </div>
@@ -137,7 +140,7 @@
     </div>
 
     <div class="flex-div right-side-div">
-      <form action="/homepage">
+      <!-- <form action="/homepage">
         <button class="btn btn-success login-btn">Logout</button>
       </form>
       <form action="/homepage/signUp/orders">
@@ -148,8 +151,15 @@
             >orders</span
           >
         </button>
-      </form>
-      <form action="/homepage/signUp/cart" method="get">
+      </form> -->
+
+      <form action="/loginHomepage/account">
+        <button style="border:none; background-color: transparent; color:white; margin-right:2rem; position:relative; top:5px">
+         <i class="fa-regular fa-user" style="font-size:22px;"></i>
+       </button>
+     </form>
+
+      <form action="/homepage/signUp/cart" method="get"> 
         <button class="cart-btn" style="margin-right: 1rem">
           <span
             class="material-symbols-outlined cart"
@@ -243,5 +253,10 @@
         comboInput.style.display = "none";
       }
     }
+   
+            //    history.pushState(null,null,"/homepage");
+            //   history.back();
+            //  history.forward();
+
   </script>
 </body>

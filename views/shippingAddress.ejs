@@ -1,0 +1,101 @@
+<% layout("/layouts/biolerplate") %>
+<body>
+     <div class="container" style=" padding:1rem; background-color: white; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);">
+        <h1 style="text-align: center;">Shipping Address</h1>
+        <p style="color:grey; text-align: center;">Please enter your shipping Details</p>  
+        <span class="material-symbols-outlined" style="position:absolute; top:0; right:0; margin:0.5rem;">home</span>
+        
+     <form action="/loginHomepage/updateAddress" onsubmit="handleSubmit(event)" class="needs-validation" novalidate >
+        <div class="address-form">
+
+          
+            <div>
+               <input  class="form-control" type="text" name="fullName" placeholder="Full Name" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback">Full Name is required</div>
+            </div>
+            <div>
+                    <input class="form-control" type="email" name="email" placeholder="Email" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+                    <div class="invalid-feedback">Email is required</div>
+            </div>
+
+            <div>
+
+               <input class="form-control" type="text" name="country" placeholder="Country" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px;" required>
+               <div class="invalid-feedback">Country is required</div>
+          </div>
+
+          <div>
+               <input class="form-control" type="text" name="state" placeholder="State" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px;" required>
+               <div class="invalid-feedback">State is required</div>
+          </div>
+
+          <div>
+               <input class="form-control" type="text" name="city" placeholder="City" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback">City is required</div>
+          </div>
+
+          <div>
+               <input class="form-control pin-code" type="number" name="pincode" placeholder="Pincode" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback pin-code-invalid">Pincode is required</div>
+          </div>
+
+          <div>
+               <input class="form-control" type="text" name="address" placeholder="Village/Street" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>   
+               <div class="invalid-feedback">Village/Street is required</div>
+          </div>
+
+         
+
+          <div>
+               <input class="form-control contact" type="number" name="contact" placeholder="Phone" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback contact-invalid">Contact is required</div>
+          </div>
+
+          
+
+     </div>
+        
+          <button style="width:100%; padding:0.5rem; margin-top:1rem; background-color:rgb(255, 115, 0); color:white; border:none;">Save Address</button>
+     </form>
+     <script>
+          const pinCode=document.querySelector(".pin-code");
+          const pinCodeError=document.querySelector(".pin-code-invalid");
+
+          const contact=document.querySelector(".contact");
+          const contactError=document.querySelector(".contact-invalid");
+
+          // Regular expression for validating Indian pincode
+          const pinCodeRegex = /^[1-9][0-9]{5}$/;
+
+          const handleSubmit=(event)=>{
+              event.preventDefault();
+              
+              // validate pincode
+              pinCode.addEventListener("input",()=>{
+              if(pinCodeRegex.test(pinCode.value)){
+                  pinCodeError.style.display="none";
+              }
+              else{
+                 pinCodeError.innerHTML="Invalid pin number";
+                  
+                  pinCodeError.style.display="block";
+              }
+
+             });
+
+             // validate contact number
+             contact.addEventListener("input",()=>{
+                 if(contact.value.length===10){
+                      contactError.style.display="none";
+                 }
+                 else{
+                      contactError.innerHTML="Enter 10 digit valid contact number";
+                      contactError.style.display="block";
+                  }
+              });             
+
+          }
+         
+          
+     </script>
+</body>

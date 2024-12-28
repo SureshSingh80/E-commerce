@@ -357,9 +357,10 @@ p
      {
         transform:scale(1.1);
         color:#1c1b1b;
-       
+        background-color: grey;
      }
-     
+
+          
      .small-screen-cart
      {
         display: inline !important;
@@ -584,14 +585,91 @@ p
     color: #f0f0f0;
   }  
 
-  /* search container responsiveness */
-@media (max-width:500px){
-  
-  .search-container .search-container-first img{
+/* account details sytling */
+
+body 
+{
+    font-family: 'Poppins', sans-serif;
+    background-color: #ebe9e9;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container{
+    max-width:1000px;
+    margin:2rem auto;
+    padding:0 20px;
+    position:relative;
+}
+.container div{
+    border-radius:10px;
     
-  }
+}
+.container .greeting-container{
+    padding: 20px;
+    border:2px solid rgb(190, 185, 185);
+    background-color: white;
+}
+
+.container .account-details-container{
+    /* padding: 20px; */
+    margin-top:20px;
+    /* border:2px solid rgb(190, 185, 185); */
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap:20px;
+}
+.container .account-details-container div 
+{
+    background-color: white;
+}
+.logout-btn 
+{
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+}
+@media (max-width:670px){
+    .container .account-details-container{
+        grid-template-columns: repeat(1,1fr);
+    }
 }
   
+/* styling address form */
+.address-form
+{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    grid-gap:20px;
+   
+}
+
+.address-form div input 
+{
+    /* background-color:rgb(228, 227, 227); */
+    
+}
+
+@media (max-width:400px){
+    
+    .address-form{
+        grid-template-columns: repeat(1,1fr);
+    }
+}
+input:focus {
+    border-color: transparent !important;  /* Remove border color */
+    box-shadow: none !important;           /* Remove any box shadow */
+}
+
+input:focus{
+
+    border:1px solid black !important;
+}
 
 
 

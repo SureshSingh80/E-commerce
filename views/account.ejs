@@ -1,0 +1,67 @@
+<% layout("/layouts/biolerplate") %>
+<body>
+     <div class="container">
+
+        <div class="greeting-container">
+
+            <div class="flex-div">
+
+                <div style="margin-right:2rem;">
+                    <div style="width:60px; height:60px; border-radius:50%; background-color: #f1f1f1; display:flex; justify-content:center; align-items:center;">
+                        <i class="fas fa-user" style="font-size:25px;"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <b style=" margin-bottom:0;">Welcome <%=cust.username%> !</b>
+                     <p style="color:grey;"><%=cust.email%></p>
+                </div>
+
+            </div>
+            
+             
+        </div>
+
+        <div class="account-details-container">
+            
+             <div style="border:2px solid rgb(190, 185, 185); padding:1rem; display: flex;">
+                <div style="width:60px; height:60px; border-radius:50%; background-color: #f1f1f1; display:flex; justify-content:center; align-items:center; margin-right:1rem;">
+                    <span class="material-symbols-outlined">orders</span>
+                </div>
+                <div>
+                    <a href="/homepage/signUp/orders" style="text-decoration:none;"><b>My Order</b></a>
+                    <p style="color:grey;">Track your Orders</p>
+                </div>
+
+             </div>
+
+             <div style="border:2px solid rgb(190, 185, 185); padding:1rem; display: flex;">
+                <div style="width:60px; height:60px; border-radius:50%; background-color: #f1f1f1; display:flex; justify-content:center; align-items:center; margin-right:1rem;">
+                    <span class="material-symbols-outlined">home</span>
+                </div>
+                <div>
+                    <a href="/loginHomepage/addresses" style="text-decoration: none;"><b>Address</b></a>
+                    <p style="color:grey;">Shipping Address</p>
+                </div>
+
+             </div>
+        </div>
+
+         <div style="margin-top:2rem;">
+            <form action="" onsubmit="handleLogout(event)">
+                <button class="logout-btn">Logout</button>
+            </form>
+         </div>
+     </div>
+     <script>
+           
+            const handleLogout=()=>{
+             event.preventDefault();
+
+             history.pushState(null,null,"/homepage");
+             history.back();
+             history.forward();
+             window.location.href="/homepage";
+          }
+     </script>
+</body>

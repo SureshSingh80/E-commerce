@@ -1,0 +1,420 @@
+<% layout("/layouts/biolerplate") %>
+<body>
+    
+    <div class="m-4 flex-div" style="display:flex;justify-content:flex-end;">
+
+        <div>
+          <form action="" onsubmit="handleLogout(event)">
+            <button  class="text-decoration-none mx-1  " style="padding:5px 10px; background-color: rgb(75, 72, 72); color:white;float:right; border:none; ">Logout</button>
+         </form>
+        </div>
+        
+        <div>
+          <a href="/admin/new"class="text-decoration-none " style="padding:5px 10px; background-color: rgb(19, 184, 69); color:white;float:right;">Add  Item</a>
+        </div>
+    </div>
+
+    <div class="top-deals-container card-container" style="margin-bottom:2rem;">   
+
+        <!-- Mobile -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">
+            
+              <input
+                type="image"
+                class="card-img-top"            
+                style="height: 10rem;"
+                src="https://media.licdn.com/dms/image/v2/D4D12AQG0NMBwOtr-IA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1712297539871?e=2147483647&v=beta&t=E-ccKcy0Sr4Nz5NqcEM0sW70Pc6w-tB1_PucQjjN3OM"
+                alt="img can't loaded"
+                />
+              <input type="hidden" name="type" value="Mobiles">
+              
+           
+          </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Mobiles</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 6000 &#8377;</p>
+        </div>
+    
+         <!-- Laptops -->
+         <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">
+            
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr9wqEqAspFJtGy1WeGgoDr7xeOtbutlctqg&s"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Laptops">
+            
+         
+        </form>
+          </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Laptops</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 22000 &#8377;</p>
+        </div>
+    
+        <!-- Earbuds  -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://i5.walmartimages.com/seo/iHip-Mini-SoundPods-True-Wireless-Earbuds_471c6118-fdc2-451e-8ffa-0d26da6bfd89.76d14900092e14dd9ba94c8ce17bccc3.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF"
+              alt="img can't loaded"
+              />
+            <input type="hidden" name="type" value="Earbuds">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Earbuds & Earphones</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 600 &#8377;</p>
+        </div>
+    
+        <!-- Cables -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://www.shutterstock.com/image-vector/socket-usb-plug-in-typec-600nw-1589223730.jpg"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Cables">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Cables</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 250 &#8377;</p>
+        </div>
+    
+        <!--Neckbands  -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://p.globalsources.com/IMAGES/PDT/B1199981724/Bluetooth-Earphone.png"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Neckbands">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Neckbands</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 700 &#8377;</p>
+        </div>
+    
+        <!-- Watches -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://m.media-amazon.com/images/I/51Pwv-iqM7L._AC_UF1000,1000_QL80_.jpg"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Watches">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Watches</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 600 &#8377;</p>
+        </div>
+    
+        <!--Mouse  -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSUk3AtPpfqTgERcYjRui9zw98BdqnEEuD8Q&s"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Mouses">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Mouses</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 250 &#8377;</p>
+        </div>
+    
+        <!-- Keyboards -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://plus.unsplash.com/premium_photo-1664194583917-b0ba07c4ce2a?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8a2V5Ym9hcmR8ZW58MHx8MHx8fDA%3D"
+              alt="img can't loaded"
+              />
+            <input type="hidden" name="type" value="Keyboards">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">keyboards</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 350 &#8377;</p>
+        </div>
+         
+        <!-- Monitors -->
+      <div class="card">
+        <form action="/adminHomepage/topDeals/Extract" method="post">        
+          <input
+            type="image"
+            class="card-img-top"            
+            style="height: 10rem;"
+            src="https://cdn.mos.cms.futurecdn.net/cgUGYddWT5Birdwnj26DNF.jpg"
+            alt="img can't loaded"
+          />
+          <input type="hidden" name="type" value="Monitors">  
+       </form>
+        <div class="rating-card">
+          <div class="stars">
+            <span class="star star1" data-value="1">&#9733;</span>
+            <span class="star star2" data-value="2">&#9733;</span>
+            <span class="star star3" data-value="3">&#9733;</span>
+            <span class="star star4" data-value="4">&#9733;</span>
+            <span class="star star5" data-value="5">&#9733;</span>
+          </div>
+          
+        </div>
+        <p class="card-title" style="margin-left:1rem;">Monitors*</p>
+        <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 7500 &#8377;</p>
+      </div>
+    
+        <!-- Printers -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://www.shutterstock.com/image-photo/multi-function-printer-isolated-against-600nw-72097618.jpg"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Printers">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Printers</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 4500 &#8377;</p>
+        </div>
+    
+        <!-- Telivisions -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://m.media-amazon.com/images/I/71mjmBA235L._AC_UF1000,1000_QL80_.jpg"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Telivisions">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Telivisions</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 8000 &#8377;</p>
+        </div>
+    
+         <!-- Tablets -->
+         <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://d.ibtimes.co.uk/en/full/1420622/google-nexus-9.jpg?w=731&f=5ed6856d651116d3475a6d9cb8815346"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Tablets">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Tablets</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 8000 &#8377;</p>
+        </div>
+    
+        <!-- Cameras -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://southernhospitalityblog.com/camera-decision/camera-front-angled/"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Cameras">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Cameras</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 44000 &#8377;</p>
+        </div>
+    
+        <!-- Projectors -->
+        <div class="card">
+          <form action="/adminHomepage/topDeals/Extract" method="post">        
+            <input
+              type="image"
+              class="card-img-top"            
+              style="height: 10rem;"
+              src="https://techterms.com/img/lg/projector_1345.jpg"
+              alt="img can't loaded"
+            />
+            <input type="hidden" name="type" value="Projectors">  
+         </form>
+          <div class="rating-card">
+            <div class="stars">
+              <span class="star star1" data-value="1">&#9733;</span>
+              <span class="star star2" data-value="2">&#9733;</span>
+              <span class="star star3" data-value="3">&#9733;</span>
+              <span class="star star4" data-value="4">&#9733;</span>
+              <span class="star star5" data-value="5">&#9733;</span>
+            </div>
+            
+          </div>
+          <p class="card-title" style="margin-left:1rem;">Projectors</p>
+          <p class="card-title" style="margin-left:1rem; font-weight:bold;">From 44000 &#8377;</p>
+        </div>
+    
+      </div>
+    
+          <!-- footer -->
+          <footer>
+            <div class="footer-info">
+                <div class="personal-detail">
+                  <div class="icons" style="margin-left:3.5rem;">
+                   <i class="fa-brands fa-square-facebook"></i>
+                   <i class="fa-brands fa-instagram"></i>
+                   <i class="fa-brands fa-linkedin"></i>
+                </div>
+                   <p class="info">
+                    Deleveloper Name: Suresh Singh<br>
+                    Email: kumarsuresh8403@gmail.com<br>
+                  </p>
+                   
+              </div>
+            </div>
+        </footer>
+
+        <script>
+          const handleLogout=(event)=>{
+           event.preventDefault();
+           history.pushState(null,null,"/homepage");
+           history.back();
+           history.forward();
+           window.location.href="/homepage";
+           }
+        </script>
+
+</body>

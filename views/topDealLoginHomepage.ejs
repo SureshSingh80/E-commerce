@@ -50,7 +50,11 @@
               </button>
             </form>
 
-            <form action="/homepage/signUp/orders">
+            <form action="/loginHomepage/account">
+              <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Account</button>
+            </form>   
+
+            <!-- <form action="/homepage/signUp/orders">
               <button
                 class="orders m-1"
                 style="width: 100%; border: none; background-color: transparent"
@@ -75,7 +79,7 @@
               >
                 Logout
               </button>
-            </form>
+            </form> -->
           </div>
         </div>
       </div>
@@ -112,6 +116,7 @@
       </form>
     </div>
 
+    <!-- show only when screen size is <=770px -->
     <div
       style="position: absolute; left: 90%; display: none"
       class="small-screen-cart"
@@ -133,10 +138,12 @@
     </div>
 
     <div class="flex-div right-side-div">
-      <form onsubmit="handleLogout(event)">
+
+      <!-- <form onsubmit="handleLogout(event)">
         <button class="btn btn-success login-btn">Logout</button>
-      </form>
-      <form action="/homepage/signUp/orders">
+      </form> -->
+
+      <!-- <form action="/homepage/signUp/orders">
         <button class="btn btn-success your-orders-btn">
           Your Orders<span
             class="material-symbols-outlined orders-icon"
@@ -144,7 +151,14 @@
             >orders</span
           >
         </button>
-      </form>
+      </form> -->
+
+      <form action="/loginHomepage/account">
+        <button style="border:none; background-color: transparent; color:white; margin-right:2rem; position:relative; top:5px">
+         <i class="fa-regular fa-user" style="font-size:22px;"></i>
+       </button>
+     </form>
+
       <form action="/homepage/signUp/cart" method="get">
         <button class="cart-btn" style="margin-right: 1rem">
           <span
@@ -214,15 +228,19 @@
       }
     });
 
-    const handleLogout=(event)=>{
-             event.preventDefault();
+    // const handleLogout=(event)=>{
+    //          event.preventDefault();
              
-             history.pushState(null,null,"/homepage");
-             history.back();
-             history.forward();
+    //          history.pushState(null,null,"/homepage");
+    //          history.back();
+    //          history.forward();
 
-             window.location.href="/homepage";
-          }
+    //          window.location.href="/homepage";
+    //       }
+
+            //  history.pushState(null,null,"/homepage");
+            //  history.back();
+            //  history.forward();
  
 
   </script>

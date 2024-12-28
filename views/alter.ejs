@@ -1,10 +1,7 @@
 <% layout("/layouts/biolerplate") %>
 <body>
    
-      <div class="  m-4">
-        <a href="/homepage" class="text-decoration-none mx-1  " style="padding:5px 10px; background-color: rgb(75, 72, 72); color:white;float:right; ">Logout</a>
-        <a href="/admin/new"class="text-decoration-none " style="padding:5px 10px; background-color: rgb(19, 184, 69); color:white;float:right;">Add  Item</a>
-      </div>
+     
         
        
     <h2 style="margin-left:2rem;">All Items</h2>
@@ -44,4 +41,13 @@
           <%}%>
         </div>
         <!-- -->
+        <script>
+                 const handleLogout=(event)=>{
+                  event.preventDefault();
+                  history.pushState(null,null,"/homepage");
+                  history.back();
+                  history.forward();
+                  window.location.href="/homepage";
+                  }
+        </script>
 </body>

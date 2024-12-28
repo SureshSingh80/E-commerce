@@ -25,21 +25,24 @@
 
                 <form action="/loginHomepage" method="get" >
                   <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Home</button>             
-              </form> 
+                </form> 
 
-                          
+                <form action="/loginHomepage/account">
+                  <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Account</button>
+               </form>         
+              
                 
-               <form action="/homepage/signUp/orders">
+               <!-- <form action="/homepage/signUp/orders">
                 <button class="orders m-1" style="width:100%; border:none; background-color: transparent;">Your Orders</button>
               </form>            
   
               <form action="/homepage/signUp/cart" method="get" >
                 <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Cart</button>             
-            </form> 
+              </form> 
 
             <form  onsubmit="handleLogout(event)">
               <button class="log-out m-1" style="width:100%; border:none; background-color: transparent; ">Logout</button>
-           </form>  
+           </form>   -->
 
               </div>                
             </div>
@@ -78,16 +81,25 @@
               <%}%>
             </form>
           </div> 
-          
+          <!-- -->
+
           <div class="flex-div right-side-div">
-                <form  onsubmit="handleLogout(event)">
+                <!-- <form  onsubmit="handleLogout(event)">
                      <button  class="btn btn-success login-btn">Logout</button>
+                </form> -->
+
+                <form action="/loginHomepage/account">
+                   <button style="border:none; background-color: transparent; color:white; margin-right:2rem; position:relative; top:5px">
+                    <i class="fa-regular fa-user" style="font-size:22px;"></i>
+                  </button>
                 </form>
-                <form action="/homepage/signUp/orders">
+
+                <!-- <form action="/homepage/signUp/orders">
                       <button class="btn btn-success your-orders-btn">Your Orders<span class="material-symbols-outlined orders-icon" style="margin-top:-1rem;position:relative;top:6px;left:3px;">orders</span></button>
-                </form>
+                </form> -->
+
                 <form action="/homepage/signUp/cart" method="get" >
-                    <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white;">shopping_cart</span></button>
+                    <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white; position:relative; top:5px; ">shopping_cart</span></button>
                     <% if(cart){%>
                       <div class="show-cart-num"><%=cart%></div>
                     <%}%>
@@ -525,13 +537,16 @@
         </div>
     </footer>
       <script>
-          const handleLogout=(event)=>{
-             event.preventDefault();
+          // const handleLogout=(event)=>{
+          //    event.preventDefault();
              
-             history.pushState(null,null,"/homepage");
-             history.back();
-             history.forward();
-             window.location.href="/homepage";
-          }
+          //    history.pushState(null,null,"/homepage");
+          //    history.back();
+          //    history.forward();
+          //    window.location.href="/homepage";
+          // }
+            //  history.pushState(null,null,"/homepage");
+            //  history.back();
+            //  history.forward();
       </script>
 </body>

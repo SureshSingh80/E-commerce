@@ -117,42 +117,49 @@
     </div>
 
     <!-- show cart only when screen size is <=770px -->
-    <button
-      style="position: absolute; left: 90%; display: none"
-      class="cart-btn small-screen-cart"
-      style="margin-right: 1rem"
-    >
-      <span
-        class="material-symbols-outlined cart"
-        style="margin-left: 0rem; color: white"
-        >shopping_cart</span
+   
+   
+
+        <button
+        onclick="window.location.href='/homepage/cart'"
+        style="position: absolute; left: 90%; display: none;"
+        class="cart-btn small-screen-cart"
+        style="margin-bottom:20px;"
       >
-    </button>
+        <span
+          class="material-symbols-outlined cart"
+          style="margin:auto; color: white"
+          >shopping_cart</span
+        >
+      </button>
+    
+   
+    
 
-    <!-- show search icon  when screen size is  <=450px  -->
+   
 
-    <div class="flex-div third-div">
+    <div class="flex-div third-div" style="position: relative; right:4rem;">
       <form action="/homepage/login">
         <button class="btn btn-success login-btn">login</button>
       </form>
       <form action="/homepage/signup">
-        <button class="btn btn-dark signUp-btn">SignUp</button>
+        <button class="btn btn-dark signUp-btn" style="">SignUp</button>
       </form>
-      <form action="/homepage/login" method="get">
+      <form action="/homepage/cart" method="get">
         <button
-          style="position: absolute; left: 98%; top: 30%"
+          style="position: absolute; left: 95%; top: 27%"
           class="cart-btn small-screen-cart"
           style="margin-right: 1rem"
         >
           <span
             class="material-symbols-outlined cart"
-            style="margin-left: 0rem; color: white"
+            style="margin-left: 0rem; color: white;"
             >shopping_cart</span
           >
         </button>
       </form>
 
-      <!-- for small screen sizes -->
+     
     </div>
   </div>
 
@@ -628,11 +635,9 @@
     </div>
   </footer>
    <script>
-    //  console.log("logout homepage");
-    //  history.pushState(null,null,location.href);
-    //  window.onpopstate = function(event) {
-    //     history.pushState(null, '', location.href);
-    // };
+             history.pushState(null,null,"/homepage");
+             history.back();
+             history.forward();
 
    </script>
 </body>

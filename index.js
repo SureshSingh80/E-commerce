@@ -17,10 +17,13 @@ const flash = require("connect-flash");
 const jwt = require("jsonwebtoken");
 require("dotenv").config(); // to access data of  .env
 const cookie = require("cookie");
-const axios = require("axios");
 const bcrypt = require("bcrypt");
-const browserSync=require("browser-sync");
-const nocache=require('nocache');
+var store=require('store');
+const { rmSync } = require("fs");
+
+
+
+
 
 const app = express();
 //basic setup
@@ -114,6 +117,12 @@ app.get("/homepage", async (req, res, next) => {
     expires: new Date(0),
   });
 
+  // clear username cookie
+  res.cookie("username", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+
  
   try {
     let allItem = await Item.find({});
@@ -160,7 +169,7 @@ app.post("/admin/homepage", async (req, res, next) => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;  
 
     let { username, password } = req.body;
-    // console.log(passwordRegex.test(password));
+    console.log(passwordRegex.test(password));
 
     if (password.length < 8) {
       req.flash("error", "password must be atleast 8 character");
@@ -189,7 +198,7 @@ app.post("/admin/homepage", async (req, res, next) => {
         res.cookie("adminToken", token, { httpOnly: true });
         let allItem = await Item.find({});
 
-        res.render("alter.ejs", { allItem });
+        res.render("adminHomepage.ejs");
       } else {
         res.render("adminError.ejs");
       }
@@ -206,11 +215,30 @@ app.get("/admin/homepage", async (req, res, next) => {
   if (cookies.adminToken) {
     try {
       let allItem = await Item.find({});
-      res.render("alter.ejs", { allItem });
+      res.render("adminHomepage.ejs");
     } catch (err) {
       next(err);
     }
   } else res.redirect("/admin");
+});
+
+app.post("/adminHomepage/topDeals/Extract",async(req,res,next)=>{
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.adminToken){
+    try {
+         const {type}=req.body;
+         const items=await Item.find({});
+          const allItem=items.filter(item=>item.type===type);
+
+          res.render("alter.ejs",{allItem});
+
+    } catch (error) {
+      
+    }
+  }
+  else 
+     res.redirect("/admin");
 });
 
 // delete particualar item(delete route)
@@ -273,7 +301,13 @@ app.put("/admin/:id", async (req, res, next) => {
 
 // add item
 app.get("/admin/new", (req, res) => {
-  res.render("new.ejs");
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.adminToken)
+    res.render("new.ejs");
+  else 
+    res.redirect("/admin");
+  
 });
 app.post("/admin/new", async (req, res, next) => {
 
@@ -295,11 +329,18 @@ app.post("/admin/new", async (req, res, next) => {
   
 });
 
+app.get("/homepage/cart", (req, res) => {
+      res.render("homepageCart.ejs");
+});
+
 // signUp (User panel)
 // signUp stores(customers data)
 app.post("/homepage/signUp", async (req, res, next) => {
   try {
-    await CurrentUser.deleteMany({}); // for track current login or signup user
+
+    
+
+    
     let { username, email, password, confirmPassword, mobNo, address } =
       req.body;
     const passwordRegex =
@@ -337,9 +378,10 @@ app.post("/homepage/signUp", async (req, res, next) => {
         address: address,
       };
 
-      let user = new CurrentUser({
-        username: data.username,
-      });
+     
+
+      // store username in cookie
+      res.cookie("username", data.username, { httpOnly: true });
 
       let customer = new Customer(data);
       // save token in browser cookie
@@ -354,22 +396,13 @@ app.post("/homepage/signUp", async (req, res, next) => {
       res.cookie("userToken", token, { httpOnly: true });
 
       await customer.save();
-      await user.save();
+     
 
-      // // find Who login
-      //  let currentUser=await CurrentUser.find({});
-      //  let customers=await Customer.find({});
-      //  let cust;
-      //  for(customer of customers){
-      //      if(customer.username==currentUser[0].username){
-      //           cust=customer;
-      //      }
-      //   }
-      let allItem = await Item.find({});
-      // res.render("loginHomepage.ejs",{allItem,cart:cust.carts.length});
+      
       res.redirect("/loginHomepage");
     }
   } catch (err) {
+    console.log(err);
     req.flash("error", "Username or email already exist");
     res.redirect("/homepage/signup");
   }
@@ -378,7 +411,7 @@ app.post("/homepage/signUp", async (req, res, next) => {
 // login user
 app.post("/homepage/login", async (req, res, next) => {
   try {
-    await CurrentUser.deleteMany({});
+   
     let login = req.body.login;
     login.username=login.username.trim();
     
@@ -395,10 +428,11 @@ app.post("/homepage/login", async (req, res, next) => {
       );
       res.redirect("/homepage/login");
     } else {
-      let user = new CurrentUser({
-        username: login.username,
-      });
-      await user.save();
+      
+
+      res.cookie("username", login.username, { httpOnly: true });
+
+    
       let customers = await Customer.find({});
       
 
@@ -433,6 +467,15 @@ app.post("/homepage/login", async (req, res, next) => {
   }
 });
 
+app.get("/loginHomepage/addresses",(req,res,next)=>{
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    res.render("shippingAddress.ejs");
+  }
+  else 
+    res.redirect("/homepage/login");
+});
+
 // login show product
 app.get("/homepage/:id/loginShowInfo", async (req, res, next) => {
 
@@ -461,13 +504,15 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
     try {
       let { id } = req.params;
     
-      let currentUser = await CurrentUser.find({});
+      
   
       // find Who login
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};   
+
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
@@ -506,18 +551,21 @@ app.get("/homepage/signUp/cart", async (req, res, next) => {
 
   if(cookies.userToken){
     try {
+
       // find Who login
-      let currentUser = await CurrentUser.find({});
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+     
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
       let items = await Customer.find({ username: cust.username }).populate(
         "carts"
       );
+      console.log("items= ", items);
       let Items = items[0];
       // calculate price
       let price = 0;
@@ -565,11 +613,12 @@ app.get("/homepage/signUp/:itemId/buy", async (req, res, next) => {
       let { itemId } = req.params;
   
       // find Who login
-      let currentUser = await CurrentUser.find({});
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+    
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
@@ -608,11 +657,12 @@ app.get("/homepage/signUp/:cartId/buyNow", async (req, res, next) => {
     try {
       let { cartId } = req.params;
       // find Who login
-      let currentUser = await CurrentUser.find({});
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+     
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
@@ -653,11 +703,12 @@ app.get("/homepage/signUp/orders", async (req, res, next) => {
   if(cookies.userToken){
     try {
       // find Who login
-      let currentUser = await CurrentUser.find({});
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+     
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
@@ -709,11 +760,13 @@ app.get("/loginHomepage", async (req, res, next) => {
   if (cookies.userToken) {
     try {
       // find Who login
-      let currentUser = await CurrentUser.find({});
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+      
+     
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
@@ -723,7 +776,28 @@ app.get("/loginHomepage", async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-  } else res.redirect("/homepage");
+  } else res.redirect("/homepage/login");
+});
+
+app.get("/loginHomepage/account",async(req,res,next)=>{
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+     // find Who login
+     const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+     let customers = await Customer.find({});
+     let cust;
+     for (customer of customers) {
+       if (customer.username == cookies.username) {
+         cust = customer;
+       }
+     }
+    res.render("account.ejs",{cust});
+  }
+  else 
+    res.redirect("/homepage");
+        
 });
 
 // searching items (homepage)
@@ -766,9 +840,9 @@ app.post("/homepage/topDeals/Explore",async(req,res,next)=>{
 
 app.post("/loginHomepage/topDeals/Explore",async(req,res,next)=>{
 
-    // res.setHeader('Cache-Control', 'no-store');
-    // res.setHeader('Pragma', 'no-cache');
-    // res.setHeader('Expires', '0');
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
 
@@ -776,11 +850,12 @@ app.post("/loginHomepage/topDeals/Explore",async(req,res,next)=>{
     try {
       let {type}=req.body;
        // find Who login
-       let currentUser = await CurrentUser.find({});
+       const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+     
        let customers = await Customer.find({});
        let cust;
        for (customer of customers) {
-         if (customer.username == currentUser[0].username) {
+         if (customer.username == cookies.username) {
            cust = customer;
          }
        }
@@ -801,16 +876,22 @@ app.post("/loginHomepage/topDeals/Explore",async(req,res,next)=>{
 // searching items (login Homepage)
 app.post("/homepage/signUp/searchResult", async (req, res, next) => {
 
+
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
 
   if(cookies.userToken){
     try {
       // find Who login
-      let currentUser = await CurrentUser.find({});
+      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+     
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
-        if (customer.username == currentUser[0].username) {
+        if (customer.username == cookies.username) {
           cust = customer;
         }
       }
@@ -835,7 +916,7 @@ app.post("/homepage/signUp/searchResult", async (req, res, next) => {
     }
   }
   else 
-     res.redirect("/homepage/login");
+     res.redirect("/homepage");
   
 });
 
