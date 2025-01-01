@@ -1,71 +1,94 @@
 <% layout("/layouts/biolerplate") %>
 <body>
+
+
+     <% if(cust.address){%>
+     <div class="address-info" style="margin:2rem 4rem; padding:1rem; background-color: white; display: flex; justify-content: center; align-items: center;">
+          <p><b>Shipping Address: </b><%= cust.address%></p>
+     </div>
+     <%}%>
+
+     <% if(!cust.address){%>
+          <div class="address-info" style="margin:2rem 4rem; padding:1rem; background-color: white; display: flex; justify-content: center; align-items: center;">
+               <p style="color:red; font-size:20px;">Shipping Address Not found! Add address to place any order...</p>
+          </div>
+     <%}%>
+
+     
      <div class="container" style=" padding:1rem; background-color: white; box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);">
         <h1 style="text-align: center;">Shipping Address</h1>
         <p style="color:grey; text-align: center;">Please enter your shipping Details</p>  
         <span class="material-symbols-outlined" style="position:absolute; top:0; right:0; margin:0.5rem;">home</span>
         
-     <form action="/loginHomepage/updateAddress" onsubmit="handleSubmit(event)" class="needs-validation" novalidate >
+     <form action="/loginHomepage/updateAddress" method="post" onsubmit="handleSubmit(event)" class="needs-validation" novalidate >
         <div class="address-form">
 
           
-            <div>
-               <input  class="form-control" type="text" name="fullName" placeholder="Full Name" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+            <div class="name-div">
+               <input  class="form-control name" type="text" name="fullName" placeholder="Full Name(Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
                <div class="invalid-feedback">Full Name is required</div>
             </div>
-            <div>
-                    <input class="form-control" type="email" name="email" placeholder="Email" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
-                    <div class="invalid-feedback">Email is required</div>
-            </div>
 
-            <div>
-
-               <input class="form-control" type="text" name="country" placeholder="Country" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px;" required>
-               <div class="invalid-feedback">Country is required</div>
+            <div class="contact-div">
+               <input class="form-control contact" type="number" name="contact" placeholder="Phone number(Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback contact-invalid">Contact is required</div>
           </div>
 
           <div>
-               <input class="form-control" type="text" name="state" placeholder="State" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px;" required>
+               <input class="form-control pin-code" type="number" name="pincode" placeholder="Pincode(Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback pin-code-invalid">Pincode is required</div>
+          </div>          
+
+          <div>
+               <input class="form-control state" type="text" name="state" placeholder="State(Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px;" required>
                <div class="invalid-feedback">State is required</div>
           </div>
 
           <div>
-               <input class="form-control" type="text" name="city" placeholder="City" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <input class="form-control city" type="text" name="city" placeholder="City(Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
                <div class="invalid-feedback">City is required</div>
           </div>
 
-          <div>
-               <input class="form-control pin-code" type="number" name="pincode" placeholder="Pincode" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
-               <div class="invalid-feedback pin-code-invalid">Pincode is required</div>
+          <div class="house-no-div">
+               <input class="form-control house-no" type="text" name="houseNo" placeholder="House No, Building Name (Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback">House No, Building Name is required</div>
           </div>
 
-          <div>
-               <input class="form-control" type="text" name="address" placeholder="Village/Street" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>   
-               <div class="invalid-feedback">Village/Street is required</div>
+          <div style="grid-column: span 2;">
+               <input class="form-control road-name" type="text" name="roadName" placeholder="Road Name,Area Colony (Required)*" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
+               <div class="invalid-feedback">Road Name,Area Colony is required</div>
           </div>
-
-         
-
-          <div>
-               <input class="form-control contact" type="number" name="contact" placeholder="Phone" style="width:100%; padding:0.5rem; margin-top:1rem; border-radius:5px; " required>
-               <div class="invalid-feedback contact-invalid">Contact is required</div>
-          </div>
-
           
-
      </div>
         
+        <% if(!cust.address) {%>
           <button style="width:100%; padding:0.5rem; margin-top:1rem; background-color:rgb(255, 115, 0); color:white; border:none;">Save Address</button>
+          <%}%>
+        <% if(cust.address){%>
+          <button style="width:100%; padding:0.5rem; margin-top:1rem; background-color:rgb(255, 115, 0); color:white; border:none;">Update Existing  Address</button>
+   
+          <%}%>
      </form>
      <script>
           const pinCode=document.querySelector(".pin-code");
           const pinCodeError=document.querySelector(".pin-code-invalid");
-
+          const name=document.querySelector(".name");
+        
+         
+          const state=document.querySelector(".state");
+          const city=document.querySelector(".city");
+         
           const contact=document.querySelector(".contact");
           const contactError=document.querySelector(".contact-invalid");
 
+          const houseNo=document.querySelector(".house-no");
+          const roadName=document.querySelector(".road-name");
+
           // Regular expression for validating Indian pincode
           const pinCodeRegex = /^[1-9][0-9]{5}$/;
+
+         
+
 
           const handleSubmit=(event)=>{
               event.preventDefault();
@@ -76,7 +99,7 @@
                   pinCodeError.style.display="none";
               }
               else{
-                 pinCodeError.innerHTML="Invalid pin number";
+                  pinCodeError.innerHTML="Invalid pin number";
                   
                   pinCodeError.style.display="block";
               }
@@ -85,6 +108,7 @@
 
              // validate contact number
              contact.addEventListener("input",()=>{
+               
                  if(contact.value.length===10){
                       contactError.style.display="none";
                  }
@@ -92,7 +116,15 @@
                       contactError.innerHTML="Enter 10 digit valid contact number";
                       contactError.style.display="block";
                   }
-              });             
+              });  
+
+             
+              
+                 // if all the fields are valid then submit the form
+
+                     if(pinCodeRegex.test(pinCode.value)  && contact.value.length===10 && name.value!="" && houseNo.value!="" && state.value!="" && city.value!="" && roadName.value!="" ){
+                          event.target.submit();
+                     }
 
           }
          

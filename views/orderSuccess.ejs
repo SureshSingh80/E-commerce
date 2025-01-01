@@ -1,24 +1,61 @@
 <% layout("/layouts/biolerplate") %>
 <body>
 
-    <div class="row">
-        <div class="col col-6 offset-3">
-        <div class="card success-order-card">
-        <h2 style="color:green;">Your Order are confirmed !! </h2>
-        <img src="<%=item.image%>" alt="" class="card-img-top" style="height:15rem;">
-        <ul>
-            <li><b><%=item.title%></b></li>
-            <li><b>&#8377;<%=item.price%></b></li>
-        </ul>
-        <div class="flex-div success-order-div" style="justify-content: space-between;" >
-            <form action="/loginHomepage">
-                <button class="btn btn-primary mt-3" >Continue Shopping</button>
-            </form>
-            <form action="/homepage/signUp/orders">
-                <button class="btn btn-primary mt-3">Go to Your Orders</button>
-            </form>
-        </div>
+    <div class="order-success-container" style="max-width:1000px; margin:2rem auto;background-color: white; padding:1rem;">
+
+         <div style="text-align:center; margin-bottom:0;">
+            <img src="https://media.tenor.com/Hw7f-4l0zgEAAAAM/check-green.gif" alt="" height="80px" style="margin-bottom:0;">
+            <h1>Order Success</h1>
+            <p>Your order has been placed successfully. You will receive a confirmation email shortly.</p>
          </div>
+
+         <div style=" justify-content:space-evenly; text-align: center;">
+              <b>Order Details:</b>
+         </div>
+
+         <div style="display:flex; justify-content:space-between; text-align: center;">
+            <b style="margin-bottom: 0;"><%=item.title%></b>
+           <p style="margin-bottom:0;"><%=item.price%> &#8377;</p>
+         </div>
+
+       <hr>
+
+       <div style="display:flex; justify-content:space-between; text-align: center;">
+           <p style="margin-bottom: 0;">Shipping</p>
+           <p style="margin-bottom: 0;">0 &#8377;</p>
        </div>
+
+       <div style="display:flex; justify-content:space-between; text-align: center;">
+         <p style="margin-bottom: 0;">Tax</p>
+        <p style="margin-bottom: 0;">0 &#8377;</p>
+       </div>
+
+       <div style="display:flex; justify-content:space-between; text-align: center;">
+        <b style="margin-bottom: 0;">Price:</b>
+        <p style="margin-bottom: 0;"><%=item.price%> &#8377;</p>
+      </div>
+
+      <hr>
+
+      <div >
+        <h4 style="margin-bottom:0;">Shipping Address</h4><br>
+        <p><%=cust.address%></p>
+      </div>
+     
+      <hr>
+
+     <div style="display:flex; justify-content:space-between; text-align: center;">
+        <button onclick="window.print()" style="padding:0.5rem 1rem; border:none;background-color: rgb(0, 119, 255);color:white;border-radius: 5px;">
+           <span class="material-symbols-outlined" style="position: relative; top:5px;">print</span>
+           Print Receipt
+       
+            
+        </button>
+        <button onclick="window.location.href='/homepage/signUp/Orders'" style=" padding:0.5rem 1rem; background-color: transparent; border:1px solid grey; border-radius: 5px;">
+            Track Order
+        </button>
+     </div>
+
     </div>
+
 </body>

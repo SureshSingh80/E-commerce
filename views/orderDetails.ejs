@@ -1,0 +1,113 @@
+<% layout("/layouts/biolerplate") %>
+<body>
+  <div style="max-width: 1400px; margin: 2rem auto; padding: 1rem;font-family:Arial, Helvetica, sans-serif">
+
+   <!-- first div -->
+   <div style="border: 1px solid grey; padding: 1rem; border-radius: 8px; background-color: white; margin-bottom:0.5rem;">
+      <div
+      class="id-container"
+      style="display: flex; justify-content: space-between; align-items: center"
+    >
+      <i style="font-size: medium; margin-right:2rem;">Order ID- #<%=item._id%></i>
+      <button style="background-color: orange; border:none;color:white;border-radius:5px;font-size:small; margin:1rem; "><%=item.status%></button>
+    </div>
+
+    <div style="display: flex; color: grey; margin-bottom:0.5rem;">
+      <span class="material-symbols-outlined" style=" margin-right:0.5rem;">shopping_bag</span>
+      <i style=""><%=item.orderStatus%></i>
+    </div>
+   </div>
+
+   <!-- second div -->
+    <div style="border: 1px solid grey; padding: 1rem; border-radius: 8px; background-color: white; margin-bottom:0.5rem;">
+      <b>Product Details:</b>
+      <div style="display: flex">
+        <div style="margin: 1rem">
+          <img
+            src="<%=item.orderImage%>"
+            alt="image not loaded"
+            style="height: 5rem"
+          />
+        </div>
+
+        <div >
+          <p style="margin-bottom: 0"><%=item.orderName%></p>
+          <b><%=item.orderPrice.toLocaleString("en-IN")%> &#8377;</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- third div -->
+    <div
+      style="
+        background-color: white;
+        border: 1px solid grey;
+        padding: 1rem;
+        border-radius: 8px;
+      "
+    >
+      <!-- shipping address -->
+      <div>
+        <span
+          class="material-symbols-outlined"
+          style="position: relative; top: 5px; margin-right: 0.8rem"
+          >local_shipping</span
+        >
+        <b>Shipping Details:</b>
+      </div>
+
+      <div style="margin-top: 0.5rem; display: flex">
+        <div style="margin-right: 1rem">
+          <span class="material-symbols-outlined">location_on</span>
+        </div>
+        <div>
+          <b><%=item.customerName%></b>
+        </div>
+      </div>
+
+      <div>
+        <div style="width: 250px; margin-left: 2.5rem">
+          <%=item.orderAddress%>
+        </div>
+      </div>
+
+      <!-- contact no. -->
+      <div style="margin-top: 0.5rem; display: flex">
+        <div style="margin-right: 1rem">
+          <span class="material-symbols-outlined">phone</span>
+        </div>
+        <div style="width: 300px"><b><%=item.mobNo%></b></div>
+      </div>
+    </div>
+    <div
+      style="
+        border: 1px solid orange;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        color: rgb(141, 95, 9);
+      "
+    >
+      your order is pending for confirmation.You can cancel your order by
+      clicking the button below.
+    </div>
+
+   <div style=" display: flex;justify-content: flex-end;">
+      <a
+      href="/homepage/signUp/<%=ID%>/cancelOrder/<%=item._id%>"
+      style="
+        
+        font-weight: bold;
+        margin-top:1rem;
+        text-decoration: none;
+        color: rgb(255, 38, 0);
+        border: 1px solid rgb(255, 60, 0);
+        border-radius:5px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 2rem;
+      "
+      >Cancel Order</a
+    >
+   </div>
+  </div>
+</body>

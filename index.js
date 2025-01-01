@@ -341,7 +341,7 @@ app.post("/homepage/signUp", async (req, res, next) => {
     
 
     
-    let { username, email, password, confirmPassword, mobNo, address } =
+    let { username, email, password, confirmPassword, mobNo } =
       req.body;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/;
@@ -374,8 +374,7 @@ app.post("/homepage/signUp", async (req, res, next) => {
         username: trimedUsername,
         email: email,
         password: bcryptPass,
-        mobNo: mobNo,
-        address: address,
+        mobNo: mobNo
       };
 
      
@@ -467,13 +466,63 @@ app.post("/homepage/login", async (req, res, next) => {
   }
 });
 
-app.get("/loginHomepage/addresses",(req,res,next)=>{
+// add address
+app.get("/loginHomepage/addresses",async(req,res,next)=>{
+
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
   if(cookies.userToken){
-    res.render("shippingAddress.ejs");
+  try {    
+
+      const customers=await Customer.find({});
+      let cust;
+      for(customer of customers){
+        if(customer.username==cookies.username){
+          cust=customer;
+        }
+      }
+      res.render("shippingAddress.ejs",{cust});        
+    }catch (error) {
+      next(error);
+    }
   }
   else 
-    res.redirect("/homepage/login");
+      res.redirect("/homepage/login");
+  
+});
+
+// update address
+app.post("/loginHomepage/updateAddress",async(req,res,next)=>{
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+     
+      const {fullName,contact,pincode,state,city,houseNo,roadName}=req.body;
+    
+      const newAddress=fullName+", "+houseNo+" "+roadName+", "+city+" "+state+"-"+pincode+", phoneNo-"+contact;
+
+      // find Who login
+      const customers=await Customer.find({});
+      let cust;
+      for(customer of customers){
+        if(customer.username==cookies.username){
+          cust=customer;
+        }
+      }
+      console.log("cust= ",cust);
+      cust.address=newAddress;
+      await cust.save();
+      
+      req.flash("success","address updated successfully");
+
+      res.redirect("/loginHomepage/addresses");
+      
+    } catch (err) {
+      next(err);
+    }
+  }
+  else 
+     res.redirect("/homepage/login");
 });
 
 // login show product
@@ -528,11 +577,10 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
       });
   
       cust.carts.push(newItem);
-      await newItem.save();
+      await newItem.save(); 
       let result = await cust.save();
       console.log(result);   
-      // res.redirect("/loginHomepage");
-      res.send(`success`);
+      res.redirect("/homepage/signUp/cart");
     } catch (err) {
       next(err);
     }
@@ -562,6 +610,7 @@ app.get("/homepage/signUp/cart", async (req, res, next) => {
           cust = customer;
         }
       }
+      
       let items = await Customer.find({ username: cust.username }).populate(
         "carts"
       );
@@ -604,16 +653,44 @@ app.delete("/homepage/:id/carts/:cartId", async (req, res, next) => {
   
 });
 
-// buy route (by without going to  cart)
-app.get("/homepage/signUp/:itemId/buy", async (req, res, next) => {
+// buy route 
 
+app.get("/homepage/signUp/:id/confirmBuy",async(req,res,next)=>{
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
   if(cookies.userToken){
     try {
-      let { itemId } = req.params;
+      let { id } = req.params;
+       let item=await Item.findById(id);
+
+       if(item===null){
+          item=await Cart.findById(id); 
+       }
+
+        res.render("confirmBuy.ejs",{item});
+     
+      
+    } catch (err) {
+      next(err);
+    }
+  }
+  else 
+     res.redirect("/homepage");
+});
+
+app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
+
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  let {paymentMethod}=req.body;
+
+  if(cookies.userToken){
+     
+    if(paymentMethod==="COD"){
+    try {
+      let { id } = req.params;
+      
   
       // find Who login
-      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+      
     
       let customers = await Customer.find({});
       let cust;
@@ -622,43 +699,62 @@ app.get("/homepage/signUp/:itemId/buy", async (req, res, next) => {
           cust = customer;
         }
       }
-      let date = Math.floor(Math.random() * 30) + 1;
-      let month = new Date().getMonth();
-      let year = new Date().getFullYear();
-      let status = "Expected at: " + date + "/" + month + "/" + year;
-      let item = await Item.findById(itemId);
-      let newOrder = new Order({
-        orderName: item.title,
-        orderImage: item.image,
-        orderPrice: item.price,
-        orderStatus: status,
-        orderAddress: cust.address,
-        customerName: cust.username,
-        mobNo: cust.mobNo,
-        status: "Pending",
-      });
-      await cust.orders.push(newOrder);
-      await newOrder.save();
-      await cust.save();
-      res.render("orderSuccess.ejs", { item });
+      if(cust.address){
+        let date = Math.floor(Math.random() * 30) + 1;
+        let month = new Date().getMonth();
+        let year = new Date().getFullYear();
+        let status = "Expected at: " + date + "/" + month + "/" + year;
+
+
+        // if item is buyed without cart
+        let item = await Item.findById(id);
+
+        // if item is buyed through cart
+        if(item===null){
+          item=await Cart.findById(id);
+        }
+        console.log("item= ", item);
+        let newOrder = new Order({
+          
+          orderName: item.description,
+          orderImage: item.image,
+          orderPrice: item.price,
+          orderStatus: status,
+          orderAddress: cust.address,
+          customerName: cust.username,
+          mobNo: cust.mobNo,
+          status: "Pending",
+        });
+        await cust.orders.push(newOrder);
+        await newOrder.save();
+        await cust.save(); 
+        res.redirect(`/loginHomepage/signUp/orderSuccess/${id}`);
+        
+      }
+      else 
+        res.redirect("/loginHomepage/addresses");
+      
     } catch (err) {
       next(err);
     }
+   }
+   else 
+     res.send("<h2 style='color:red;'>Payment Gateway is under construction</h2>");
   }
   else 
     res.redirect("/homepage");
   
 });
-// buy route (through cart)
-app.get("/homepage/signUp/:cartId/buyNow", async (req, res, next) => {
+
+app.get("/loginHomepage/signUp/orderSuccess/:id",async(req,res,next)=>{
 
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  let {id}=req.params;
+
   if(cookies.userToken){
     try {
-      let { cartId } = req.params;
-      // find Who login
-      const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-     
+
+      // find who login
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
@@ -666,35 +762,125 @@ app.get("/homepage/signUp/:cartId/buyNow", async (req, res, next) => {
           cust = customer;
         }
       }
-      let date = Math.floor(Math.random() * 30) + 1;
-      let month = new Date().getMonth();
-      let year = new Date().getFullYear();
-      let status = "Expected at: " + date + "/" + month + "/" + year;
-  
-      let item = await Cart.findById(cartId);
-  
-      let newOrder = new Order({
-        orderName: item.title,
-        orderImage: item.image,
-        orderPrice: item.price,
-        orderStatus: status,
-        orderAddress: cust.address,
-        customerName: cust.username,
-        mobNo: cust.mobNo,
-        status: "Pending",
-      });
-      await cust.orders.push(newOrder);
-      await newOrder.save();
-      await cust.save();
-      res.render("orderSuccess.ejs", { item });
+      
+
+      let item=await Item.findById(id);
+      if(item===null)
+          item=await Cart.findById(id);
+
+      
+      res.render("orderSuccess.ejs", { item,cust });
     } catch (err) {
       next(err);
     }
   }
   else 
-     res.redirect("/homepage");
-  
+    res.redirect("/homepage");
 });
+
+// buy route (by without going to  cart)
+// app.get("/homepage/signUp/:itemId/buy", async (req, res, next) => {
+
+//   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+//   if(cookies.userToken){
+//     try {
+//       let { itemId } = req.params;
+  
+//       // find Who login
+      
+    
+//       let customers = await Customer.find({});
+//       let cust;
+//       for (customer of customers) {
+//         if (customer.username == cookies.username) {
+//           cust = customer;
+//         }
+//       }
+//       if(cust.address){
+//         let date = Math.floor(Math.random() * 30) + 1;
+//         let month = new Date().getMonth();
+//         let year = new Date().getFullYear();
+//         let status = "Expected at: " + date + "/" + month + "/" + year;
+//         let item = await Item.findById(itemId);
+//         let newOrder = new Order({
+//           orderName: item.title,
+//           orderImage: item.image,
+//           orderPrice: item.price,
+//           orderStatus: status,
+//           orderAddress: cust.address,
+//           customerName: cust.username,
+//           mobNo: cust.mobNo,
+//           status: "Pending",
+//         });
+//         await cust.orders.push(newOrder);
+//         await newOrder.save();
+//         await cust.save();
+//         res.render("orderSuccess.ejs", { item });
+//       }
+//       else 
+//         res.redirect("/loginHomepage/addresses");
+      
+//     } catch (err) {
+//       next(err);
+//     }
+//   }
+//   else 
+//     res.redirect("/homepage");
+  
+// });
+// buy route (through cart)
+// app.get("/homepage/signUp/:cartId/buyNow", async (req, res, next) => {
+
+//   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+//   if(cookies.userToken){
+//     try {
+//       let { cartId } = req.params;
+//       // find Who login
+      
+     
+//       let customers = await Customer.find({});
+//       let cust;
+//       for (customer of customers) {
+//         if (customer.username == cookies.username) {
+//           cust = customer;
+//         }
+//       }
+
+//       // to check customer have address or not
+//       if(cust.address){
+//         let date = Math.floor(Math.random() * 30) + 1;
+//       let month = new Date().getMonth();
+//       let year = new Date().getFullYear();
+//       let status = "Expected at: " + date + "/" + month + "/" + year;
+  
+//       let item = await Cart.findById(cartId);
+  
+//       let newOrder = new Order({
+//         orderName: item.title,
+//         orderImage: item.image,
+//         orderPrice: item.price,
+//         orderStatus: status,
+//         orderAddress: cust.address,
+//         customerName: cust.username,
+//         mobNo: cust.mobNo,
+//         status: "Pending",
+//       });
+//       await cust.orders.push(newOrder);
+//       await newOrder.save();
+//       await cust.save();
+//       res.render("orderSuccess.ejs", { item });
+//       }
+//       else 
+//         res.redirect("/loginHomepage/addresses");
+      
+//     } catch (err) {
+//       next(err);
+//     }
+//   }
+//   else 
+//      res.redirect("/homepage");
+  
+// });
 
 // All orders
 app.get("/homepage/signUp/orders", async (req, res, next) => {
@@ -716,7 +902,8 @@ app.get("/homepage/signUp/orders", async (req, res, next) => {
         "orders"
       );
       let Orders = order[0];
-      if (cust.orders.length) res.render("orders.ejs", { Orders });
+      console.log("Orders= ", Orders);
+      if (cust.orders.length) res.render("orders.ejs", { Orders,cart: cust.carts.length });
       else res.render("emptyOrder.ejs");
     } catch (err) {
       next(err);
@@ -727,8 +914,24 @@ app.get("/homepage/signUp/orders", async (req, res, next) => {
   
 });
 
+app.get("/homepage/signUp/:id/:ID",async(req,res,next)=>{
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if(cookies.userToken){
+    try {
+      let {id,ID}=req.params;
+      let item=await Order.findById(id);
+      console.log("item= ",item);
+      res.render("orderDetails.ejs",{item,ID});
+    } catch (err) {
+      next(err);
+    }
+  }
+  else 
+     res.redirect("/homepage");
+});
+
 // cancel orders
-app.get("/homepage/signUp/:id/cancelOrder/:orderId", async (req, res, next) => {
+app.get("/homepage/signUp/:id/cancelOrder/:orderId", async (req, res, next) => { 
 
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
   if(cookies.userToken){

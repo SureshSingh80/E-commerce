@@ -655,21 +655,75 @@ body
     
 }
 
-@media (max-width:400px){
+@media (max-width:430px){
     
-    .address-form{
+    /* .address-form{
         grid-template-columns: repeat(1,1fr);
     }
+    .address-form div:last-child{
+        grid-column: span 1;
+    } */
+     .name-div,.contact-div,.house-no-div{
+        grid-column: span 2;
+     }
+     .address-info 
+     {
+        margin:2rem 1rem !important;
+     }
 }
 input:focus {
     border-color: transparent !important;  /* Remove border color */
     box-shadow: none !important;           /* Remove any box shadow */
+}
+input::placeholder{
+    font-size:13px;
 }
 
 input:focus{
 
     border:1px solid black !important;
 }
+/* styling order summary page */
+@media (max-width:450px){
+    .cancel-order-btn,.confirm-order-btn
+    {
+        padding:0.3rem 1rem !important;
+    }
+   
+}
+/* styling orders page */
+@media (max-width:600px){
+    .orders-container > div:nth-child(2)
+    {
+        display: none !important;
+    }
+}
+.orders-container
+{
+   
+   transition:0.1s;
+}
+.orders-container:hover
+{
+    transform: scale(1.01);
+    /* box-shadow: horizontal-offset vertical-offset blur-radius spread-radius color; */
+
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3); 
+}
+
+/* stying order details page */
+@media (max-width:500px){
+     .id-container 
+     {
+        display:inline !important;
+     }
+     .id-container button 
+     {
+        float:right;
+        margin-top:0rem !important;
+     }
+    }
+
 
 
 

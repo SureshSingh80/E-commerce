@@ -25,7 +25,7 @@ let customerSchema= Schema({
     },
     address:{
         type:String,
-        required:true
+        
     },
     orders:[
         {

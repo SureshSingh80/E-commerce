@@ -1,0 +1,76 @@
+<% layout("/layouts/biolerplate") %>
+<body>
+    
+    <div style=" margin:2rem auto; padding:1rem; max-width:500px;  background-color: rgb(247, 242, 242);">
+
+       <div style="background-color: rgb(238, 233, 233); padding:1rem; margin-bottom:1rem;">
+
+           <h5>Order Summary</h5>
+
+           <div style="display: flex; justify-content: space-between; margin-bottom:0;">
+              <p style="margin-bottom:0;">Product</p>
+              <p style="margin-bottom:0;"><%=item.description%></p>
+           </div>
+
+           <div style="display: flex; justify-content: space-between; margin-bottom:0;">
+                <p style="margin-bottom:0;">Price</p>
+                <p style="margin-bottom:0;"><%=item.price%> &#8377;</p>
+           </div>
+
+           <div style="display: flex; justify-content: space-between; margin-bottom:0;">
+                <p style="margin-bottom:0;">Shipping</p>
+                <p style="margin-bottom:0;">0 &#8377;</p>
+           </div>
+
+           <div style="display: flex; justify-content: space-between; margin-bottom:0;">
+              <p style="margin-bottom:0;">Tax</p>
+              <p style="margin-bottom:0;" >0 &#8377;</p>
+           </div>
+           <hr>
+            <div style="display: flex; justify-content: space-between; margin-bottom:0;">
+               <p style="font-weight: bold; margin-bottom:0;">Total</p>
+               <p style="font-weight: bold; margin-bottom:0;"><%=item.price%> &#8377;</p>
+            </div>
+       </div>
+
+       <b>Payment Method</b>
+
+       <form action="/homepage/signUp/<%=item._id%>/buy" method="post" onsubmit="handleOrder(event)">
+        <div style="margin-top:1rem;">
+
+            <div style="border:1px solid grey; margin-bottom:1rem; padding:1rem; border-radius:10px;">
+              <input type="radio" name="paymentMethod" id="cash" value="COD" checked>
+              <label for="cash">Cash On Delivery</label>
+            </div>
+           
+            <div style="border:1px solid grey; margin-bottom:1rem; padding:1rem; border-radius:10px;">
+              <input type="radio" name="paymentMethod" id="upi" value="UPI" >
+              <label for="cash">UPI</label>
+            </div>     
+           
+            <div style="display:flex;justify-content: space-between;">
+                <button type="button" onclick="handleCancel()" class="cancel-order-btn" style=" padding:0.3rem 3rem; background-color: transparent; border:1px solid grey; border-radius:10px;">Cancel</button>
+                <button type="submit" class="confirm-order-btn"  style=" padding:0.3rem 3rem; background-color: #2563EB; color:white; border:1px solid grey; border-radius:10px;">Confirm Purchase</button>
+            </div>
+        </div>
+       </form>
+       
+        <!-- <form action="/homepage/signUp/<%=item._id%>/buy" method="get">
+            <button class="btn btn-success">Confirm Buy</button>
+        </form> -->
+    </div>
+
+    <script>
+        const handleOrder=(event)=>{
+            event.preventDefault();
+            console.log(event);
+            event.target.submit();
+        }
+        const handleCancel=()=>{
+             console.log("cancel button is clicked");
+             window.history.back();
+             window.history.go(-1);
+        }
+    </script>
+     
+</body>

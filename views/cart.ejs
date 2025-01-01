@@ -17,12 +17,18 @@
                   </div>
             </div>
             <div class="flex-div cardDiv offset-1">
-            <form action="/homepage/signUp/<%=item._id%>/buyNow" method="get">
-                <button  class="btn btn-success mb-3 buyNow-btn"  >Buy Now</button>
+
+            
+            <form action="/homepage/signUp/<%=item._id%>/confirmBuy" method="get">
+                <button  class="btn btn-success mb-3 buyNow-btn">Buy Now</button>
             </form>
+          
+
+            
             <form action="/homepage/<%=Items._id%>/carts/<%=item._id%>?_method=delete" method="post">
                 <button class="btn btn-danger mb-3 remove-btn">Remove</button>
             </form>
+
            </div>
           <%}%>
           <div class="col-3 mb-3"><b><i>Total price: &#8377;<%=totalPrice.toLocaleString("en-IN")%></i></b> </div>
