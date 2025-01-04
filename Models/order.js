@@ -2,6 +2,9 @@ const mongoose=require("mongoose");
 const Schema=mongoose.Schema;
 
 const orderSchema=Schema({
+    itemID:{
+        type:String,
+    },
     orderName:{
         type:String
     },

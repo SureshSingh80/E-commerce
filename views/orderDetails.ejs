@@ -1,6 +1,6 @@
 <% layout("/layouts/biolerplate") %>
 <body>
-  <div style="max-width: 1400px; margin: 2rem auto; padding: 1rem;font-family:Arial, Helvetica, sans-serif">
+  <div  style="max-width: 1400px; margin: 2rem auto; padding: 1rem;font-family:Arial, Helvetica, sans-serif">
 
    <!-- first div -->
    <div style="border: 1px solid grey; padding: 1rem; border-radius: 8px; background-color: white; margin-bottom:0.5rem;">
@@ -8,8 +8,12 @@
       class="id-container"
       style="display: flex; justify-content: space-between; align-items: center"
     >
-      <i style="font-size: medium; margin-right:2rem;">Order ID- #<%=item._id%></i>
-      <button style="background-color: orange; border:none;color:white;border-radius:5px;font-size:small; margin:1rem; "><%=item.status%></button>
+      <i style="font-size: medium; margin-right:2rem;color:grey;">Order ID- #<%=item._id%></i>
+      <div style="display: flex; justify-content: center; align-items: center;" class="pending-container">
+        <button style="background-color: orange; border:none;color:white;border-radius:5px;font-size:small;margin:1rem; "><%=item.status%></button>
+        <img src="https://cdnl.iconscout.com/lottie/premium/thumb/notification-dot-animation-download-in-lottie-json-gif-static-svg-file-formats--red-logo-alert-warning-ui-essential-pack-sign-symbols-animations-4561481.gif" height="20rem;">
+      </div>
+      
     </div>
 
     <div style="display: flex; color: grey; margin-bottom:0.5rem;">
@@ -19,7 +23,8 @@
    </div>
 
    <!-- second div -->
-    <div style="border: 1px solid grey; padding: 1rem; border-radius: 8px; background-color: white; margin-bottom:0.5rem;">
+    <a href="/homepage/<%=item.itemID%>/loginShowInfo" style="text-decoration: none; color:black;">
+    <div class="product-details-container" style="border: 1px solid grey; padding: 1rem; border-radius: 8px; background-color: white; margin-bottom:0.5rem;">
       <b>Product Details:</b>
       <div style="display: flex">
         <div style="margin: 1rem">
@@ -36,6 +41,7 @@
         </div>
       </div>
     </div>
+   </a>
 
     <!-- third div -->
     <div

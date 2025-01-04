@@ -10,6 +10,13 @@ body
     overflow-x:hidden;    
     /* background-color:pink; */
 }
+.login-bg-image
+{
+    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/2327ffa4-20e9-41b6-b77c-462d26f7bfea/d3ecbzg-045f95bb-8610-4dbb-84ab-e1d08fb037d7.jpg");
+    background-position: center;
+    background-repeat:no-repeat;
+    background-size: cover;
+}
 @media (max-width:400px){
     body{
         overflow-x: visible;
@@ -69,18 +76,17 @@ body
 /* login */
 .login-container 
 {
-   height: 100%;
-   width: 100%;
-   min-width:300px;
-   position:absolute;
+   
+   min-width:300px;  
    display:flex;
    align-items: center;
-   justify-content: center;
+   justify-content: center; 
    
 
 }
 .login-container .form-div
 {
+    margin-top:2rem;
     border:1px solid rgb(180, 172, 172);
     padding: 1rem;
 }
@@ -683,7 +689,7 @@ input:focus{
 
     border:1px solid black !important;
 }
-/* styling order summary page */
+/* styling confirmBuy page */
 @media (max-width:450px){
     .cancel-order-btn,.confirm-order-btn
     {
@@ -691,6 +697,7 @@ input:focus{
     }
    
 }
+/* styling  */
 /* styling orders page */
 @media (max-width:600px){
     .orders-container > div:nth-child(2)
@@ -706,9 +713,7 @@ input:focus{
 .orders-container:hover
 {
     transform: scale(1.01);
-    /* box-shadow: horizontal-offset vertical-offset blur-radius spread-radius color; */
-
-    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.3); 
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3); 
 }
 
 /* stying order details page */
@@ -722,7 +727,41 @@ input:focus{
         float:right;
         margin-top:0rem !important;
      }
+     .pending-container
+     {
+        display:block !important;
+     }
     }
+    .product-details-container:hover 
+    {
+        transform: scale(1.01);
+        box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3); 
+    }
+   
+/* styling cart page */
+.item-container:hover
+{
+    transform: scale(1.01);
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3); 
+}
+
+/* styling product detail (login Show) */
+@media(max-width:700px){
+    .product-container{
+        display: block !important;
+    }
+    .product-container  .left-container{
+        width:100% !important;
+    }
+    .product-container .right-container{
+        width:100% !important;
+    }
+}
+/* styling login search container */
+.search-container:hover{
+    transform: scale(1.01);
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3); 
+}
 
 
 

@@ -1,26 +1,273 @@
 <% layout("/layouts/biolerplate") %>
 <body>
-    <div class="row mt-3">
+     <!-- navbar -->
+  <div class="nav-container sticky-top">
+    <div class="flex-div first-div">
+      <a href="/homepage" style="color: white"
+        ><span class="material-symbols-outlined">Home</span></a
+      >
+    </div>
+
+    <div class="flex-div second-div">
+      <!-- show only when screen size is <=770px -->
+      <div class="hamberger-container" style="visibility: hidden">
+        <button
+          class="hamberger-btn"
+          style="background: none; border: none; color: white"
+          ;
+        >
+          <span
+            class="material-symbols-outlined hamberger-icon"
+            style="padding: 4px; font-size: 2rem; margin-right: 2rem"
+          >
+            menu
+          </span>
+          <span
+            class="material-symbols-outlined position-absolute cross-icon"
+            style="top: 20%; left: 3%; font-size: 30px; visibility: hidden"
+          >
+            close
+          </span>
+        </button>
+
+        <div
+          class="position-absolute hamberger-content"
+          style="
+            visibility: hidden;
+            min-width: 20%;
+            position: relative;
+            left: -200px;
+          "
+        >
+          <div class="p-3">
+            <form action="/homepage/login">
+              <button
+                class="login m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                login
+              </button>
+            </form>
+
+            <form action="/homepage/signup">
+              <button
+                class="signUp m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                SignUp
+              </button>
+            </form>
+
+            <form action="/admin">
+              <button
+                class="admin m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Admin
+              </button>
+            </form>
+
+            <form action="/homepage">
+              <button
+                class="admin m-1"
+                style="width: 100%; border: none; background-color: transparent"
+              >
+                Home
+              </button>
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+      <form action="/homepage/searchResult" method="post">
+        <div class="flex-div input-box">
+          <select
+            name="selectedCategory"
+            id="combo-select"
+            onchange="toggleInputField()"
+          >
+            <option value="">---Search---</option>
+            <option value="Mobiles">Mobiles</option>
+            <option value="Laptops">Laptops</option>
+            <option value="Earbuds">Earbuds</option>
+            <option value="Cables">Cables</option>
+            <option value="Neckbands">Neckbands</option>
+            <option value="Watches">Watches</option>
+            <option value="Mouses">Mouses</option>
+            <option value="Keyboards">Keyboards</option>
+            <option value="Monitors">Monitors</option>
+            <option value="Other">Other</option>
+          </select>
+          <input
+            type="text"
+            name="customCategory"
+            placeholder="Type Model..."
+            id="combo-input"
+            style="display: none"
+          />
+
+          <button class="btn btn-danger search-btn">Search</button>
+        </div>
+        <!-- <div class="flex-div" style="width:100%; position:absolute;">
+                  <input type="text" class="form-control" name="searchType" placeholder="Seach products" style="display: inline;" style="width:100%; position:relative">
+                  <button class="btn btn-danger search-btn">Search</button>
+              </div> -->
+      </form>
+    </div>
+
+    <!-- show cart only when screen size is <=770px -->
    
-        <div class="col col-8 offset-3">
-            <h3>Product details:</h3>
-        </div>
-        <div class="card  col-7 offset-3">
-                <img src=<%=item.image %>  alt="listing image" class=show-img>
-                <ul class="card-text">
-                <li> <b><%=item.title%> </b></li>
-                <li><%=item.description%></li>
-                <li>&#8377;<%=item.price.toLocaleString("en-IN") %></li>
-                  <li>  <%=item.specification%></li>
-                    
-                 
-                </ul>
-        </div>
+   
+
+        <button
+        onclick="window.location.href='/homepage/cart'"
+        style="position: absolute; left: 90%; display: none;"
+        class="cart-btn small-screen-cart"
+        style="margin-bottom:20px;"
+      >
+        <span
+          class="material-symbols-outlined cart"
+          style="margin:auto; color: white"
+          >shopping_cart</span
+        >
+      </button>
     
+   
+    
+
+   
+
+    <div class="flex-div third-div" style="position: relative; right:4rem;">
+      <form action="/homepage/login">
+        <button class="btn btn-success login-btn">login</button>
+      </form>
+      <form action="/homepage/signup">
+        <button class="btn btn-dark signUp-btn" style="">SignUp</button>
+      </form>
+      <form action="/homepage/cart" method="get">
+        <button
+          style="position: absolute; left: 95%; top: 27%"
+          class="cart-btn small-screen-cart"
+          style="margin-right: 1rem"
+        >
+          <span
+            class="material-symbols-outlined cart"
+            style="margin-left: 0rem; color: white;"
+            >shopping_cart</span
+          >
+        </button>
+      </form>
+
+     
     </div>
-    <div class="row mt-3">
-    <div class="col  col-8 offset-3">
-        <a href="/homepage/signup" class="btn btn-success" style="width:88%">Buy Now</a>
+  </div>
+
+   <!-- product details -->
+   <div class="product-container" style="max-width: 1400px; padding:2rem; margin:2rem auto; background-color: white;display:flex; justify-content: space-evenly;" > 
+       
+       
+    <!-- left side -->
+    <div class="left-container" style="position:relative;width:50%; margin-right:2rem; display: flex; flex-direction: column; justify-content: space-around;">
+
+       <div style="text-align: center;">
+         <img src=<%=item.image %>  alt="listing image" style=" width: 10rem; object-fit: contain; margin-bottom:2rem;">
+       </div>
+        
+
+     <div style="">
+
+      <form action="/homepage/signUp/<%=item._id%>/cart" method="get" style="margin-bottom:0.5rem;">
+        <button style="padding:0.6rem 1.2rem;  border:none; color:rgb(248, 163, 4); background-color: transparent; border:1px solid rgb(248, 163, 4); width:100%; margin-right:1rem; border-radius:8px;">
+          <span style="margin-right:0.2rem; font-size:large; position:relative;top:3px;" class="material-symbols-outlined">add_shopping_cart</span>Add to Cart
+        </button>
+      </form>
+
+      <form action="/homepage/signUp/<%=item._id%>/confirmBuy" method="get" style="">
+        <button style="padding:0.6rem 1.2rem;  border:none; color:white; background-color: rgb(35, 177, 35); width:100%; margin-right:1rem; border-radius:8px;">Buy Now</button>
+      </form>
+
+     </div>    
+
     </div>
+
+    <!--  right side -->
+    <div class="right-container" style="width:50%;">
+
+       <div style="margin-bottom:2rem; margin-top:1rem;">
+        <h5 style='font-weight:bold; margin-bottom:0;'><%=item.title%></h5>
+        <p style="margin-bottom:0;"><%=item.description%></p> 
+        <div class="rating-card" style="margin-top:0;">
+          <div class="stars">
+            <span class="star star1" data-value="1">&#9733;</span>
+            <span class="star star2" data-value="2">&#9733;</span>
+            <span class="star star3" data-value="3">&#9733;</span>
+            <span class="star star4" data-value="4">&#9733;</span>
+            <span class="star star5" data-value="5">&#9733;</span>
+           
+          </div>
+          <hr>
+        </div>
+       </div>
+       
+
+       <div>
+         <h4 style="font-weight: bold; margin-bottom:0;">&#8377;<%=item.price.toLocaleString("en-IN") %> </h4>
+         <p style="font-size:small; color:green;">inclusive of all taxes</p>
+       </div>
+        <hr>
+
+        <div style="margin-bottom:0;">
+          <h5>Highlights</h5>
+          <ul>
+            <li>Brand: </li>
+            <li>Model: <i><%=item.title%></i></li>
+            <li>Color: </li>
+            <li>Warranty:</li>
+          </ul>
+        </div>
+        <hr>
+       <div style="margin-top:1rem;">
+          <h4 style="font-weight: bold;"> Technical Specification </h4>
+                         
+          <p><%=item.specification%> </p>
+       </div>
+       
     </div>
+
+    <script>
+        // hamberger-btn
+    const hBtn = document.querySelector(".hamberger-btn");
+    const hContent = document.querySelector(".hamberger-content");
+    const crossIcon = document.querySelector(".cross-icon");
+    const hambergerIcon = document.querySelector(".hamberger-icon");
+
+    hBtn.addEventListener("click", () => {
+      if (hContent.style.visibility === "hidden") {
+        crossIcon.style.visibility = "visible";
+        hambergerIcon.style.visibility = "hidden";
+        hContent.style.visibility = "visible";
+        hContent.style.left = "0px";
+        // hContent.style.opacity=1;
+      } else {
+        crossIcon.style.visibility = "hidden";
+        hambergerIcon.style.visibility = "visible";
+        hContent.style.left = "-200px";
+        hContent.style.visibility = "hidden";
+      }
+    });
+
+    // combo search functionality
+    function toggleInputField() {
+      const comboSelect = document.querySelector("#combo-select");
+      const comboInput = document.querySelector("#combo-input");
+
+      if (comboSelect.value === "Other") {
+        comboSelect.style.display = "none";
+        comboInput.style.display = "block";
+      } else {
+        comboInput.style.display = "none";
+      }
+    }
+    </script>
 </body>
