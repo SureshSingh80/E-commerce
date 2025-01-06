@@ -1,18 +1,32 @@
 <% layout("/layouts/biolerplate") %>
+<style>
+    body 
+    {
+      background-color: white;
+    }
+</style>
 <body>
 
-    <div class="row">
-        <div class="col col-6 offset-3">
-        <div class="card" style="padding:2rem;">
-        <h2 style="color:rgb(128, 0, 0);">No Search Found.. </h2>
-        <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="" class="card-img-top" style="height:15rem;">
-        
-        <div class="flex-div cancel-order-div" style="justify-content: space-around;" >
-            <form action="/homepage">
-                <button class="btn btn-primary mt-3" style="">Continue Shopping</button>
-            </form>
+    <div  style="max-width:1600px; margin:2rem auto; padding:2rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div style="text-align: center;">
+                <h2  class="" >Oops! Search Not Found</h2>
+                <p style="margin:0; padding:0;">Oops! The Item you want to search doesn't exist or has been moved.</p>
+
+            </div>
+            
         </div>
-         </div>
-       </div>
-    </div>
+        <img src="https://img.freepik.com/premium-vector/search-result-find-illustration_585024-17.jpg" alt="" style="height:15rem; ">
+        <% if(cookies.userToken){%>
+            <form action="/loginHomepage">
+                <button style="border:none;  padding:0.6rem 4rem; background-color: rgb(17, 17, 17); color:white;"> <span style="position:relative;top:5px;" class="material-symbols-outlined">home</span> Go to Home</button>
+             </form>
+        <%}%>
+
+        <% if(!cookies.userToken){%>
+            <form action="/homepage">
+                <button style="border:none;  padding:0.6rem 4rem; background-color: rgb(17, 17, 17); color:white;"> <span style="position:relative;top:5px;" class="material-symbols-outlined">home</span> Go to Home</button>
+             </form>
+        <%}%>
+
 </body>

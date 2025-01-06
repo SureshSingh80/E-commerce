@@ -20,6 +20,7 @@ const cookie = require("cookie");
 const bcrypt = require("bcrypt");
 var store = require("store");
 const { rmSync } = require("fs");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 //basic setup
@@ -32,9 +33,11 @@ main()
   .catch((err) => {
     console.log(err);
   });
+
 async function main() {
   await mongoose.connect("mongodb://127.0.0.1:27017/ElectronicGadgets");
 }
+
 
 // for creating sessions
 let sessionOption = {
@@ -62,6 +65,11 @@ app.use(express.urlencoded({ extended: true }));
 // form can only send  get and post request, to convert other type request
 app.use(methodOverride("_method"));
 
+ 
+
+// ue cookie-parse middleware
+app.use(cookieParser());
+
 // ejs file set path
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -87,6 +95,8 @@ app.listen(port, () => {
 
 // routes (Homepage)
 app.get("/", (req, res) => {
+  const cookies=req.cookies;
+  console.log("cookies= ",cookies);
   res.render("root.ejs");
 });
 
@@ -190,7 +200,6 @@ app.post("/admin/homepage", async (req, res, next) => {
 
         res.render("adminHomepage.ejs");
       } else {
-        // res.render("adminError.ejs");
         req.flash("error","username or password is incorrect");
         res.redirect("/admin");
       }
@@ -593,7 +602,7 @@ app.get("/homepage/signUp/cart", async (req, res, next) => {
           Items,
           totalPrice: price,
         });
-      else res.render("emptyCart.ejs");
+      else res.render("emptyCart.ejs",{cart:cust.carts.length});
     } catch (err) {
       next(err);
     }
@@ -847,7 +856,7 @@ app.get("/homepage/signUp/orders", async (req, res, next) => {
       console.log("Orders= ", Orders);
       if (cust.orders.length)
         res.render("orders.ejs", { Orders, cart: cust.carts.length });
-      else res.render("emptyOrder.ejs");
+      else res.render("emptyOrder.ejs",{cart:cust.carts.length});
     } catch (err) {
       next(err);
     }
@@ -876,7 +885,17 @@ app.get("/homepage/signUp/:id/cancelOrder/:orderId", async (req, res, next) => {
       let { id, orderId } = req.params;
       await Customer.findByIdAndUpdate(id, { $pull: { orders: orderId } });
       await Order.findByIdAndDelete(orderId);
-      res.render("orderCancel.ejs");
+
+      // find who login
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == cookies.username) {
+          cust = customer;
+        }
+      }
+
+      res.render("orderCancel.ejs",{cart:cust.carts.length});
     } catch (err) {
       next(err);
     }
@@ -890,6 +909,10 @@ app.get("/loginHomepage", async (req, res, next) => {
   res.setHeader("Expires", "0");
 
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+
+  // another way to access cookies but you should first set app.use(cookieParser()) as middleware
+     console.log("cookies=",req.cookies);
+
   // console.log("loginCookies= ", cookies.userToken);
   if (cookies.userToken) {
     try {
@@ -911,7 +934,10 @@ app.get("/loginHomepage", async (req, res, next) => {
     } catch (err) {
       next(err);
     }
-  } else res.redirect("/homepage/login");
+        
+  } else res.redirect("/homepage/login"); 
+     
+
 });
 
 app.get("/loginHomepage/account", async (req, res, next) => {
@@ -936,6 +962,7 @@ app.post("/homepage/searchResult", async (req, res, next) => {
   try {
     let { selectedCategory, customCategory } = req.body;
     let searchItem;
+    const cookies=req.cookies;
 
     let allItem = await Item.find({});
     if (selectedCategory === "Other") {
@@ -944,7 +971,7 @@ app.post("/homepage/searchResult", async (req, res, next) => {
       searchItem = allItem.filter((item) => item.type == selectedCategory);
     }
 
-    if (searchItem.length == 0) res.render("noSearchFound.ejs");
+    if (searchItem.length == 0) res.render("noSearchFound.ejs",{cookies});
     else {
       res.render("searches.ejs", { searchItem });
     }
@@ -1024,7 +1051,6 @@ app.post("/homepage/signUp/searchResult", async (req, res, next) => {
       }
       let { selectedCategory, customCategory } = req.body;
       let searchItem;
-
       let allItem = await Item.find({});
       if (selectedCategory === "Other") {
         searchItem = allItem.filter((item) => item.title == customCategory);
@@ -1032,7 +1058,7 @@ app.post("/homepage/signUp/searchResult", async (req, res, next) => {
         searchItem = allItem.filter((item) => item.type == selectedCategory);
       }
 
-      if (searchItem.length == 0) res.render("noSearchFoundLogin.ejs");
+      if (searchItem.length == 0) res.render("noSearchFound.ejs",{cookies});
       else {
         res.render("loginSearches.ejs", {
           searchItem,
@@ -1050,6 +1076,8 @@ app.use((err, req, res, next) => {
   console.log("--------ERROR----------");
   console.log(err.name);
   console.log(err.message);
+  
+
   let { status = 500, message = "Some Error Occured" } = err;
   // res.status(status).send(message);
   res.status(status).render("errors.ejs", { message });
@@ -1057,5 +1085,9 @@ app.use((err, req, res, next) => {
 
 // when any route not match (page not found)
 app.use((req, res) => {
-  res.render("pageNotFound.ejs");
+  const cookies=req.cookies;
+
+  // another way to access cookies but for this method  you should first set app.use(cookieParser()) as middleware
+  console.log("cookies=",req.cookies);
+   res.render("pageNotFound.ejs",{cookies});
 });

@@ -1,8 +1,63 @@
 <% layout("/layouts/biolerplate") %>
+<style>
+    body 
+    {
+        background-color: white;
+    }
+    .gradient-404
+    {
+        /* first type */
+        background: linear-gradient(45deg, #f97316, #ec4899, #a855f7);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: gradient-pulse 2s ease-in-out infinite;
+
+        /* second type */
+        background: linear-gradient(45deg, #7c3aed, #8b5cf6, #6366f1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+
+        /* third type */
+        background: linear-gradient(45deg, #06b6d4, #3b82f6, #6366f1);
+        -webkit-background-clip: text;
+         background-clip: text;
+         color: transparent;
+
+         /* fourth */
+         background: linear-gradient(45deg, #d946ef, #a855f7, #ec4899);
+        -webkit-background-clip: text;
+         background-clip: text;
+         color: transparent;
+    }
+</style>
 <body>
-    <div class="card col-6 offset-3 mt-3 " style="border:none">
-        <h2 style="color:red;" class="offset-5" >page Not found</h2>
-        <img src="https://t4.ftcdn.net/jpg/03/88/63/83/360_F_388638369_wSBADhKfhiTx6Q5Pz1xfdpy6zotku1Sg.jpg" alt="" style="height:20rem;">
-        <a href="/homepage" class="btn btn-dark">Go To Home</a>
+    
+    <div  style="max-width:1600px; margin:2rem auto; padding:2rem; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <div style="display: flex; justify-content: center; align-items: center;">
+            <div style="text-align: center;">
+                <h1 class="gradient-404"  style="font-size:80px; ">404</h1>
+                <h2  class="" >Oops! Page Not Found</h2>
+                <p style="margin:0; padding:0;">Oops! The page you're looking for doesn't exist or has been moved.</p>
+
+            </div>
+            
+        </div>
+        <img src="https://t4.ftcdn.net/jpg/03/88/63/83/360_F_388638369_wSBADhKfhiTx6Q5Pz1xfdpy6zotku1Sg.jpg" alt="" style="height:15rem; ">
+        <% if(cookies.userToken){%>
+            <form action="/loginHomepage">
+                <button style="border:none;  padding:0.6rem 4rem; background-color: rgb(17, 17, 17); color:white;"> <span style="position:relative;top:5px;" class="material-symbols-outlined">home</span> Go to Home</button>
+             </form>
+        <%}%>
+
+        <% if(!cookies.userToken){%>
+            <form action="/homepage">
+                <button style="border:none;  padding:0.6rem 4rem; background-color: rgb(17, 17, 17); color:white;"> <span style="position:relative;top:5px;" class="material-symbols-outlined">home</span> Go to Home</button>
+             </form>
+        <%}%>
+
+         
+      
     </div>
 </body>
