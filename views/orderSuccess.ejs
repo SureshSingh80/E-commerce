@@ -1,6 +1,107 @@
 <% layout("/layouts/biolerplate") %>
 <body>
 
+   <!-- navbar -->
+   <div class="nav-container sticky-top">
+      <div class="flex-div left-side-div">
+        <a href="/loginHomepage" style="color:white;"><span class="material-symbols-outlined" style="">Home</span></a>
+     </div>
+
+     <div class="flex-div middle-side-div">
+
+       <!-- show only when screen size is <=770px -->
+      <div class="hamberger-container" style="visibility:hidden;">
+        <button class="hamberger-btn" style="background: none; border:none; color:white;";>
+          <span class="material-symbols-outlined hamberger-icon" style="padding:4px; font-size:2rem; margin-right: 2rem;">
+            menu
+          </span>
+          <span class="material-symbols-outlined position-absolute cross-icon" style="top:20%; left:3% ;font-size:30px; visibility:hidden;">
+            close
+          </span>
+        </button>
+
+        <div class="position-absolute hamberger-content" style="visibility:hidden; min-width:20%; position:relative; left:-200px; ">             
+          <div class=" p-3">
+
+            <form action="/loginHomepage" method="get" >
+              <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Home</button>             
+            </form> 
+
+            <form action="/loginHomepage/account">
+              <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Account</button>
+           </form>         
+          
+            
+           <!-- <form action="/homepage/signUp/orders">
+            <button class="orders m-1" style="width:100%; border:none; background-color: transparent;">Your Orders</button>
+          </form>            
+
+          <form action="/homepage/signUp/cart" method="get" >
+            <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Cart</button>             
+          </form> 
+
+        <form  onsubmit="handleLogout(event)">
+          <button class="log-out m-1" style="width:100%; border:none; background-color: transparent; ">Logout</button>
+       </form>   -->
+
+          </div>                
+        </div>
+        
+     </div>
+          
+          <form action="/homepage/signUp/searchResult" method="post">
+            <div class="flex-div input-box">
+              <select name="selectedCategory" id="combo-select" onchange="toggleInputField()">
+                <option value="">---Search---</option>
+                <option value="Mobiles">Mobiles</option>
+                <option value="Laptops">Laptops</option>
+                <option value="Earbuds">Earbuds</option>
+                <option value="Cables">Cables</option>
+                <option value="Neckbands">Neckbands</option>
+                <option value="Watches">Watches</option>
+                <option value="Mouses">Mouses</option>
+                <option value="Keyboards">Keyboards</option>
+                <option value="Monitors">Monitors</option>
+                <option value="Other">Other</option>
+                
+             </select>
+             <input type="text" name="customCategory" placeholder="Type Model..." id="combo-input" style="display:none;">
+             
+            <button class="btn btn-danger search-btn" >Search</button>
+           </div>
+          </form>
+      </div>
+
+      <!-- show only when screen size is <=770px -->
+      <div style="position:absolute; left:90%; display: none;" class="small-screen-cart">
+        <form action="/homepage/signUp/cart" method="get" >
+          <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white;">shopping_cart</span></button>
+          <% if(cart){%>
+            <div class="show-cart-num" style="position:absolute; top:-11px; "><span ><%=cart%></span></div>
+          <%}%>
+        </form>
+      </div> 
+      <!-- -->
+
+      <div class="flex-div right-side-div">
+           
+
+            <form action="/loginHomepage/account">
+               <button style="border:none; background-color: transparent; color:white; margin-right:2rem; position:relative; top:5px">
+                <i class="fa-regular fa-user" style="font-size:22px;"></i>
+              </button>
+            </form>
+
+            
+            <form action="/homepage/signUp/cart" method="get" >
+                <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white; position:relative; top:5px; ">shopping_cart</span></button>
+                <% if(cart){%>
+                  <div class="show-cart-num"><%=cart%></div>
+                <%}%>
+            </form>
+      </div>
+    </div>
+   <!-- order success info -->
     <div class="order-success-container" style="max-width:1000px; margin:2rem auto;background-color: white; padding:1rem;">
 
          <div style="text-align:center; margin-bottom:0;">
@@ -57,5 +158,42 @@
      </div>
 
     </div>
+
+    <script>
+      // hamberger-btn
+  const hBtn = document.querySelector(".hamberger-btn");
+  
+  const hContent = document.querySelector(".hamberger-content");
+  const crossIcon = document.querySelector(".cross-icon");
+  const hambergerIcon = document.querySelector(".hamberger-icon");
+
+  hBtn.addEventListener("click", () => {
+    if (hContent.style.visibility === "hidden") {
+      crossIcon.style.visibility = "visible";
+      hambergerIcon.style.visibility = "hidden";
+      hContent.style.visibility = "visible";
+      hContent.style.left = "0px";
+      // hContent.style.opacity=1;
+    } else {
+      crossIcon.style.visibility = "hidden";
+      hambergerIcon.style.visibility = "visible";
+      hContent.style.left = "-200px";
+      hContent.style.visibility = "hidden";
+    }
+  });
+
+  // combo search functionality
+  function toggleInputField() {
+    const comboSelect = document.querySelector("#combo-select");
+    const comboInput = document.querySelector("#combo-input");
+
+    if (comboSelect.value === "Other") {
+      comboSelect.style.display = "none";
+      comboInput.style.display = "block";
+    } else {
+      comboInput.style.display = "none";
+    }
+  }
+ </script>
 
 </body>

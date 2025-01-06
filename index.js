@@ -634,12 +634,21 @@ app.get("/homepage/signUp/:id/confirmBuy", async (req, res, next) => {
     try {
       let { id } = req.params;
       let item = await Item.findById(id);
+      
+      // find who login
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == cookies.username) {
+          cust = customer;
+        }
+      }
 
       if (item === null) {
         item = await Cart.findById(id);
       }
 
-      res.render("confirmBuy.ejs", { item });
+      res.render("confirmBuy.ejs", { cart:cust.carts.length, item });
     } catch (err) {
       next(err);
     }
@@ -706,7 +715,8 @@ app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
 });
 
 app.get("/loginHomepage/signUp/orderSuccess/:id", async (req, res, next) => {
-  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};   
+       
   let { id } = req.params;
 
   if (cookies.userToken) {
@@ -720,10 +730,11 @@ app.get("/loginHomepage/signUp/orderSuccess/:id", async (req, res, next) => {
         }
       }
 
+
       let item = await Item.findById(id);
       if (item === null) item = await Cart.findById(id);
-
-      res.render("orderSuccess.ejs", { item, cust });
+       
+      res.render("orderSuccess.ejs", { cart:cust.carts.length,item, cust });
     } catch (err) {
       next(err);
     }
@@ -953,7 +964,7 @@ app.get("/loginHomepage/account", async (req, res, next) => {
         cust = customer;
       }
     }
-    res.render("account.ejs", { cust });
+    res.render("account.ejs", {cart:cust.carts.length, cust });
   } else res.redirect("/homepage/login");
 });
 
