@@ -2,11 +2,22 @@
 <head>
     <!-- for use axios -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+
+    <style>
+        .admin-bg-img 
+        {
+            background-image: url("https://img.freepik.com/free-vector/gradient-futuristic-background-with-spheres_23-2149110136.jpg");
+            height:100vh;
+            background-position: center;
+            background-repeat:no-repeat;
+            background-size: cover;
+        }
+    </style>
 </head>
-<body >
+<body class="admin-bg-img">
     <div class="login-container" >
         <div class="form-div">
-            <h5>Admin Login</h5>
+            <h5 style="text-align: center; color:white;">Admin Login</h5>
             <form action="/admin/homepage" method="post" class="needs-validation" novalidate >
             <div>
                
@@ -22,7 +33,7 @@
             </div>
               <br>
              <div>
-                <label for="show-pass">Show password</label><br>
+                <label for="show-pass" style="color:white;">Show password</label><br>
                 <input type="checkbox" id="show-pass" class="m-0" onchange="handleChange()">
              </div>
             

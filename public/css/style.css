@@ -10,13 +10,7 @@ body
     overflow-x:hidden;    
     /* background-color:pink; */
 }
-.login-bg-image
-{
-    background-image: url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/i/2327ffa4-20e9-41b6-b77c-462d26f7bfea/d3ecbzg-045f95bb-8610-4dbb-84ab-e1d08fb037d7.jpg");
-    background-position: center;
-    background-repeat:no-repeat;
-    background-size: cover;
-}
+
 @media (max-width:400px){
     body{
         overflow-x: visible;

@@ -1099,6 +1099,6 @@ app.use((req, res) => {
   const cookies=req.cookies;
 
   // another way to access cookies but for this method  you should first set app.use(cookieParser()) as middleware
-  console.log("cookies=",req.cookies);
+  
    res.render("pageNotFound.ejs",{cookies});
 });
