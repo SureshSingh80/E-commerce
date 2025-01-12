@@ -24,6 +24,15 @@ const cartSchema=Schema({
         default:"https://live.staticflickr.com/5207/5287310204_86fffc6c5a_b.jpg",
         set:(v)=> v===""?"https://live.staticflickr.com/5207/5287310204_86fffc6c5a_b.jpg":v
     },
+    brand:{
+        type:String
+    },
+    color:{
+        type:String
+    },
+    warranty:{
+        type:String
+    },
     price:Number,
     
 

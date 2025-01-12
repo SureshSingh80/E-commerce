@@ -1,5 +1,101 @@
 <% layout("/layouts/biolerplate") %>
 <body>
+
+  <style>
+     
+    
+
+  </style>
+
+    <!-- navbar -->
+    <div class="nav-container sticky-top">
+      <div class="flex-div left-side-div">
+        <a href="/loginHomepage" style="color:white;"><span class="material-symbols-outlined" style="">Home</span></a>
+     </div>
+
+     <div class="flex-div middle-side-div">
+
+       <!-- show only when screen size is <=770px -->
+      <div class="hamberger-container" style="visibility:hidden;">
+        <button class="hamberger-btn" style="background: none; border:none; color:white;">
+          <span class="material-symbols-outlined hamberger-icon" style="padding:4px; font-size:2rem; margin-right: 2rem;">
+            menu
+          </span>
+          <span class="material-symbols-outlined position-absolute cross-icon" style="top:20%; left:3% ;font-size:30px; visibility:hidden;">
+            close
+          </span>
+        </button>
+
+        <div class="position-absolute hamberger-content" style="visibility:hidden; min-width:20%; position:relative; left:-200px; ">             
+          <div class=" p-3">
+
+            <form action="/loginHomepage" method="get" >
+              <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Home</button>             
+            </form> 
+
+            <form action="/loginHomepage/account">
+              <button class="carts m-1" style="width:100%; border:none; background-color: transparent; ">Account</button>
+           </form>         
+        
+          </div>                
+        </div>
+        
+     </div>
+          
+          <form action="/homepage/signUp/searchResult" method="post">
+            <div class="flex-div input-box">
+              <select name="selectedCategory" id="combo-select" onchange="toggleInputField()">
+                <option value="">---Search---</option>
+                <option value="Mobiles">Mobiles</option>
+                <option value="Laptops">Laptops</option>
+                <option value="Earbuds">Earbuds</option>
+                <option value="Cables">Cables</option>
+                <option value="Neckbands">Neckbands</option>
+                <option value="Watches">Watches</option>
+                <option value="Mouses">Mouses</option>
+                <option value="Keyboards">Keyboards</option>
+                <option value="Monitors">Monitors</option>
+                <option value="Other">Other</option>
+                
+             </select>
+             <input type="text" name="customCategory" placeholder="Type Model..." id="combo-input" style="display:none;">
+             
+            <button class="btn btn-danger search-btn" >Search</button>
+           </div>
+          </form>
+      </div>
+
+      <!-- show only when screen size is <=770px -->
+      <div style="position:absolute; left:90%; display: none;" class="small-screen-cart">
+        <form action="/homepage/signUp/cart" method="get" >
+          <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white;">shopping_cart</span></button>
+          <% if(cart){%>
+            <div class="show-cart-num" style="position:absolute; top:-11px; "><span ><%=cart%></span></div>
+          <%}%>
+        </form>
+      </div> 
+      <!-- -->
+
+      <div class="flex-div right-side-div">
+           
+
+            <form action="/loginHomepage/account">
+               <button style="border:none; background-color: transparent; color:white; margin-right:2rem; position:relative; top:5px">
+                <i class="fa-regular fa-user" style="font-size:22px;"></i>
+              </button>
+            </form>
+
+            
+            <form action="/homepage/signUp/cart" method="get" >
+                <button class="cart-btn" style="margin-right:1rem;"><span class="material-symbols-outlined cart" style="margin-left:0rem; color:white; position:relative; top:5px; ">shopping_cart</span></button>
+                <% if(cart){%>
+                  <div class="show-cart-num"><%=cart%></div>
+                <%}%>
+            </form>
+      </div>
+    </div> 
+
+  <!-- order details info -->
   <div  style="max-width: 1400px; margin: 2rem auto; padding: 1rem;font-family:Arial, Helvetica, sans-serif">
 
    <!-- first div -->
@@ -9,16 +105,29 @@
       style="display: flex; justify-content: space-between; align-items: center"
     >
       <i style="font-size: medium; margin-right:2rem;color:grey;">Order ID- #<%=item._id%></i>
+      
+       
       <div style="display: flex; justify-content: center; align-items: center;" class="pending-container">
         <button style="background-color: orange; border:none;color:white;border-radius:5px;font-size:small;margin:1rem; "><%=item.status%></button>
-        <img src="https://cdnl.iconscout.com/lottie/premium/thumb/notification-dot-animation-download-in-lottie-json-gif-static-svg-file-formats--red-logo-alert-warning-ui-essential-pack-sign-symbols-animations-4561481.gif" height="20rem;">
-      </div>
+         <% if(item.status!=='Delivered'){%>
+           <img src="https://cdnl.iconscout.com/lottie/premium/thumb/notification-dot-animation-download-in-lottie-json-gif-static-svg-file-formats--red-logo-alert-warning-ui-essential-pack-sign-symbols-animations-4561481.gif" height="20rem;">
+         <%}%>
+        </div>  
+     
       
     </div>
 
-    <div style="display: flex; color: grey; margin-bottom:0.5rem;">
-      <span class="material-symbols-outlined" style=" margin-right:0.5rem;">shopping_bag</span>
-      <i style=""><%=item.orderStatus%></i>
+    <div class="delivery-info" style=" display: flex; justify-content: space-between;  color: grey; margin-bottom:0.5rem;">
+      <div>        
+          <span class="material-symbols-outlined" style=" font-size:medium; margin-right:0.5rem;">shopping_bag</span>
+          <i style="font-size: small; position: relative; top:-2px;"><%=item.expectedDelivery%></i>
+                
+      </div>
+
+      <div>
+         <p style="font-size:small; margin-left:2.2rem;"><%=item.orderDate%></p> 
+      </div>
+      
     </div>
    </div>
 
@@ -35,13 +144,39 @@
           />
         </div>
 
-        <div >
-          <p style="margin-bottom: 0"><%=item.orderName%></p>
+        <div>
+          <p style="margin-bottom: 0; margin-top:1rem; line-height:normal;"><%=item.orderName%></p>
           <b><%=item.orderPrice.toLocaleString("en-IN")%> &#8377;</b>
+        
         </div>
       </div>
+      </a>
+      <!-- create UI for order status -->
+      <div class="status-icons" style="display:flex; justify-content: space-around;align-items: center;">
+        <div><span style="font-size:1.5rem; color:rgb(32, 194, 32);" class="material-symbols-outlined">schedule</span></div>
+        <div><span class="<%= item.status==='Processing' || item.status==='Shipped' || item.status==='Delivered' ? 'Processing-icon' : ''%> material-symbols-outlined"  style="font-size:1.5rem;color:grey;" >package_2</span></div>
+        <div><span class="<%= item.status==='Shipped' || item.status==='Delivered' ? 'Shipped-icon' : ''%> material-symbols-outlined" style="font-size:1.5rem;color:grey;" >local_shipping</span></div>
+        <div><span class="<%= item.status==='Delivered' ? 'Delivered-icon' : ''%> material-symbols-outlined" style="font-size:1.5rem;color:grey;" >check_circle</span></div>
+      </div>
+
+      <div class="status-line" style="display:flex; justify-content: space-around; align-items: center;">
+          <div style=" margin-right:0.2rem;background-color: rgb(32, 194, 32); height:0.3rem; width:25%"></div>
+          <div class="<%= item.status==='Processing' || item.status==='Shipped' || item.status==='Delivered' ? 'Processing-div' : ''%>" style=" margin-right:0.2rem; height:0.3rem;background-color:grey; width:25%"></div>
+          <div class="<%= item.status==='Shipped' || item.status==='Delivered' ? 'Shipped-div' : ''%>" style=" margin-right:0.2rem; height:0.3rem;background-color:grey; width:25%"></div>
+          <div class="<%= item.status==='Delivered' ? 'Delivered-div' : ''%>" style=" margin-right:0.2rem; height:0.3rem;background-color:grey; width:25%"></div>
+      </div>
+
+      <div class="status-text" style="display:flex; justify-content: space-around;align-items: center;">
+        <div style="color:rgb(32, 194, 32);">Pending</div>
+        <div class="<%= item.status==='Processing' || item.status==='Shipped' || item.status==='Delivered' ? 'Processing-text' : ''%>" style="color:grey;">Processing</div>
+        <div class="<%= item.status==='Shipped' || item.status==='Delivered' ? 'Shipped-text' : ''%>" style="color:grey;">Shipped</div>
+        <div class="<%= item.status==='Delivered' ? 'Delivered-text' : ''%>" style="color:grey;">Delivered</div>
+      </div>
+     
     </div>
-   </a>
+  
+          
+  
 
     <!-- third div -->
     <div
@@ -85,6 +220,7 @@
         <div style="width: 300px"><b><%=item.mobNo%></b></div>
       </div>
     </div>
+    <% if(item.status==='Pending'){%>
     <div
       style="
         border: 1px solid orange;
@@ -97,7 +233,9 @@
       your order is pending for confirmation.You can cancel your order by
       clicking the button below.
     </div>
+    <%}%>
 
+    <% if(item.status!=='Delivered'){%>
    <div style=" display: flex;justify-content: flex-end;">
       <a
       href="/homepage/signUp/<%=ID%>/cancelOrder/<%=item._id%>"
@@ -115,5 +253,43 @@
       >Cancel Order</a
     >
    </div>
-  </div>
+   <%}%>
+</div>
+
+  <script>
+    // hamberger-btn
+    const hBtn = document.querySelector(".hamberger-btn");
+    const hContent = document.querySelector(".hamberger-content");
+    const crossIcon = document.querySelector(".cross-icon");
+    const hambergerIcon = document.querySelector(".hamberger-icon");
+
+    hBtn.addEventListener("click", () => {
+      if (hContent.style.visibility === "hidden") {
+        crossIcon.style.visibility = "visible";
+        hambergerIcon.style.visibility = "hidden";
+        hContent.style.visibility = "visible";
+        hContent.style.left = "0px";
+        // hContent.style.opacity=1;
+      } else {
+        crossIcon.style.visibility = "hidden";
+        hambergerIcon.style.visibility = "visible";
+        hContent.style.left = "-200px";
+        hContent.style.visibility = "hidden";
+      }
+    });
+
+    // combo search functionality
+    function toggleInputField() {
+      const comboSelect = document.querySelector("#combo-select");
+      const comboInput = document.querySelector("#combo-input");
+
+      if (comboSelect.value === "Other") {
+        comboSelect.style.display = "none";
+        comboInput.style.display = "block";
+      } else {
+        comboInput.style.display = "none";
+      }
+    }
+    console.log()
+  </script>
 </body>

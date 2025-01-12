@@ -89,6 +89,8 @@ function toggleInputField(){
     comboInput.style.display="none";
   }
 }
+
+ 
 console.log("other than homepage");
 
 

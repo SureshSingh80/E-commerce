@@ -150,10 +150,15 @@
                 <div style="margin-bottom:0;">
                   <h5>Highlights</h5>
                   <ul>
-                    <li>Brand: </li>
-                    <li>Model: <i><%=item.title%></i></li>
-                    <li>Color: </li>
-                    <li>Warranty:</li>
+                    <% if(item.brand){%>
+                      <li>Brand: <%=item.brand%></li>
+                    <%}%>
+                    <% if(item.color){%>
+                      <li>Color: <%=item.color%></li>
+                    <%}%>
+                    <% if(item.warranty){%>
+                      <li>Warranty: <%=item.warranty%></li>
+                    <%}%>
                   </ul>
                 </div>
                 <hr>

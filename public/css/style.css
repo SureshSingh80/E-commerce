@@ -1,7 +1,7 @@
 /* general styling */
 *
 {
-    
+
 }
 body 
 {
@@ -22,6 +22,17 @@ body
     display:flex;
 }
 
+/* admin section styling */
+textarea::placeholder{
+    font-size:13px;
+    
+}
+textarea:focus{
+    outline: none !important; /* Remove the default outline */
+     box-shadow: none !important; /* Remove the default box-shadow */
+    border: 1px solid black !important; /* Optional: set your desired border */
+    
+}
 /* Homepage/Navbar */
 .nav-container
 {
@@ -140,8 +151,22 @@ p
     color:white;
     border-radius:50%;
     text-align: center;
+    /* rotate  360 deg */
+    animation:  rotate 3s ease-in-out infinite;
+   
     
 }
+ @keyframes rotate {
+    0%{
+        transform: rotateY(0deg);
+    }
+    100%{
+        transform: rotateY(360deg);
+    }
+ }
+
+ 
+
 .show-cart-num span 
 {
     /* font-size:10px !important; */
@@ -679,6 +704,7 @@ input::placeholder{
     font-size:13px;
 }
 
+
 input:focus{
 
     border:1px solid black !important;
@@ -731,6 +757,68 @@ input:focus{
         transform: scale(1.01);
         box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.3); 
     }
+@media (max-width:700px){ 
+    .delivery-info{
+        display:inline !important;
+    }
+    
+}
+
+/* styling order status */
+ .Processing-icon {
+    color: rgb(32, 194, 32) !important;
+   }
+   .Processing-div 
+   {
+    background-color: rgb(32, 194, 32) !important;
+   }
+   .Processing-text
+   {
+    color: rgb(32, 194, 32) !important;
+   }
+
+   /* shipped status styling */
+   .Shipped-icon {
+    color: rgb(32, 194, 32) !important;
+   }
+   .Shipped-div{
+    background-color: rgb(32, 194, 32) !important;
+   }
+   .Shipped-text
+   {
+    color: rgb(32, 194, 32) !important;
+   }
+
+   /* delivered status styling  */
+   .Delivered-icon {
+    color: rgb(32, 194, 32) !important;
+   }
+   .Delivered-div{
+    background-color: rgb(32, 194, 32) !important;
+   }
+   .Delivered-text
+   {
+    color: rgb(32, 194, 32) !important;
+   }
+
+/* responsive status styling */
+@media (max-width:750px){
+    .status-icons div  span
+    {
+        font-size: 1rem !important;
+        position:relative;
+        top:0.3rem;
+    }
+    .status-line div {
+        height:0.2rem !important;
+        margin-right:0.1rem !important;
+    }
+    .status-text div 
+    {
+        font-size: 0.8rem !important;
+    }
+}
+
    
 /* styling cart page */
 .item-container:hover

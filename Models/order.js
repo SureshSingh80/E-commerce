@@ -14,7 +14,10 @@ const orderSchema=Schema({
     orderPrice:{
         type:Number
     },
-    orderStatus:{
+    expectedDelivery:{
+        type:String
+    },
+    orderDate:{
         type:String
     },
     orderAddress:{

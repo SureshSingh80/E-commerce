@@ -513,9 +513,15 @@ app.get("/homepage/:id/loginShowInfo", async (req, res, next) => {
       }
 
       let item = await Item.findById(id);
-      if (item === null) {
-        item = await Cart.findById(id);
-      }
+      console.log("item on item ", item);
+      
+      // if (item === null) {
+      //   item = await Cart.findById(id);
+      // }
+      // if(item===null){
+      //   item=await Order.findById(id);
+      // }
+      console.log("item in order=", item);
       if (!item) throw new customError(500, "Item Not Found");
       res.render("loginShow.ejs", { item, cart: cust.carts.length });
     } catch (err) {
@@ -553,6 +559,9 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
         description: item.description,
         specification: item.specification,
         image: item.image,
+        brand: item.brand,
+        color: item.color,
+        warranty: item.warranty,
         price: item.price,
       });
 
@@ -589,8 +598,9 @@ app.get("/homepage/signUp/cart", async (req, res, next) => {
       let items = await Customer.find({ username: cust.username }).populate(
         "carts"
       );
-      console.log("items= ", items);
+      
       let Items = items[0];
+      console.log("items in cart= ", Items);
       // calculate price
       let price = 0;
       for (item of Items.carts) {
@@ -644,9 +654,9 @@ app.get("/homepage/signUp/:id/confirmBuy", async (req, res, next) => {
         }
       }
 
-      if (item === null) {
-        item = await Cart.findById(id);
-      }
+      // if (item === null) {
+      //   item = await Cart.findById(id);
+      // }
 
       res.render("confirmBuy.ejs", { cart:cust.carts.length, item });
     } catch (err) {
@@ -657,7 +667,8 @@ app.get("/homepage/signUp/:id/confirmBuy", async (req, res, next) => {
 
 app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-  let { paymentMethod } = req.body;
+  let { paymentMethod,quantity } = req.body;
+  
 
   if (cookies.userToken) {
     if (paymentMethod === "COD") {
@@ -674,34 +685,66 @@ app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
           }
         }
         if (cust.address) {
-          let date = Math.floor(Math.random() * 30) + 1;
-          let month = new Date().getMonth();
-          let year = new Date().getFullYear();
-          let status = "Expected Delivery: " + date + "/" + month + "/" + year;
+
+          let shippingDay,month,orderMonth,year,expectedDelivery,orderDate,todayDay;          
+
+           todayDay = new Date().getDate();
+           month = new Date().getMonth() + 1;
+           orderMonth=month;
+           year = new Date().getFullYear();
+
+           do{
+            shippingDay = Math.floor(Math.random() * 37) + 1;
+            if(todayDay>23 && shippingDay>30){ 
+              shippingDay=shippingDay-30;
+              month=month+1;
+              break;
+            }
+           }while(!(shippingDay>=todayDay+5 && shippingDay <= todayDay+7)); // day should be >= purchaseDay+5 && <= purchaseDay+7
+
+
+           // convert todayDay, month and shippingDay to its appropriate format
+           todayDay = todayDay<10?("0"+todayDay):todayDay;
+           month = month<10?("0"+month):month;
+           orderMonth = orderMonth<10?("0"+orderMonth):orderMonth;
+           shippingDay = shippingDay<10?("0"+shippingDay):shippingDay;
+
+           orderDate= "Order Date: " + todayDay + "/" + orderMonth + "/" + year;            
+                               
+           expectedDelivery = "Expected Delivery: " + shippingDay + "/" + month + "/" + year;
+          
 
           // if item is buyed without cart
           let item = await Item.findById(id);
-          console.log("type of id= ", typeof id);
+          console.log("buy through item",item);
 
           // if item is buyed through cart
-          if (item === null) {
-            item = await Cart.findById(id);
+          // if (item === null) {
+          //   item = await Cart.findById(id);
+          // }
+          // console.log("item= ", item);
+
+          //  add loop for quantity
+          for (let i = 1; i <= quantity; i++) {
+            let newOrder = new Order({
+              itemID: id,
+              orderName: item.description,
+              orderImage: item.image,
+              orderPrice: item.price,
+              expectedDelivery: expectedDelivery,
+              orderDate: orderDate,
+              orderAddress: cust.address,
+              customerName: cust.username,
+              mobNo: cust.mobNo,
+              status: "Pending",
+            });
+            await cust.orders.push(newOrder);
+                   
+            await newOrder.save();
+            await cust.save();
+  
           }
-          console.log("item= ", item);
-          let newOrder = new Order({
-            itemID: id,
-            orderName: item.description,
-            orderImage: item.image,
-            orderPrice: item.price,
-            orderStatus: status,
-            orderAddress: cust.address,
-            customerName: cust.username,
-            mobNo: cust.mobNo,
-            status: "Pending",
-          });
-          await cust.orders.push(newOrder);
-          await newOrder.save();
-          await cust.save();
+         
           res.redirect(`/loginHomepage/signUp/orderSuccess/${id}`);
         } else res.redirect("/loginHomepage/addresses");
       } catch (err) {
@@ -879,9 +922,19 @@ app.get("/homepage/signUp/:id/:ID", async (req, res, next) => {
   if (cookies.userToken) {
     try {
       let { id, ID } = req.params;
+
+       // find who login
+       let customers = await Customer.find({});
+       let cust;
+       for (customer of customers) {
+         if (customer.username == cookies.username) {
+           cust = customer;
+         }
+       }
       let item = await Order.findById(id);
       console.log("item= ", item);
-      res.render("orderDetails.ejs", { item, ID });
+         
+      res.render("orderDetails.ejs", { cart:cust.carts.length, item, ID });
     } catch (err) {
       next(err);
     }
