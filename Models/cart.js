@@ -7,7 +7,7 @@ const cartSchema=Schema({
     },
     type:{
         type:String,
-        required:true
+        
     },
     title:{
         type:String,

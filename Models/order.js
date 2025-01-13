@@ -5,6 +5,24 @@ const orderSchema=Schema({
     itemID:{
         type:String,
     },
+    title:{
+        type:String
+    },
+    description:{
+        type:String
+    },
+    specification:{
+        type:String
+    },
+    brand:{
+        type:String
+    },
+    color:{
+        type:String
+    },
+    warranty:{
+        type:String
+    },
     orderName:{
         type:String
     },

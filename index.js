@@ -513,15 +513,18 @@ app.get("/homepage/:id/loginShowInfo", async (req, res, next) => {
       }
 
       let item = await Item.findById(id);
-      console.log("item on item ", item);
+      console.log("itemA in items= ", item);
       
-      // if (item === null) {
-      //   item = await Cart.findById(id);
-      // }
-      // if(item===null){
-      //   item=await Order.findById(id);
-      // }
-      console.log("item in order=", item);
+      if (item === null) {
+        item = await Cart.findById(id);
+
+        console.log("itemA in cart= ", item);
+      }
+      if(item===null){
+        item=await Order.findById(id);
+        console.log("itemA in order=", item);
+      }
+      
       if (!item) throw new customError(500, "Item Not Found");
       res.render("loginShow.ejs", { item, cart: cust.carts.length });
     } catch (err) {
@@ -552,24 +555,29 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
       }
 
       let item = await Item.findById(id);
-      let newItem = new Cart({
-        itemID: id,
-        type: item.type,
-        title: item.title,
-        description: item.description,
-        specification: item.specification,
-        image: item.image,
-        brand: item.brand,
-        color: item.color,
-        warranty: item.warranty,
-        price: item.price,
-      });
-
-      cust.carts.push(newItem);
-      await newItem.save();
-      let result = await cust.save();
-      console.log(result);
-      res.redirect("/homepage/signUp/cart");
+      if(item===null){
+        res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
+      }
+      else {
+        let newItem = new Cart({
+          itemID: id,
+          type: item.type,
+          title: item.title,
+          description: item.description,
+          specification: item.specification,
+          image: item.image,
+          brand: item.brand,
+          color: item.color,
+          warranty: item.warranty,
+          price: item.price,
+        });
+  
+        cust.carts.push(newItem);
+        await newItem.save();
+        let result = await cust.save();
+        console.log(result);
+        res.redirect("/homepage/signUp/cart");
+      }
     } catch (err) {
       next(err);
     }
@@ -643,9 +651,14 @@ app.get("/homepage/signUp/:id/confirmBuy", async (req, res, next) => {
   if (cookies.userToken) {
     try {
       let { id } = req.params;
+      const product=req.query.product;
+      console.log(product);
       let item = await Item.findById(id);
-      
-      // find who login
+      if(item===null){
+        res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
+      }
+      else{
+        // find who login
       let customers = await Customer.find({});
       let cust;
       for (customer of customers) {
@@ -654,11 +667,10 @@ app.get("/homepage/signUp/:id/confirmBuy", async (req, res, next) => {
         }
       }
 
-      // if (item === null) {
-      //   item = await Cart.findById(id);
-      // }
-
       res.render("confirmBuy.ejs", { cart:cust.carts.length, item });
+      }
+      
+      
     } catch (err) {
       next(err);
     }
@@ -714,20 +726,23 @@ app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
            expectedDelivery = "Expected Delivery: " + shippingDay + "/" + month + "/" + year;
           
 
-          // if item is buyed without cart
+         
           let item = await Item.findById(id);
           console.log("buy through item",item);
 
-          // if item is buyed through cart
-          // if (item === null) {
-          //   item = await Cart.findById(id);
-          // }
-          // console.log("item= ", item);
 
           //  add loop for quantity
           for (let i = 1; i <= quantity; i++) {
             let newOrder = new Order({
               itemID: id,
+              title: item.title,
+              description: item.description,
+              specification: item.specification,
+              brand: item.brand,
+              color: item.color,
+              warranty: item.warranty,
+
+
               orderName: item.description,
               orderImage: item.image,
               orderPrice: item.price,

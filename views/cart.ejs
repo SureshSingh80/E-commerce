@@ -171,7 +171,7 @@
     <% for(item of Items.carts){%>
 
     <!-- container -->
-    <a href="/homepage/<%=item.itemID%>/loginShowInfo" style="text-decoration: none; color:black;">
+    <a href="/homepage/<%=item._id%>/loginShowInfo" style="text-decoration: none; color:black;">
     <div
       class="item-container"
       style="
@@ -220,7 +220,7 @@
             box-shadow: 0 0 5px rgb(42, 122, 21);
             font-size: small;
           "
-          href="/homepage/signUp/<%=item.itemID%>/confirmBuy"
+          href="/homepage/signUp/<%=item.itemID%>/confirmBuy?product=<%= item.title %>"
           ><span style="position:relative; top:2px; font-size: small;" class="material-symbols-outlined">credit_card</span> buy this Now </a
         >
         <form

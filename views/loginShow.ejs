@@ -101,21 +101,24 @@
             <div class="left-container" style="position:relative;width:50%; margin-right:2rem; display: flex; flex-direction: column; justify-content: space-around;">
 
                <div style="text-align: center;">
-                 <img src=<%=item.image %>  alt="listing image" style=" width: 10rem; object-fit: contain; margin-bottom:2rem;">
+                 <img src=<%=item.image || item.orderImage %>  alt="listing image" style=" width: 10rem; object-fit: contain; margin-bottom:2rem;">
                </div>
                 
 
              <div style="">
 
-              <form action="/homepage/signUp/<%=item._id%>/cart" method="post" style="margin-bottom:0.5rem;">
+              <form action="/homepage/signUp/<%=item.itemID || item._id%>/cart" method="post" style="margin-bottom:0.5rem;">
                 <button style="padding:0.6rem 1.2rem;  border:none; color:rgb(248, 163, 4); background-color: transparent; border:1px solid rgb(248, 163, 4); width:100%; margin-right:1rem; border-radius:8px;">
                   <span style="margin-right:0.2rem; font-size:large; position:relative;top:3px;" class="material-symbols-outlined">add_shopping_cart</span>Add to Cart
                 </button>
               </form>
 
-              <form action="/homepage/signUp/<%=item._id%>/confirmBuy" method="get" style="">
-                <button style="padding:0.6rem 1.2rem;  border:none; color:white; background-color: rgb(35, 177, 35); width:100%; margin-right:1rem; border-radius:8px;">Buy Now</button>
-              </form>
+              <!-- <form action="/homepage/signUp/<%=item.itemID || item._id%>/confirmBuy?product=abc" method="get">
+                <button style="padding:0.6rem 1.2rem;  border:none; color:white; background-color: rgb(35, 177, 35); width:100%; margin-right:1rem; border-radius:8px;">Buy  Now</button>
+              </form> -->
+              <a href="/homepage/signUp/<%=item.itemID || item._id%>/confirmBuy?product=<%= item.title %>">
+                <button style="padding:0.6rem 1.2rem;  border:none; color:white; background-color: rgb(35, 177, 35); width:100%; margin-right:1rem; border-radius:8px;">Buy  Now</button>
+              </a>
 
              </div>    
 
@@ -142,7 +145,7 @@
                
 
                <div>
-                 <h4 style="font-weight: bold; margin-bottom:0;">&#8377;<%=item.price.toLocaleString("en-IN") %> </h4>
+                 <h4 style="font-weight: bold; margin-bottom:0;">&#8377;<%= item.orderPrice?.toLocaleString("en-IN") || item.price?.toLocaleString("en-IN") %> </h4>
                  <p style="font-size:small; color:green;">inclusive of all taxes</p>
                </div>
                 <hr>
