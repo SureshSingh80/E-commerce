@@ -220,7 +220,7 @@
             box-shadow: 0 0 5px rgb(42, 122, 21);
             font-size: small;
           "
-          href="/homepage/signUp/<%=item.itemID%>/confirmBuy?product=<%= item.title %>"
+          href="/homepage/signUp/<%=item.itemID%>/confirmBuy?productType=<%= item.type? item.type:'default' %>"
           ><span style="position:relative; top:2px; font-size: small;" class="material-symbols-outlined">credit_card</span> buy this Now </a
         >
         <form

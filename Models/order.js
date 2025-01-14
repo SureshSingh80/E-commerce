@@ -8,6 +8,9 @@ const orderSchema=Schema({
     title:{
         type:String
     },
+    type:{
+        type:String
+    },
     description:{
         type:String
     },

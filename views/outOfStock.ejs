@@ -1,7 +1,12 @@
 <% layout("/layouts/biolerplate") %>
+<style>
+    body 
+    {
+        background-color: white;
+    }
+</style>
 <body>
-
-   <!-- navbar -->
+      <!-- navbar -->
    <div class="nav-container sticky-top">
     <div class="flex-div left-side-div">
       <a href="/loginHomepage" style="color:white;"><span class="material-symbols-outlined" style="">Home</span></a>
@@ -92,90 +97,25 @@
           </form>
     </div>
   </div>
-  
-  <!-- product details -->
-    <div class="product-container" style="max-width: 1400px; padding:2rem; margin:2rem auto; background-color: white;display:flex; justify-content: space-evenly;" > 
-       
-       
-            <!-- left side -->
-            <div class="left-container" style="position:relative;width:50%; margin-right:2rem; display: flex; flex-direction: column; justify-content: space-around;">
 
-               <div style="text-align: center;">
-                 <img src=<%=item.image || item.orderImage %>  alt="listing image" style=" width: 10rem; object-fit: contain; margin-bottom:2rem;">
-               </div>
-                
+    <!-- out of stock message -->
+    <div style="max-width:1500px; margin:8rem auto; display:flex; flex-direction: column; justify-content: center; align-items: center;">
 
-             <div style="">
-
-              <form action="/homepage/signUp/<%=item.itemID || item._id%>/cart?productType=<%= item.type? item.type:'default' %>" method="post" style="margin-bottom:0.5rem;">
-                <button style="padding:0.6rem 1.2rem;  border:none; color:rgb(248, 163, 4); background-color: transparent; border:1px solid rgb(248, 163, 4); width:100%; margin-right:1rem; border-radius:8px;">
-                  <span style="margin-right:0.2rem; font-size:large; position:relative;top:3px;" class="material-symbols-outlined">add_shopping_cart</span>Add to Cart
-                </button>
-              </form>
-
-              <!-- <form action="/homepage/signUp/<%=item.itemID || item._id%>/confirmBuy?productType=<%= item.type? item.type:'default' %>" method="get">
-                <button style="padding:0.6rem 1.2rem;  border:none; color:white; background-color: rgb(35, 177, 35); width:100%; margin-right:1rem; border-radius:8px;">Buy  Now</button>
-              </form> -->
-              <a href="/homepage/signUp/<%=item.itemID || item._id%>/confirmBuy?productType=<%= item.type? item.type:'default' %>">
-                <button style="padding:0.6rem 1.2rem;  border:none; color:white; background-color: rgb(35, 177, 35); width:100%; margin-right:1rem; border-radius:8px;">Buy  Now</button>
-              </a>
-
-             </div>    
-
-            </div>
-
-            <!--  right side -->
-            <div class="right-container" style="width:50%;">
-
-               <div style="margin-bottom:2rem; margin-top:1rem;">
-                <h5 style='font-weight:bold; margin-bottom:0;'><%=item.title%></h5>
-                <p style="margin-bottom:0;"><%=item.description%></p> 
-                <div class="rating-card" style="margin-top:0;">
-                  <div class="stars">
-                    <span class="star star1" data-value="1">&#9733;</span>
-                    <span class="star star2" data-value="2">&#9733;</span>
-                    <span class="star star3" data-value="3">&#9733;</span>
-                    <span class="star star4" data-value="4">&#9733;</span>
-                    <span class="star star5" data-value="5">&#9733;</span>
-                   
-                  </div>
-                  <hr>
-                </div>
-               </div>
-               
-
-               <div>
-                 <h4 style="font-weight: bold; margin-bottom:0;">&#8377;<%= item.orderPrice?.toLocaleString("en-IN") || item.price?.toLocaleString("en-IN") %> </h4>
-                 <p style="font-size:small; color:green;">inclusive of all taxes</p>
-               </div>
-                <hr>
-
-                <div style="margin-bottom:0;">
-                  <h5>Highlights</h5>
-                  <ul>
-                    <% if(item.brand){%>
-                      <li>Brand: <%=item.brand%></li>
-                    <%}%>
-                    <% if(item.color){%>
-                      <li>Color: <%=item.color%></li>
-                    <%}%>
-                    <% if(item.warranty){%>
-                      <li>Warranty: <%=item.warranty%></li>
-                    <%}%>
-                  </ul>
-                </div>
-                <hr>
-               <div style="margin-top:1rem;">
-                  <h4 style="font-weight: bold;"> Technical Specification- </h4>
-                                 
-                  <p><%=item.specification%> </p>
-               </div>
-               
+          <div>
+            <h3 style="text-align: center; color:red;">Currently Out Of Stock, Sorry !</h3>
+            <p style="text-align: center; line-height:1.3rem; color:grey;">We're sorry, but this item is temporarily unavailable. Please click on View Similiar and find Similiar Item</p>
           </div>
-     </div>
-   
+          <div style="display: flex; justify-content: center; align-items: center;">
+            <img src=" https://media.istockphoto.com/id/1340464049/photo/afraid-smiley-face.jpg?s=612x612&w=0&k=20&c=coMpdLZVOke-zgHAaVD2Ej3BmYWJ1p72NPucN89jQfI=" style="height:15rem;"  />
+          </div>
+
+          <div style="">
+            <a  style="padding:0.5rem 5rem; background-color: rgb(20, 146, 146);color:white;text-decoration:none;" href="/homepage/signUp/viewSimilar?productType=<%=productType%>" >View Similiar</a>
+          </div>
+            
+    </div>
     <script>
-        // hamberger-btn
+             // hamberger-btn
     const hBtn = document.querySelector(".hamberger-btn");
     const hContent = document.querySelector(".hamberger-content");
     const crossIcon = document.querySelector(".cross-icon");
@@ -209,4 +149,6 @@
       }
     }
     </script>
+
 </body>
+  

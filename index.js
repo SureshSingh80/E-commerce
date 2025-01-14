@@ -540,6 +540,8 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
   if (cookies.userToken) {
     try {
       let { id } = req.params;
+      const productType=req.query.productType;
+      console.log("Req Query= ",productType);
 
       // find Who login
       const cookies = req.headers.cookie
@@ -556,7 +558,8 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
 
       let item = await Item.findById(id);
       if(item===null){
-        res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
+        // res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
+        res.render("outOfStock.ejs", {productType,cart:cust.carts.length});
       }
       else {
         let newItem = new Cart({
@@ -651,23 +654,25 @@ app.get("/homepage/signUp/:id/confirmBuy", async (req, res, next) => {
   if (cookies.userToken) {
     try {
       let { id } = req.params;
-      const product=req.query.product;
-      console.log(product);
+      const productType=req.query.productType;
+      console.log("REq query= ",productType);
+        // find who login
+        let customers = await Customer.find({});
+        let cust;
+        for (customer of customers) {
+          if (customer.username == cookies.username) {
+            cust = customer;
+          }
+        }
+
       let item = await Item.findById(id);
       if(item===null){
-        res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
-      }
-      else{
-        // find who login
-      let customers = await Customer.find({});
-      let cust;
-      for (customer of customers) {
-        if (customer.username == cookies.username) {
-          cust = customer;
-        }
-      }
 
-      res.render("confirmBuy.ejs", { cart:cust.carts.length, item });
+        // res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
+        res.render("outOfStock.ejs",{productType,cart:cust.carts.length});
+      }
+      else{    
+          res.render("confirmBuy.ejs", { cart:cust.carts.length, item });
       }
       
       
@@ -736,6 +741,7 @@ app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
             let newOrder = new Order({
               itemID: id,
               title: item.title,
+              type: item.type,
               description: item.description,
               specification: item.specification,
               brand: item.brand,
@@ -1137,7 +1143,7 @@ app.post("/homepage/signUp/searchResult", async (req, res, next) => {
         searchItem = allItem.filter((item) => item.type == selectedCategory);
       }
 
-      if (searchItem.length == 0) res.render("noSearchFound.ejs",{cookies});
+      if (searchItem.length == 0) res.render("noSearchFound.ejs",{cookies,cart:cust.carts.length});
       else {
         res.render("loginSearches.ejs", {
           searchItem,
@@ -1148,6 +1154,38 @@ app.post("/homepage/signUp/searchResult", async (req, res, next) => {
       next(err);
     }
   } else res.redirect("/homepage/login");
+});
+
+// find similiar item 
+app.get("/homepage/signUp/viewSimilar", async (req, res, next) => {
+   const productType=req.query.productType;
+
+   const cookies=req.cookies;
+   if(cookies.userToken){
+
+     // find who login
+     let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == cookies.username) {
+          cust = customer;
+        }
+      }
+
+     const allItem=await Item.find({});
+     const similarItem=allItem.filter((item)=>item.type==productType);
+     const searchItem=similarItem;
+     if(searchItem.length==0){
+       res.render("noSearchFound.ejs",{cookies,cart:cust.carts.length});
+     }
+     else{
+       res.render("loginSearches.ejs",{searchItem,cart:cust.carts.length});
+     }
+
+   }
+   else
+     res.redirect("/homepage/login");
+
 });
 
 // error handling middleWare
