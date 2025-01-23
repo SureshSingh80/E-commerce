@@ -30,6 +30,12 @@ const itemSchema=Schema({
     warranty:{
         type:String
     },
+    reviews:[
+        {
+          type:Schema.Types.ObjectId,
+          ref:"Review",
+        }
+    ],
     price:Number,
 
     

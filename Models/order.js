@@ -26,6 +26,12 @@ const orderSchema=Schema({
     warranty:{
         type:String
     },
+    reviews:[
+        {
+          type:Schema.Types.ObjectId,
+          ref:"Review",
+        }
+    ],
     orderName:{
         type:String
     },

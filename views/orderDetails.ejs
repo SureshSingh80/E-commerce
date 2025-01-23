@@ -112,7 +112,7 @@
          <% if(item.status!=='Delivered'){%>
            <img src="https://cdnl.iconscout.com/lottie/premium/thumb/notification-dot-animation-download-in-lottie-json-gif-static-svg-file-formats--red-logo-alert-warning-ui-essential-pack-sign-symbols-animations-4561481.gif" height="20rem;">
          <%}%>
-        </div>  
+      </div>  
      
       
     </div>
@@ -254,6 +254,30 @@
     >
    </div>
    <%}%>
+   
+   <!-- order review -->
+    <% if(item.status==='Delivered'){%> 
+      <div style=" display: flex;justify-content: flex-end;">
+        <form action="/homepage/signUp/<%=item.itemID%>/review" method="post">
+          <button
+          style="          
+            /* font-weight: bold; */
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-top:1rem;
+            font-size:large;
+            text-decoration: none;
+            color: rgb(2, 172, 2);
+            border: 1px solid rgb(2, 172, 2);
+            border-radius:5px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 2rem;
+          "
+          > Add Review  <span class="material-symbols-outlined" style="position: relative; top:0.4rem;">add</span></button
+        >
+        </form>
+       
+     </div>
+      <%}%>
 </div>
 
   <script>

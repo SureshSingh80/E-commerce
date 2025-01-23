@@ -7,10 +7,9 @@ const ejsMate = require("ejs-mate");
 const mongoose = require("mongoose");
 const Item = require("./Models/list.js");
 const Customer = require("./Models/customer.js");
-const CurrentUser = require("./Models/currentUser.js");
 const Cart = require("./Models/cart.js");
 const Order = require("./Models/order.js");
-const Search = require("./Models/search.js");
+const Review=require("./Models/review.js");
 const customError = require("./customError.js");
 const session = require("express-session");
 const flash = require("connect-flash");
@@ -513,20 +512,27 @@ app.get("/homepage/:id/loginShowInfo", async (req, res, next) => {
       }
 
       let item = await Item.findById(id);
+      let reviews=await Item.findById(id).populate("reviews");
+      console.log("reviews= ", reviews);
       console.log("itemA in items= ", item);
       
       if (item === null) {
         item = await Cart.findById(id);
-
+        reviews=await Cart.findById(id).populate("reviews");
+        console.log("reviews in cart=", reviews);
         console.log("itemA in cart= ", item);
       }
       if(item===null){
         item=await Order.findById(id);
+        reviews=await Order.findById(id).populate("reviews");
+        console.log("reviews in order=", reviews);
         console.log("itemA in order=", item);
       }
+
+      
       
       if (!item) throw new customError(500, "Item Not Found");
-      res.render("loginShow.ejs", { item, cart: cust.carts.length });
+      res.render("loginShow.ejs", { item, cart: cust.carts.length,reviews });
     } catch (err) {
       next(err);
     }
@@ -572,6 +578,7 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
           brand: item.brand,
           color: item.color,
           warranty: item.warranty,
+          reviews: item.reviews,
           price: item.price,
         });
   
@@ -747,7 +754,7 @@ app.post("/homepage/signUp/:id/buy", async (req, res, next) => {
               brand: item.brand,
               color: item.color,
               warranty: item.warranty,
-
+              reviews: item.reviews,
 
               orderName: item.description,
               orderImage: item.image,
@@ -805,107 +812,7 @@ app.get("/loginHomepage/signUp/orderSuccess/:id", async (req, res, next) => {
   } else res.redirect("/homepage/login");
 });
 
-// buy route (by without going to  cart)
-// app.get("/homepage/signUp/:itemId/buy", async (req, res, next) => {
 
-//   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-//   if(cookies.userToken){
-//     try {
-//       let { itemId } = req.params;
-
-//       // find Who login
-
-//       let customers = await Customer.find({});
-//       let cust;
-//       for (customer of customers) {
-//         if (customer.username == cookies.username) {
-//           cust = customer;
-//         }
-//       }
-//       if(cust.address){
-//         let date = Math.floor(Math.random() * 30) + 1;
-//         let month = new Date().getMonth();
-//         let year = new Date().getFullYear();
-//         let status = "Expected at: " + date + "/" + month + "/" + year;
-//         let item = await Item.findById(itemId);
-//         let newOrder = new Order({
-//           orderName: item.title,
-//           orderImage: item.image,
-//           orderPrice: item.price,
-//           orderStatus: status,
-//           orderAddress: cust.address,
-//           customerName: cust.username,
-//           mobNo: cust.mobNo,
-//           status: "Pending",
-//         });
-//         await cust.orders.push(newOrder);
-//         await newOrder.save();
-//         await cust.save();
-//         res.render("orderSuccess.ejs", { item });
-//       }
-//       else
-//         res.redirect("/loginHomepage/addresses");
-
-//     } catch (err) {
-//       next(err);
-//     }
-//   }
-//   else
-//     res.redirect("/homepage");
-
-// });
-// buy route (through cart)
-// app.get("/homepage/signUp/:cartId/buyNow", async (req, res, next) => {
-
-//   const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
-//   if(cookies.userToken){
-//     try {
-//       let { cartId } = req.params;
-//       // find Who login
-
-//       let customers = await Customer.find({});
-//       let cust;
-//       for (customer of customers) {
-//         if (customer.username == cookies.username) {
-//           cust = customer;
-//         }
-//       }
-
-//       // to check customer have address or not
-//       if(cust.address){
-//         let date = Math.floor(Math.random() * 30) + 1;
-//       let month = new Date().getMonth();
-//       let year = new Date().getFullYear();
-//       let status = "Expected at: " + date + "/" + month + "/" + year;
-
-//       let item = await Cart.findById(cartId);
-
-//       let newOrder = new Order({
-//         orderName: item.title,
-//         orderImage: item.image,
-//         orderPrice: item.price,
-//         orderStatus: status,
-//         orderAddress: cust.address,
-//         customerName: cust.username,
-//         mobNo: cust.mobNo,
-//         status: "Pending",
-//       });
-//       await cust.orders.push(newOrder);
-//       await newOrder.save();
-//       await cust.save();
-//       res.render("orderSuccess.ejs", { item });
-//       }
-//       else
-//         res.redirect("/loginHomepage/addresses");
-
-//     } catch (err) {
-//       next(err);
-//     }
-//   }
-//   else
-//      res.redirect("/homepage");
-
-// });
 
 // All orders
 app.get("/homepage/signUp/orders", async (req, res, next) => {
@@ -985,6 +892,60 @@ app.get("/homepage/signUp/:id/cancelOrder/:orderId", async (req, res, next) => {
       next(err);
     }
   } else res.redirect("/homepage/login");
+});
+
+// review route
+app.post("/homepage/signUp/:id/Review",async (req, res, next) => {
+  const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+  if (cookies.userToken) {
+    try {
+      let { id } = req.params;
+      // find who login
+      let customers = await Customer.find({});
+      let cust;
+      for (customer of customers) {
+        if (customer.username == cookies.username) {
+          cust = customer;
+        }
+      }
+  
+      console.log("customer= ",cust);
+      let item = await Item.findById(id);
+      console.log("item from review= ", item);
+      res.render("review.ejs", { item,cart:cust.carts.length });
+    } catch (err) {
+      next(err);
+    }
+  } else res.redirect("/homepage/login");
+});
+
+app.post("/homepage/signUp/:itemID/submitReview",async(req,res,next)=>{
+    const cookies = req.headers.cookie ? cookie.parse(req.headers.cookie) : {};
+    if (cookies.userToken) {
+        try {
+          let { itemID } = req.params;
+          let { review, rating } = req.body;
+        
+          // add review and rating to item
+          let item = await Item.findById(itemID);
+          let newReview = new Review({
+            itemID: item._id,
+            username: cookies.username,
+            review: review,
+            rating: rating,
+            date: new Date().getDate()+"/"+(new Date().getMonth()+1)+"/"+new Date().getFullYear(),
+          });
+          await newReview.save();
+          item.reviews.push(newReview._id);          
+          await item.save();
+             
+          res.redirect("/loginHomepage");
+        } catch (err) {
+          next(err);
+        }
+      }
+      else res.redirect("/homepage/login");
+
 });
 
 // return to login(User) from Logout
