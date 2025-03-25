@@ -1,4 +1,9 @@
 <% layout("/layouts/biolerplate") %>
+<style>
+  .gold {
+    color: gold;
+  }
+</style>
 <body>
      <!-- navbar -->
   <div class="nav-container sticky-top">
@@ -163,6 +168,7 @@
     </div>
   </div>
 
+
    <!-- product details -->
    <div class="product-container" style="max-width: 1400px; padding:2rem; margin:2rem auto; background-color: white;display:flex; justify-content: space-evenly;" > 
        
@@ -197,17 +203,7 @@
        <div style="margin-bottom:2rem; margin-top:1rem;">
         <h5 style='font-weight:bold; margin-bottom:0;'><%=item.title%></h5>
         <p style="margin-bottom:0;"><%=item.description%></p> 
-        <div class="rating-card" style="margin-top:0;">
-          <div class="stars">
-            <span class="star star1" data-value="1">&#9733;</span>
-            <span class="star star2" data-value="2">&#9733;</span>
-            <span class="star star3" data-value="3">&#9733;</span>
-            <span class="star star4" data-value="4">&#9733;</span>
-            <span class="star star5" data-value="5">&#9733;</span>
-           
-          </div>
-          <hr>
-        </div>
+       
        </div>
        
 
@@ -239,6 +235,47 @@
        </div>
        
     </div>
+   </div>
+
+     <!-- display reviews that have comes from backend in reviews variable -->
+     <div style="max-width: 1400px; padding:0.5rem; margin:2rem auto; background-color:white;">
+      
+      <% if(reviews){%>
+        <% for(let review of reviews.reviews){%>
+          <p style="font-style:italic;margin-left:1rem;font-size:large;">Top reviews...</p>
+        <div  style="  margin-bottom:3rem;   margin-bottom:1rem; border-radius:8px; padding:1rem; background-color:rgb(245, 245, 245); ">
+            <!-- username container with icon -->
+             <div >
+                <div style="display: flex; justify-content:flex-start;">
+                  <span class="material-symbols-outlined" style="position: relative; top:3px; font-size:1.5rem; ">
+                    account_circle
+                    </span>
+                  <p style="font-weight:bold; margin-bottom:0; margin-left:0.5rem;"><%=review.username%></p>
+                
+                </div>
+             </div>
+             <!-- rating ,review and date container -->
+            <div style="">
+              <div style="margin-left:2rem;">
+                  <p style="margin-bottom:0; line-height: normal;"><%=review.review%></p>
+                 <div class="stars" style="margin-top:0rem; padding:0;">
+                  <!-- according to value of review.rating , color changed to gold -->
+                    
+                  <span class="<%=review.rating=="1" || review.rating=='2' || review.rating=='3' || review.rating=="4" || review.rating=='5' ? 'gold' :'' %> ">&#9733;</span>
+                  <span class="<%=review.rating=="2" || review.rating=='3' || review.rating=='4' || review.rating=="5"  ? 'gold' :'' %> ">&#9733;</span>
+                  <span class="<%=review.rating=="3" || review.rating=='4' || review.rating=='5'  ? 'gold' :'' %> ">&#9733;</span>
+                  <span class="<%=review.rating=="4" || review.rating=='5' ? 'gold' :'' %> ">&#9733;</span>
+                  <span class="<%=review.rating=="5"  ? 'gold' :'' %> ">&#9733;</span>
+                </div>
+                <p style="font-size:small; color:grey; margin-top:0;margin-bottom:0;"><%=review.date%></p>
+            </div>                     
+          </div>
+        </div> 
+          <%}%>
+        
+      <%}%> 
+      
+  </div>
 
     <script>
         // hamberger-btn

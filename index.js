@@ -147,8 +147,10 @@ app.get("/homepage/:id/showInfo", async (req, res, next) => {
   try {
     let { id } = req.params;
     let item = await Item.findById(id);
+    const reviews=await Item.findById(id).populate("reviews");
+
     if (!item) throw new customError(500, "Item Not Found");
-    res.render("show.ejs", { item });
+    res.render("show.ejs", { item,reviews });
   } catch (err) {
     next(err);
   }
@@ -441,7 +443,7 @@ app.get("/loginHomepage/addresses", async (req, res, next) => {
           cust = customer;
         }
       }
-      res.render("shippingAddress.ejs", { cust });
+      res.render("shippingAddress.ejs", { cust, cart:cust.carts.length });
     } catch (error) {
       next(error);
     }
@@ -547,7 +549,7 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
     try {
       let { id } = req.params;
       const productType=req.query.productType;
-      console.log("Req Query= ",productType);
+      
 
       // find Who login
       const cookies = req.headers.cookie
@@ -562,10 +564,16 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
         }
       }
 
+      // check for item already in cart or not
+      let cartItem=await Cart.findOne({itemID:id});      
+      if(cartItem!==null){
+        return res.redirect("/homepage/signUp/cart");
+      } 
+
       let item = await Item.findById(id);
       if(item===null){
         // res.send(`<h3 style="color:red">Currently Out of Stock</h3>`);
-        res.render("outOfStock.ejs", {productType,cart:cust.carts.length});
+         res.render("outOfStock.ejs", {productType,cart:cust.carts.length});
       }
       else {
         let newItem = new Cart({
@@ -578,14 +586,14 @@ app.post("/homepage/signUp/:id/cart", async (req, res, next) => {
           brand: item.brand,
           color: item.color,
           warranty: item.warranty,
-          reviews: item.reviews,
+          reviews: item.reviews,  
           price: item.price,
         });
   
         cust.carts.push(newItem);
         await newItem.save();
         let result = await cust.save();
-        console.log(result);
+        // console.log(result);
         res.redirect("/homepage/signUp/cart");
       }
     } catch (err) {
